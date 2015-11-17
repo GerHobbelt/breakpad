@@ -251,8 +251,8 @@
       'win_release_Optimization%': '2', # 2 = /Os
       'win_debug_Optimization%': '0',   # 0 = /Od
       # See http://msdn.microsoft.com/en-us/library/aa652367(VS.71).aspx
-      'win_release_RuntimeLibrary%': '0', # 0 = /MT (nondebug static)
-      'win_debug_RuntimeLibrary%': '1',   # 1 = /MTd (debug static)
+      'win_release_RuntimeLibrary%': '2', # 2 = /MD (nondebug dynamic)
+      'win_debug_RuntimeLibrary%': '3',   # 3 = /MDd (debug dynamic)
 
       'release_extra_cflags%': '',
       'debug_extra_cflags%': '',
