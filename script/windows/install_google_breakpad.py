@@ -4,12 +4,13 @@ import os
 import argparse
 import shutil
 import string
+import sys
 
 
 # parse args
 parser = argparse.ArgumentParser()
 parser.add_argument('src', help='google_breakpad root directory where build was done')
-parser.add_argument('dst', help='sqool_manager root directory where google_breakpad have to be installed')
+parser.add_argument('dst', help='destination root directory where google_breakpad have to be installed')
 
 args = parser.parse_args()
 
@@ -25,14 +26,14 @@ if not os.path.isdir(args.dst):
 
 
 # customize args
-google_breakpad_src_dir = os.path.join( args.src, 'src')
-sqool_manager_3rdparties_dir = os.path.join( args.dst, '3rdParties', 'windows')
+google_breakpad_src_dir = os.path.join( args.src, 'src' )
+dst_dir = os.path.join( args.dst )
 
 
 # function to define src and dst in copy function
 def convertSrcAndDst( srcFile, dstFile, subDir ):
     src = os.path.join(google_breakpad_src_dir, srcFile.replace('/', os.path.sep))
-    dst = os.path.join(sqool_manager_3rdparties_dir, subDir, dstFile.replace('/', os.path.sep))
+    dst = os.path.join(dst_dir, subDir, dstFile.replace('/', os.path.sep))
     return src, dst
 
 
@@ -105,9 +106,11 @@ build_type = [
 # copy libraries
 for bt in build_type:
     for f in google_breakpad_library_files:
-        file = os.path.join(google_breakpad_library_dir_base, bt, 'lib', f)
-        src, dst = convertSrcAndDst(file, os.path.basename(file), os.path.join('lib', bt))
-        copyFile(src, dst)
+        bt_lib_dir = os.path.join(google_breakpad_library_dir_base, bt)
+        if os.path.exists(bt_lib_dir):
+            file = os.path.join(bt_lib_dir, 'lib', f)
+            src, dst = convertSrcAndDst(file, os.path.basename(file), os.path.join('lib', bt))
+            copyFile(src, dst)
 
 
 
@@ -121,8 +124,3 @@ for f in google_breakpad_binary_files:
     copyFile(src, dst)
 
 
-
-
-
-
-# copy binaries
