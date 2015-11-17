@@ -86,7 +86,11 @@ for f in google_breakpad_header_files:
 
 
 
-google_breakpad_library_dir_base = 'client/windows'
+google_breakpad_library_dir_base = [
+    'client/windows',
+    'client/windows/crash_generation',
+    'client/windows/handler'
+    ]
 google_breakpad_library_dir_end = 'lib'
 google_breakpad_library_files = [
     'crash_generation_client.lib',
@@ -101,13 +105,13 @@ build_type = [
     ]
 
 # copy libraries
-for bt in build_type:
-    for f in google_breakpad_library_files:
-        bt_lib_dir = os.path.join(google_breakpad_library_dir_base, bt)
-        if os.path.exists(bt_lib_dir):
-            file = os.path.join(bt_lib_dir, 'lib', f)
-            src, dst = convertSrcAndDst(file, os.path.basename(file), os.path.join('lib', bt))
-            copyFile(src, dst)
+for dir in google_breakpad_library_dir_base:
+    for buildType in build_type:
+        for file in google_breakpad_library_files:
+            path = os.path.join(dir, buildType, 'lib', file)
+            src, dst = convertSrcAndDst(path, os.path.basename(path), os.path.join('lib', buildType))
+            if os.path.exists(src):
+                copyFile(src, dst)
 
 
 
