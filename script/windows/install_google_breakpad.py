@@ -17,12 +17,9 @@ args = parser.parse_args()
 
 # test args
 if not os.path.isdir(args.src):
-    print(args.src + ' not not such directory')
+    print(args.src + ' not such directory')
     sys.exit(1)
 
-if not os.path.isdir(args.dst):
-    print(args.dst + ' not not such directory')
-    sys.exit(1)
 
 
 # customize args
