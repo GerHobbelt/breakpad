@@ -185,7 +185,8 @@ src_client_linux_libbreakpad_client_a_SOURCES = \
 	src/common/linux/guid_creator.h \
 	src/common/linux/linux_libc_support.cc \
 	src/common/linux/memory_mapped_file.cc \
-	src/common/linux/safe_readlink.cc
+	src/common/linux/safe_readlink.cc \
+	src/common/linux/http_upload.cc
 if ANDROID_HOST
 src_client_linux_libbreakpad_client_a_SOURCES += \
 	src/common/android/breakpad_getcontext.S

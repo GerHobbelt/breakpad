@@ -316,6 +316,7 @@ am__src_client_linux_libbreakpad_client_a_SOURCES_DIST =  \
 	src/common/linux/linux_libc_support.cc \
 	src/common/linux/memory_mapped_file.cc \
 	src/common/linux/safe_readlink.cc \
+	src/common/linux/http_upload.cc \
 	src/common/android/breakpad_getcontext.S
 am__dirstamp = $(am__leading_dot)dirstamp
 @ANDROID_HOST_TRUE@@LINUX_HOST_TRUE@am__objects_1 = src/common/android/breakpad_getcontext.$(OBJEXT)
@@ -342,6 +343,7 @@ am__dirstamp = $(am__leading_dot)dirstamp
 @LINUX_HOST_TRUE@	src/common/linux/linux_libc_support.$(OBJEXT) \
 @LINUX_HOST_TRUE@	src/common/linux/memory_mapped_file.$(OBJEXT) \
 @LINUX_HOST_TRUE@	src/common/linux/safe_readlink.$(OBJEXT) \
+@LINUX_HOST_TRUE@	src/common/linux/http_upload.$(OBJEXT) \
 @LINUX_HOST_TRUE@	$(am__objects_1)
 src_client_linux_libbreakpad_client_a_OBJECTS =  \
 	$(am_src_client_linux_libbreakpad_client_a_OBJECTS)
@@ -3631,6 +3633,9 @@ src/common/linux/memory_mapped_file.$(OBJEXT):  \
 src/common/linux/safe_readlink.$(OBJEXT):  \
 	src/common/linux/$(am__dirstamp) \
 	src/common/linux/$(DEPDIR)/$(am__dirstamp)
+src/common/linux/http_upload.$(OBJEXT):  \
+	src/common/linux/$(am__dirstamp) \
+	src/common/linux/$(DEPDIR)/$(am__dirstamp)
 src/common/android/$(am__dirstamp):
 	@$(MKDIR_P) src/common/android
 	@: > src/common/android/$(am__dirstamp)
@@ -4617,9 +4622,6 @@ src/tools/linux/md2core/src_tools_linux_md2core_minidump_2_core_unittest-minidum
 src/tools/linux/md2core/minidump_2_core_unittest$(EXEEXT): $(src_tools_linux_md2core_minidump_2_core_unittest_OBJECTS) $(src_tools_linux_md2core_minidump_2_core_unittest_DEPENDENCIES) $(EXTRA_src_tools_linux_md2core_minidump_2_core_unittest_DEPENDENCIES) src/tools/linux/md2core/$(am__dirstamp)
 	@rm -f src/tools/linux/md2core/minidump_2_core_unittest$(EXEEXT)
 	$(AM_V_CXXLD)$(CXXLINK) $(src_tools_linux_md2core_minidump_2_core_unittest_OBJECTS) $(src_tools_linux_md2core_minidump_2_core_unittest_LDADD) $(LIBS)
-src/common/linux/http_upload.$(OBJEXT):  \
-	src/common/linux/$(am__dirstamp) \
-	src/common/linux/$(DEPDIR)/$(am__dirstamp)
 src/tools/linux/symupload/$(am__dirstamp):
 	@$(MKDIR_P) src/tools/linux/symupload
 	@: > src/tools/linux/symupload/$(am__dirstamp)
