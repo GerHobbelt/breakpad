@@ -116,7 +116,7 @@ for dir in google_breakpad_library_dir_base:
 
 
 google_breakpad_binary_dir_base = [
-    'tools/windows/dump_syms/Release'
+    'tools/windows/dump_syms'
     ]
 google_breakpad_binary_files = [
     'dump_syms.exe'
@@ -125,9 +125,7 @@ google_breakpad_binary_files = [
 for dir in google_breakpad_binary_dir_base:
     for buildType in build_type:
         for file in google_breakpad_binary_files:
-            path = os.path.join(dir, buildType, 'lib', file)
+            path = os.path.join(dir, buildType, file)
             src, dst = convertSrcAndDst(path, os.path.basename(path), 'bin')
             if os.path.exists(src):
                 copyFile(src, dst)
-
-
