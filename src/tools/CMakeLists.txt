@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.6)
 
 project(breakpad_tools)
 
+if(LINUX)
 set(DUMP_SYMS_COMMON_SOURCES
     ../common/dwarf_cfi_to_module.cc
     ../common/dwarf_cu_to_module.cc
@@ -96,3 +97,6 @@ install(TARGETS
 	LIBRARY DESTINATION lib
 	ARCHIVE DESTINATION lib
 )
+elseif(WIN32)
+elseif(APPLE)
+endif()

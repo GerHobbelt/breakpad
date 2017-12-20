@@ -4,7 +4,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 project(breakpad_client)
 
-# Common to both project
+# Common to all client projects
 set(BREAKPAD_COMMON_HEADERS
     ../common/convert_UTF.h
     ../common/md5.h
@@ -18,7 +18,7 @@ set(BREAKPAD_COMMON_SOURCES
 )
 source_group( "Source Files\\Breakpad_Common" FILES ${BREAKPAD_COMMON_SOURCES} )
 
-# Common to all client
+# Common to all client projects
 set(BREAKPAD_CLIENT_COMMON_HEADERS
     minidump_file_writer-inl.h
     minidump_file_writer.h
@@ -29,6 +29,8 @@ set(BREAKPAD_CLIENT_COMMON_SOURCES
     minidump_file_writer.cc
 )
 source_group( "Source Files\\Breakpad_Client_Common" FILES ${BREAKPAD_CLIENT_COMMON_SOURCES} )
+
+if(LINUX)
 
 # Common to all linux projects
 set(BREAKPAD_COMMON_LINUX_HEADERS
@@ -96,11 +98,6 @@ add_library(breakpad_client
 set_target_properties(breakpad_client PROPERTIES DEBUG_POSTFIX "d")
 
 install ( FILES
-	${BREAKPAD_CLIENT_COMMON_HEADERS}
-	DESTINATION
-    "${CMAKE_INSTALL_PREFIX}/include/breakpad/common"
-)
-install ( FILES
 	${BREAKPAD_COMMON_LINUX_HEADERS}
 	DESTINATION
 	"${CMAKE_INSTALL_PREFIX}/include/breakpad/common/linux"
@@ -119,6 +116,93 @@ install ( FILES
 	${BREAKPAD_CLIENT_LINUX_DUMPWRITER_HEADERS}
 	DESTINATION
 	"${CMAKE_INSTALL_PREFIX}/include/breakpad/client/linux/microdump_writer"
+)
+elseif(WIN32)
+
+add_library(breakpad_client
+    ${BREAKPAD_COMMON_HEADERS}
+    ${BREAKPAD_COMMON_SOURCES}
+    ${BREAKPAD_CLIENT_COMMON_HEADERS}
+    ${BREAKPAD_CLIENT_COMMON_SOURCES}
+)
+elseif(APPLE)
+set(BREAKPAD_CLIENT_MACOS_HANDLER_HEADERS
+    mac/handler/exception_handler.h
+    mac/handler/minidump_generator.h
+    mac/handler/dynamic_images.h
+)
+set(BREAKPAD_CLIENT_MACOS_CRASHGEN_HEADERS
+    mac/crash_generation/crash_generation_client.h
+)
+set(BREAKPAD_CLIENT_MACOS_COMMON_HEADERS
+    ../common/mac/http_upload.h
+    ../common/mac/string_utilities.h
+    ../common/mac/MachIPC.h
+    ../common/mac/macho_id.h
+    ../common/mac/macho_utilities.h
+    ../common/mac/macho_walker.h
+    ../common/mac/file_id.h
+    ../common/mac/bootstrap_compat.h
+)
+set(BREAKPAD_CLIENT_MACOS_HEADERS
+    ${BREAKPAD_CLIENT_MACOS_COMMON_HEADERS}
+    ${BREAKPAD_CLIENT_MACOS_CRASHGEN_HEADERS}
+    ${BREAKPAD_CLIENT_MACOS_HANDLER_HEADERS}
+)
+source_group( "Header Files\\Breakpad_Client_Apple" FILES ${BREAKPAD_CLIENT_MACOS_HEADERS} )
+set(BREAKPAD_CLIENT_MACOS_SOURCES
+    mac/handler/exception_handler.cc
+    mac/handler/minidump_generator.cc
+    mac/handler/dynamic_images.cc
+    mac/crash_generation/crash_generation_client.cc
+    ../common/mac/http_upload.cc
+    ../common/mac/string_utilities.cc
+    ../common/mac/MachIPC.mm
+    ../common/mac/macho_id.cc
+    ../common/mac/macho_utilities.cc
+    ../common/mac/macho_walker.cc
+    ../common/mac/file_id.cc
+    ../common/mac/bootstrap_compat.cc
+)
+source_group( "Source Files\\Breakpad_Client_Apple" FILES ${BREAKPAD_CLIENT_LINUX_SOURCES} )
+
+add_library(breakpad_client
+    ${BREAKPAD_COMMON_HEADERS}
+    ${BREAKPAD_COMMON_SOURCES}
+    ${BREAKPAD_CLIENT_COMMON_HEADERS}
+    ${BREAKPAD_CLIENT_COMMON_SOURCES}
+    ${BREAKPAD_CLIENT_MACOS_SOURCES}
+)
+set_target_properties(breakpad_client PROPERTIES DEBUG_POSTFIX "d")
+
+install ( FILES
+	${BREAKPAD_CLIENT_MACOS_COMMON_HEADERS}
+	DESTINATION
+	"${CMAKE_INSTALL_PREFIX}/include/breakpad/common/mac"
+)
+install ( FILES
+	${BREAKPAD_CLIENT_MACOS_HANDLER_HEADERS}
+	DESTINATION
+	"${CMAKE_INSTALL_PREFIX}/include/breakpad/client/mac/handler"
+)
+install ( FILES
+	${BREAKPAD_CLIENT_MACOS_CRASHGEN_HEADERS}
+	DESTINATION
+	"${CMAKE_INSTALL_PREFIX}/include/breakpad/client/mac/crash_generation"
+)
+
+endif()
+
+
+install ( FILES
+	${BREAKPAD_COMMON_HEADERS}
+	DESTINATION
+    "${CMAKE_INSTALL_PREFIX}/include/breakpad/common"
+)
+install ( FILES
+	${BREAKPAD_CLIENT_COMMON_HEADERS}
+	DESTINATION
+    "${CMAKE_INSTALL_PREFIX}/include/breakpad/client"
 )
 
 install(TARGETS
