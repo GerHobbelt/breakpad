@@ -35,6 +35,7 @@ set(BREAKPAD_COMMON_LINUX_HEADERS
     ../common/linux/elfutils.h
     ../common/linux/file_id.h
 	../common/linux/guid_creator.h
+    ../common/linux/http_upload.h
 )
 source_group( "Header Files\\Breakpad_Linux_Common" FILES ${BREAKPAD_COMMON_LINUX_HEADERS} )
 set(BREAKPAD_COMMON_LINUX_SOURCES
@@ -44,7 +45,8 @@ set(BREAKPAD_COMMON_LINUX_SOURCES
     ../common/linux/guid_creator.cc
 	../common/linux/linux_libc_support.cc
 	../common/linux/memory_mapped_file.cc
-	../common/linux/safe_readlink.cc
+    ../common/linux/safe_readlink.cc
+    ../common/linux/http_upload.cc
 )
 source_group( "Source Files\\Breakpad_Linux_Common" FILES ${BREAKPAD_COMMON_LINUX_SOURCES} )
 
