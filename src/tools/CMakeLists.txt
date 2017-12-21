@@ -98,5 +98,61 @@ install(TARGETS
 	ARCHIVE DESTINATION lib
 )
 elseif(WIN32)
+# Windows tools
+set(MS_SYMBOL_SOURCES
+    windows/converter/ms_symbol_server_converter.cc
+    windows/converter/ms_symbol_server_converter.h
+)
+set(COMMON_TOOL_WINDOWS_SOURCES
+    ../common/windows/dia_util.cc
+    ../common/windows/dia_util.h
+    ../common/windows/guid_string.cc
+    ../common/windows/guid_string.h
+    ../common/windows/http_upload.cc
+    ../common/windows/http_upload.h
+    ../common/windows/omap.cc
+    ../common/windows/omap.h
+    ../common/windows/omap_internal.h
+    ../common/windows/pdb_source_line_writer.cc
+    ../common/windows/pdb_source_line_writer.h
+    ../common/windows/string_utils.cc
+    ../common/windows/string_utils-inl.h
+)
+set(DUMP_SYMS_WINDOWS_SOURCES
+    windows/dump_syms/dump_syms.cc
+)
+set(SYM_UPLOAD_WINDOWS_SOURCES
+    windows/symupload/symupload.cc
+)
+
+add_executable(dump_syms
+    ${MS_SYMBOL_SOURCES}
+    ${COMMON_TOOL_WINDOWS_SOURCES}
+	${DUMP_SYMS_WINDOWS_SOURCES}
+)
+
+target_link_libraries(dump_syms
+    diaguids
+    imagehlp
+    shell32
+)
+
+
+add_executable(sym_upload
+    ${COMMON_TOOL_WINDOWS_SOURCES}
+	${SYM_UPLOAD_WINDOWS_SOURCES}
+)
+target_link_libraries(sym_upload
+    diaguids
+    imagehlp
+)
+
+install(TARGETS
+    dump_syms sym_upload
+	RUNTIME DESTINATION bin
+	LIBRARY DESTINATION lib
+	ARCHIVE DESTINATION lib
+)
+
 elseif(APPLE)
 endif()

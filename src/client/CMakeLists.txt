@@ -31,6 +31,7 @@ set(BREAKPAD_CLIENT_COMMON_SOURCES
 source_group( "Source Files\\Breakpad_Client_Common" FILES ${BREAKPAD_CLIENT_COMMON_SOURCES} )
 
 if(LINUX)
+# Linux OS rules
 
 # Common to all linux projects
 set(BREAKPAD_COMMON_LINUX_HEADERS
@@ -68,7 +69,7 @@ set(BREAKPAD_CLIENT_LINUX_HEADERS
     ${BREAKPAD_CLIENT_LINUX_LOG_HEADERS}
     ${BREAKPAD_CLIENT_LINUX_DUMPWRITER_HEADERS}
 )
-source_group( "Header Files\\Breakpad_Client_Linux" FILES ${BREAKPAD_CLIENT_LINUX_HEADERS} )
+source_group( "Header Files\\Breakpad_Client" FILES ${BREAKPAD_CLIENT_LINUX_HEADERS} )
 set(BREAKPAD_CLIENT_LINUX_SOURCES
     linux/crash_generation/crash_generation_client.cc
 	linux/crash_generation/crash_generation_server.cc
@@ -83,7 +84,7 @@ set(BREAKPAD_CLIENT_LINUX_SOURCES
 	linux/minidump_writer/linux_ptrace_dumper.cc
 	linux/minidump_writer/minidump_writer.cc
 )
-source_group( "Source Files\\Breakpad_Client_Linux" FILES ${BREAKPAD_CLIENT_LINUX_SOURCES} )
+source_group( "Source Files\\Breakpad_Client" FILES ${BREAKPAD_CLIENT_LINUX_SOURCES} )
 
 add_library(breakpad_client
     ${BREAKPAD_COMMON_HEADERS}
@@ -117,15 +118,75 @@ install ( FILES
 	DESTINATION
 	"${CMAKE_INSTALL_PREFIX}/include/breakpad/client/linux/microdump_writer"
 )
+
 elseif(WIN32)
+# Windows OS rules
+set(BREAKPAD_CLIENT_WINDOWS_COMMON_HEADERS
+    ../common/windows/guid_string.h
+    ../common/windows/http_upload.h
+)
+set(BREAKPAD_CLIENT_WINDOWS_HANDLER_HEADERS
+    windows/handler/exception_handler.h
+)
+set(BREAKPAD_CLIENT_WINDOWS_CRASHGEN_HEADERS
+    windows/crash_generation/crash_generation_client.h
+    windows/crash_generation/crash_generation_server.h
+)
+set(BREAKPAD_CLIENT_WINDOWS_SENDER_HEADERS
+    windows/sender/crash_report_sender.h
+)
+set(BREAKPAD_CLIENT_WINDOWS_SOURCES
+    ../common/windows/string_utils.cc
+    ../common/windows/http_upload.cc
+    ../common/windows/guid_string.cc
+    windows/handler/exception_handler.cc
+    windows/crash_generation/crash_generation_client.cc
+    windows/sender/crash_report_sender.cc
+)
+source_group( "Source Files\\Breakpad_Client" FILES ${BREAKPAD_CLIENT_WINDOWS_SOURCES} )
+
+set(BREAKPAD_CLIENT_WINDOWS_HEADERS
+    ${BREAKPAD_CLIENT_WINDOWS_COMMON_HEADERS}
+    ${BREAKPAD_CLIENT_WINDOWS_HANDLER_HEADERS}
+    ${BREAKPAD_CLIENT_WINDOWS_CRASHGEN_HEADERS}
+    ${BREAKPAD_CLIENT_WINDOWS_SENDER_HEADERS}
+)
+source_group( "Header Files\\Breakpad_Client" FILES ${BREAKPAD_CLIENT_WINDOWS_HEADERS} )
 
 add_library(breakpad_client
     ${BREAKPAD_COMMON_HEADERS}
     ${BREAKPAD_COMMON_SOURCES}
     ${BREAKPAD_CLIENT_COMMON_HEADERS}
     ${BREAKPAD_CLIENT_COMMON_SOURCES}
+    ${BREAKPAD_CLIENT_WINDOWS_HEADERS}
+    ${BREAKPAD_CLIENT_WINDOWS_SOURCES}
 )
+set_target_properties(breakpad_client PROPERTIES DEBUG_POSTFIX "d")
+
+install ( FILES
+	${BREAKPAD_CLIENT_WINDOWS_COMMON_HEADERS}
+	DESTINATION
+	"${CMAKE_INSTALL_PREFIX}/include/breakpad/common/windows"
+)
+install ( FILES
+	${BREAKPAD_CLIENT_WINDOWS_HANDLER_HEADERS}
+	DESTINATION
+	"${CMAKE_INSTALL_PREFIX}/include/breakpad/client/windows/handler"
+)
+install ( FILES
+	${BREAKPAD_CLIENT_WINDOWS_CRASHGEN_HEADERS}
+	DESTINATION
+	"${CMAKE_INSTALL_PREFIX}/include/breakpad/client/windows/crash_generation"
+)
+install ( FILES
+	${BREAKPAD_CLIENT_WINDOWS_SENDER_HEADERS}
+	DESTINATION
+	"${CMAKE_INSTALL_PREFIX}/include/breakpad/client/windows/sender"
+)
+
+
 elseif(APPLE)
+# Apple Mac OS rules
 set(BREAKPAD_CLIENT_MACOS_HANDLER_HEADERS
     mac/handler/exception_handler.h
     mac/handler/minidump_generator.h
@@ -149,7 +210,8 @@ set(BREAKPAD_CLIENT_MACOS_HEADERS
     ${BREAKPAD_CLIENT_MACOS_CRASHGEN_HEADERS}
     ${BREAKPAD_CLIENT_MACOS_HANDLER_HEADERS}
 )
-source_group( "Header Files\\Breakpad_Client_Apple" FILES ${BREAKPAD_CLIENT_MACOS_HEADERS} )
+source_group( "Header Files\\Breakpad_Client" FILES ${BREAKPAD_CLIENT_MACOS_HEADERS} )
+
 set(BREAKPAD_CLIENT_MACOS_SOURCES
     mac/handler/exception_handler.cc
     mac/handler/minidump_generator.cc
@@ -164,7 +226,7 @@ set(BREAKPAD_CLIENT_MACOS_SOURCES
     ../common/mac/file_id.cc
     ../common/mac/bootstrap_compat.cc
 )
-source_group( "Source Files\\Breakpad_Client_Apple" FILES ${BREAKPAD_CLIENT_LINUX_SOURCES} )
+source_group( "Source Files\\Breakpad_Client" FILES ${BREAKPAD_CLIENT_MACOS_SOURCES} )
 
 add_library(breakpad_client
     ${BREAKPAD_COMMON_HEADERS}
@@ -193,6 +255,7 @@ install ( FILES
 
 endif()
 
+# Common install rules
 
 install ( FILES
 	${BREAKPAD_COMMON_HEADERS}
