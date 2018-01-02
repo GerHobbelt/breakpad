@@ -9,6 +9,10 @@ set(BREAKPAD_COMMON_HEADERS
     ../common/convert_UTF.h
     ../common/md5.h
     ../common/string_conversion.h
+    ../common/scoped_ptr.h
+    ../common/basictypes.h
+    ../common/using_std_string.h
+    ../common/memory_allocator.h
 )
 source_group( "Header Files\\Breakpad_Common" FILES ${BREAKPAD_COMMON_HEADERS} )
 set(BREAKPAD_COMMON_SOURCES
@@ -29,6 +33,52 @@ set(BREAKPAD_CLIENT_COMMON_SOURCES
     minidump_file_writer.cc
 )
 source_group( "Source Files\\Breakpad_Common" FILES ${BREAKPAD_CLIENT_COMMON_SOURCES} )
+
+set(BREAKPAD_GOOGLEBREAKPAD_COMMON_HEADERS
+    ../google_breakpad/common/breakpad_types.h
+    ../google_breakpad/common/minidump_cpu_amd64.h
+    ../google_breakpad/common/minidump_cpu_arm64.h
+    ../google_breakpad/common/minidump_cpu_arm.h
+    ../google_breakpad/common/minidump_cpu_mips.h
+    ../google_breakpad/common/minidump_cpu_ppc64.h
+    ../google_breakpad/common/minidump_cpu_ppc.h
+    ../google_breakpad/common/minidump_cpu_sparc.h
+    ../google_breakpad/common/minidump_cpu_x86.h
+    ../google_breakpad/common/minidump_exception_linux.h
+    ../google_breakpad/common/minidump_exception_mac.h
+    ../google_breakpad/common/minidump_exception_ps3.h
+    ../google_breakpad/common/minidump_exception_solaris.h
+    ../google_breakpad/common/minidump_exception_win32.h
+    ../google_breakpad/common/minidump_format.h
+    ../google_breakpad/common/minidump_size.h
+)
+
+set(BREAKPAD_GOOGLEBREAKPAD_PROCESSOR_HEADERS
+    ../google_breakpad/processor/basic_source_line_resolver.h
+    ../google_breakpad/processor/call_stack.h
+    ../google_breakpad/processor/code_module.h
+    ../google_breakpad/processor/code_modules.h
+    ../google_breakpad/processor/dump_context.h
+    ../google_breakpad/processor/dump_object.h
+    ../google_breakpad/processor/exploitability.h
+    ../google_breakpad/processor/fast_source_line_resolver.h
+    ../google_breakpad/processor/memory_region.h
+    ../google_breakpad/processor/microdump.h
+    ../google_breakpad/processor/microdump_processor.h
+    ../google_breakpad/processor/minidump.h
+    ../google_breakpad/processor/minidump_processor.h
+    ../google_breakpad/processor/process_result.h
+    ../google_breakpad/processor/process_state.h
+    ../google_breakpad/processor/proc_maps_linux.h
+    ../google_breakpad/processor/source_line_resolver_base.h
+    ../google_breakpad/processor/source_line_resolver_interface.h
+    ../google_breakpad/processor/stack_frame_cpu.h
+    ../google_breakpad/processor/stack_frame.h
+    ../google_breakpad/processor/stack_frame_symbolizer.h
+    ../google_breakpad/processor/stackwalker.h
+    ../google_breakpad/processor/symbol_supplier.h
+    ../google_breakpad/processor/system_info.h
+)
 
 if(LINUX)
 # Linux OS rules
@@ -57,16 +107,36 @@ source_group( "Source Files\\Breakpad_Common" FILES ${BREAKPAD_COMMON_LINUX_SOUR
 set(BREAKPAD_CLIENT_LINUX_HANDLER_HEADERS
     linux/handler/exception_handler.h
     linux/handler/minidump_descriptor.h
+    linux/handler/microdump_extra_info.h
 )
 set(BREAKPAD_CLIENT_LINUX_LOG_HEADERS
     linux/log/log.h
 )
-set(BREAKPAD_CLIENT_LINUX_DUMPWRITER_HEADERS
+set(BREAKPAD_CLIENT_LINUX_MICROWRITER_HEADERS
     linux/microdump_writer/microdump_writer.h
+)
+set(BREAKPAD_CLIENT_LINUX_MINIWRITER_HEADERS
+    linux/minidump_writer/minidump_writer.h
+    linux/minidump_writer/linux_dumper.h
+)
+set(BREAKPAD_CLIENT_LINUX_CRASHGEN_HEADERS
+    linux/crash_generation/crash_generation_client.h
+    linux/crash_generation/client_info.h
+)
+set(BREAKPAD_CLIENT_LINUX_DUMPWRITER_HEADERS
+    linux/dump_writer_common/thread_info.h
+    linux/dump_writer_common/mapping_info.h
+    linux/dump_writer_common/raw_context_cpu.h
+)
+set(BREAKPAD_THIRDPARTS_LSS_HEADERS
+    ../third_party/lss/linux_syscall_support.h
 )
 set(BREAKPAD_CLIENT_LINUX_HEADERS
     ${BREAKPAD_CLIENT_LINUX_HANDLER_HEADERS}
     ${BREAKPAD_CLIENT_LINUX_LOG_HEADERS}
+    ${BREAKPAD_CLIENT_LINUX_MICROWRITER_HEADERS}
+    ${BREAKPAD_CLIENT_LINUX_MINIWRITER_HEADERS}
+    ${BREAKPAD_CLIENT_LINUX_CRASHGEN_HEADERS}
     ${BREAKPAD_CLIENT_LINUX_DUMPWRITER_HEADERS}
 )
 source_group( "Header Files\\Breakpad_Client" FILES ${BREAKPAD_CLIENT_LINUX_HEADERS} )
@@ -114,16 +184,37 @@ install ( FILES
 	"${CMAKE_INSTALL_PREFIX}/include/breakpad/client/linux/log"
 )
 install ( FILES
-	${BREAKPAD_CLIENT_LINUX_DUMPWRITER_HEADERS}
+	${BREAKPAD_CLIENT_LINUX_MICROWRITER_HEADERS}
 	DESTINATION
 	"${CMAKE_INSTALL_PREFIX}/include/breakpad/client/linux/microdump_writer"
+)
+install ( FILES
+	${BREAKPAD_CLIENT_LINUX_MINIWRITER_HEADERS}
+	DESTINATION
+	"${CMAKE_INSTALL_PREFIX}/include/breakpad/client/linux/minidump_writer"
+)
+install ( FILES
+	${BREAKPAD_CLIENT_LINUX_CRASHGEN_HEADERS}
+    DESTINATION
+    "${CMAKE_INSTALL_PREFIX}/include/breakpad/client/linux/crash_generation"
+)
+install ( FILES
+	${BREAKPAD_CLIENT_LINUX_DUMPWRITER_HEADERS}
+    DESTINATION
+    "${CMAKE_INSTALL_PREFIX}/include/breakpad/client/linux/dump_writer_common"
+)
+install ( FILES
+	${BREAKPAD_THIRDPARTS_LSS_HEADERS}
+    DESTINATION
+    "${CMAKE_INSTALL_PREFIX}/include/breakpad/third_party/lss"
 )
 
 elseif(WIN32)
 # Windows OS rules
-set(BREAKPAD_CLIENT_WINDOWS_COMMON_HEADERS
+set(BREAKPAD_CLIENT_COMMON_WINDOWS_HEADERS
     ../common/windows/guid_string.h
     ../common/windows/http_upload.h
+    ../common/windows/string_utils-inl.h
 )
 set(BREAKPAD_CLIENT_WINDOWS_HANDLER_HEADERS
     windows/handler/exception_handler.h
@@ -134,6 +225,10 @@ set(BREAKPAD_CLIENT_WINDOWS_CRASHGEN_HEADERS
 )
 set(BREAKPAD_CLIENT_WINDOWS_SENDER_HEADERS
     windows/sender/crash_report_sender.h
+)
+set(BREAKPAD_CLIENT_WINDOWS_COMMON_HEADERS
+    windows/common/ipc_protocol.h
+    windows/common/auto_critical_section.h
 )
 set(BREAKPAD_CLIENT_WINDOWS_SOURCES
     ../common/windows/string_utils.cc
@@ -146,6 +241,7 @@ set(BREAKPAD_CLIENT_WINDOWS_SOURCES
 source_group( "Source Files\\Breakpad_Client" FILES ${BREAKPAD_CLIENT_WINDOWS_SOURCES} )
 
 set(BREAKPAD_CLIENT_WINDOWS_HEADERS
+    ${BREAKPAD_CLIENT_COMMON_WINDOWS_HEADERS}
     ${BREAKPAD_CLIENT_WINDOWS_COMMON_HEADERS}
     ${BREAKPAD_CLIENT_WINDOWS_HANDLER_HEADERS}
     ${BREAKPAD_CLIENT_WINDOWS_CRASHGEN_HEADERS}
@@ -190,9 +286,14 @@ target_link_libraries(breakpad_client
 endif()
 
 install ( FILES
-	${BREAKPAD_CLIENT_WINDOWS_COMMON_HEADERS}
+	${BREAKPAD_CLIENT_COMMON_WINDOWS_HEADERS}
 	DESTINATION
 	"${CMAKE_INSTALL_PREFIX}/include/breakpad/common/windows"
+)
+install ( FILES
+	${BREAKPAD_CLIENT_WINDOWS_COMMON_HEADERS}
+	DESTINATION
+	"${CMAKE_INSTALL_PREFIX}/include/breakpad/client/windows/common"
 )
 install ( FILES
 	${BREAKPAD_CLIENT_WINDOWS_HANDLER_HEADERS}
@@ -292,6 +393,18 @@ install ( FILES
 	${BREAKPAD_CLIENT_COMMON_HEADERS}
 	DESTINATION
     "${CMAKE_INSTALL_PREFIX}/include/breakpad/client"
+)
+
+install ( FILES
+	${BREAKPAD_GOOGLEBREAKPAD_COMMON_HEADERS}
+	DESTINATION
+    "${CMAKE_INSTALL_PREFIX}/include/breakpad/google_breakpad/common"
+)
+
+install ( FILES
+	${BREAKPAD_GOOGLEBREAKPAD_PROCESSOR_HEADERS}
+    DESTINATION
+    "${CMAKE_INSTALL_PREFIX}/include/breakpad/google_breakpad/processor"
 )
 
 install(TARGETS
