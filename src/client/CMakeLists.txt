@@ -222,7 +222,7 @@ set(BREAKPAD_CLIENT_MACOS_CRASHGEN_HEADERS
     mac/crash_generation/crash_generation_client.h
 )
 set(BREAKPAD_CLIENT_MACOS_COMMON_HEADERS
-    ../common/mac/http_upload.h
+    ../common/mac/HTTPMultipartUpload.h
     ../common/mac/string_utilities.h
     ../common/mac/MachIPC.h
     ../common/mac/macho_id.h
@@ -243,7 +243,7 @@ set(BREAKPAD_CLIENT_MACOS_SOURCES
     mac/handler/minidump_generator.cc
     mac/handler/dynamic_images.cc
     mac/crash_generation/crash_generation_client.cc
-    ../common/mac/http_upload.cc
+    ../common/mac/HTTPMultipartUpload.m
     ../common/mac/string_utilities.cc
     ../common/mac/MachIPC.mm
     ../common/mac/macho_id.cc
