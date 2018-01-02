@@ -1,3 +1,9 @@
+# Blacknut Breakpad changes
+* Compil a basic client library for Windows, Linux (Android) and Mac
+* Crosscompilation for Windows
+* add CMake generation process
+* **warning** windows code won't build on MSVC
+
 # Breakpad
 
 Breakpad is a set of client and server components which implement a
