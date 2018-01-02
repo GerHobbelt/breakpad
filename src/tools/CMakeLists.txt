@@ -120,9 +120,11 @@ set(COMMON_TOOL_WINDOWS_SOURCES
 )
 set(DUMP_SYMS_WINDOWS_SOURCES
     windows/dump_syms/dump_syms.cc
+    ../third_party/dia_sdk/lib/dia2_guids.c
 )
 set(SYM_UPLOAD_WINDOWS_SOURCES
     windows/symupload/symupload.cc
+    ../third_party/dia_sdk/lib/dia2_guids.c
 )
 
 add_executable(dump_syms
@@ -131,21 +133,93 @@ add_executable(dump_syms
 	${DUMP_SYMS_WINDOWS_SOURCES}
 )
 
-target_link_libraries(dump_syms
-    diaguids
-    imagehlp
-    shell32
+if(CMAKE_COMPILER_IS_GNUCXX)
+    add_compile_options(-Wattributes -fpermissive -Wconversion-null -municode)
+endif()
+
+target_compile_definitions(dump_syms
+    PRIVATE UNICODE
+    PRIVATE _UNICODE
+    PRIVATE _WIN32_WINNT=0x0600
+    PRIVATE WINVER=0x0600
+    PRIVATE WIN32
+    PRIVATE _WINDOWS
+    PRIVATE NOMINMAX
+    PRIVATE WIN32_LEAN_AND_MEAN
+ #   PRIVATE _HAS_EXCEPTIONS=0
+ #   PRIVATE _CRT_RAND_S
+ #   PRIVATE CERT_CHAIN_PARA_HAS_EXTRA_FIELDS
+ #   PRIVATE _SECURE_ATL
+ #   PRIVATE _HAS_TR1=0
+ #   PRIVATE RC_INVOKED
+ #   PRIVATE _ATL_ENABLE_PTM_WARNING
 )
 
+target_include_directories(dump_syms
+    PRIVATE ../third_party/dia_sdk/include
+    PRIVATE ../third_party/atl_compat
+)
+if(CMAKE_SIZEOF_VOID_P MATCHES "8")
+target_link_libraries(dump_syms
+    imagehlp
+    version
+    wininet
+    #-Wl,--start-group uuid ${CMAKE_SOURCE_DIR}/src/third_party/dia_sdk/lib/amd64/diaguids.lib -Wl,--end-group
+    -municode
+)
+else()
+target_link_libraries(dump_syms
+    imagehlp
+    version
+    wininet
+    #-Wl,--start-group uuid ${CMAKE_SOURCE_DIR}/src/third_party/dia_sdk/lib/diaguids.lib -Wl,--end-group
+    -municode
+)
+endif()
 
 add_executable(sym_upload
     ${COMMON_TOOL_WINDOWS_SOURCES}
 	${SYM_UPLOAD_WINDOWS_SOURCES}
 )
-target_link_libraries(sym_upload
-    diaguids
-    imagehlp
+target_compile_definitions(sym_upload
+    PRIVATE UNICODE
+    PRIVATE _UNICODE
+    PRIVATE _WIN32_WINNT=0x0600
+    PRIVATE WINVER=0x0600
+    PRIVATE WIN32
+    PRIVATE _WINDOWS
+    PRIVATE NOMINMAX
+    PRIVATE WIN32_LEAN_AND_MEAN
+ #   PRIVATE _HAS_EXCEPTIONS=0
+ #   PRIVATE _CRT_RAND_S
+ #   PRIVATE CERT_CHAIN_PARA_HAS_EXTRA_FIELDS
+ #   PRIVATE _SECURE_ATL
+ #   PRIVATE _HAS_TR1=0
+ #   PRIVATE RC_INVOKED
+ #   PRIVATE _ATL_ENABLE_PTM_WARNING
 )
+
+target_include_directories(sym_upload
+    PRIVATE ../third_party/dia_sdk/include
+    PRIVATE ../third_party/atl_compat
+)
+if(CMAKE_SIZEOF_VOID_P MATCHES "8")
+target_link_libraries(sym_upload
+    imagehlp
+    wininet
+    version
+    #-Wl,--start-group uuid ${CMAKE_SOURCE_DIR}/src/third_party/dia_sdk/lib/amd64/diaguids.lib -Wl,--end-group
+    -municode
+)
+else()
+target_link_libraries(sym_upload
+    imagehlp
+    wininet
+    version
+    #-Wl,--start-group uuid ${CMAKE_SOURCE_DIR}/src/third_party/dia_sdk/lib/diaguids.lib -Wl,--end-group
+    -municode
+)
+endif()
 
 install(TARGETS
     dump_syms sym_upload

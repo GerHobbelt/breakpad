@@ -47,6 +47,11 @@
 #include <dbghelp.h>
 #include <wininet.h>
 
+#include <dia2.h>
+#ifndef _MSC_VER
+#include "ms_atl.h"
+#endif
+
 #include <cstdio>
 #include <map>
 #include <string>
@@ -168,6 +173,7 @@ __declspec(noreturn) void printUsageAndExit() {
           L"        chrome.dll http://no.free.symbol.server.for.you\n");
   exit(0);
 }
+extern "C"
 int wmain(int argc, wchar_t *argv[]) {
   const wchar_t *module;
   const wchar_t *product = nullptr;

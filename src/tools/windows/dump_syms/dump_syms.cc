@@ -35,12 +35,19 @@
 
 #include <string>
 
+#ifndef _MSC_VER
+extern "C" {
+#include <dia2.h>
+};
+#include "ms_atl.h"
+#endif
+
 #include "common/windows/pdb_source_line_writer.h"
 
 using std::wstring;
 using google_breakpad::PDBSourceLineWriter;
 
-int wmain(int argc, wchar_t **argv) {
+int wmain(int argc, wchar_t *argv[]) {
   if (argc < 2) {
     fprintf(stderr, "Usage: %ws <file.[pdb|exe|dll]>\n", argv[0]);
     return 1;

@@ -33,8 +33,6 @@
 #ifndef COMMON_WINDOWS_PDB_SOURCE_LINE_WRITER_H_
 #define COMMON_WINDOWS_PDB_SOURCE_LINE_WRITER_H_
 
-#include <atlcomcli.h>
-
 #include <unordered_map>
 #include <string>
 

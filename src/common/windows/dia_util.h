@@ -31,8 +31,6 @@
 #ifndef COMMON_WINDOWS_DIA_UTIL_H_
 #define COMMON_WINDOWS_DIA_UTIL_H_
 
-#include <Windows.h>
-#include <dia2.h>
 
 namespace google_breakpad {
 

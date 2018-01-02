@@ -40,9 +40,18 @@
 #include <cassert>
 #include <cstdio>
 
+#ifndef _MSC_VER
+extern "C" {
+#include <dia2.h>
+};
+#include "ms_atl.h"
+#endif
+
+
 #include "tools/windows/converter/ms_symbol_server_converter.h"
 #include "common/windows/pdb_source_line_writer.h"
 #include "common/windows/string_utils-inl.h"
+
 
 // SYMOPT_NO_PROMPTS is not defined in earlier platform SDKs.  Define it
 // in that case, in the event that this code is used with a newer version

@@ -26,9 +26,23 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+
+#include <windows.h>
+extern "C" {
+#include <dia2.h>
+};
+
 #include "common/windows/dia_util.h"
 
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
+#ifdef _MSC_VER
 #include <atlbase.h>
+#else
+#include "ms_atl.h"
+#endif
 
 namespace google_breakpad {
 

@@ -23,12 +23,12 @@ set(BREAKPAD_CLIENT_COMMON_HEADERS
     minidump_file_writer-inl.h
     minidump_file_writer.h
 )
-source_group( "Header Files\\Breakpad_Client_Common" FILES ${BREAKPAD_CLIENT_COMMON_HEADERS} )
+source_group( "Header Files\\Breakpad_Common" FILES ${BREAKPAD_CLIENT_COMMON_HEADERS} )
 
 set(BREAKPAD_CLIENT_COMMON_SOURCES
     minidump_file_writer.cc
 )
-source_group( "Source Files\\Breakpad_Client_Common" FILES ${BREAKPAD_CLIENT_COMMON_SOURCES} )
+source_group( "Source Files\\Breakpad_Common" FILES ${BREAKPAD_CLIENT_COMMON_SOURCES} )
 
 if(LINUX)
 # Linux OS rules
@@ -40,7 +40,7 @@ set(BREAKPAD_COMMON_LINUX_HEADERS
 	../common/linux/guid_creator.h
     ../common/linux/http_upload.h
 )
-source_group( "Header Files\\Breakpad_Linux_Common" FILES ${BREAKPAD_COMMON_LINUX_HEADERS} )
+source_group( "Header Files\\Breakpad_Common" FILES ${BREAKPAD_COMMON_LINUX_HEADERS} )
 set(BREAKPAD_COMMON_LINUX_SOURCES
     ../common/linux/elf_core_dump.cc
     ../common/linux/elfutils.cc
@@ -51,7 +51,7 @@ set(BREAKPAD_COMMON_LINUX_SOURCES
     ../common/linux/safe_readlink.cc
     ../common/linux/http_upload.cc
 )
-source_group( "Source Files\\Breakpad_Linux_Common" FILES ${BREAKPAD_COMMON_LINUX_SOURCES} )
+source_group( "Source Files\\Breakpad_Common" FILES ${BREAKPAD_COMMON_LINUX_SOURCES} )
 
 # Linux client 
 set(BREAKPAD_CLIENT_LINUX_HANDLER_HEADERS
@@ -157,11 +157,37 @@ add_library(breakpad_client
     ${BREAKPAD_COMMON_HEADERS}
     ${BREAKPAD_COMMON_SOURCES}
     ${BREAKPAD_CLIENT_COMMON_HEADERS}
-    ${BREAKPAD_CLIENT_COMMON_SOURCES}
     ${BREAKPAD_CLIENT_WINDOWS_HEADERS}
     ${BREAKPAD_CLIENT_WINDOWS_SOURCES}
 )
 set_target_properties(breakpad_client PROPERTIES DEBUG_POSTFIX "d")
+target_compile_definitions(breakpad_client
+    PRIVATE UNICODE
+    PRIVATE _WIN32_WINNT=0x0600
+    PRIVATE WINVER=0x0600
+    PRIVATE WIN32
+    PRIVATE _WINDOWS
+    PRIVATE _HAS_EXCEPTIONS=0
+    PRIVATE NOMINMAX
+    PRIVATE _CRT_RAND_S
+    PRIVATE CERT_CHAIN_PARA_HAS_EXTRA_FIELDS
+    PRIVATE WIN32_LEAN_AND_MEAN
+    PRIVATE _SECURE_ATL
+    PRIVATE _HAS_TR1=0
+)
+target_include_directories(breakpad_client
+    PRIVATE ../third_party/dia_sdk/include
+    PRIVATE ../third_party/atl_sdk/include
+)
+if(CMAKE_SIZEOF_VOID_P MATCHES "8")
+target_link_libraries(breakpad_client
+    PRIVATE ../third_party/dia_sdk/lib/amd64
+)
+else()
+target_link_libraries(breakpad_client
+    PRIVATE ../third_party/dia_sdk/lib
+)
+endif()
 
 install ( FILES
 	${BREAKPAD_CLIENT_WINDOWS_COMMON_HEADERS}

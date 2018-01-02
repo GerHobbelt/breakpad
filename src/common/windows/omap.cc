@@ -102,7 +102,11 @@
 
 #include "common/windows/omap.h"
 
+#ifdef _MSC_VER
 #include <atlbase.h>
+#else
+#include "ms_atl.h"
+#endif
 
 #include <algorithm>
 #include <cassert>
@@ -224,7 +228,7 @@ bool GetOriginalImageLength(IDiaSession* session, DWORD* image_length) {
   assert(image_length != NULL);
 
   CComPtr<IDiaEnumSegments> enum_segments;
-  if (!FindTable(session, &enum_segments))
+  if (!FindTable(IID_IDiaEnumSegments, session, (void**)&enum_segments))
     return false;
   assert(enum_segments.p != NULL);
 
@@ -547,7 +551,7 @@ bool GetOmapDataAndDisableTranslation(IDiaSession* session,
   assert(omap_data != NULL);
 
   CComPtr<IDiaAddressMap> address_map;
-  if (FAILED(session->QueryInterface(&address_map))) {
+  if (FAILED(session->QueryInterface(IID_IDiaAddressMap, (void**)&address_map))) {
     fprintf(stderr, "IDiaSession::QueryInterface(IDiaAddressMap) failed\n");
     return false;
   }

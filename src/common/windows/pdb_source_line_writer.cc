@@ -27,14 +27,23 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include "common/windows/pdb_source_line_writer.h"
 
 #include <windows.h>
 #include <winnt.h>
-#include <atlbase.h>
+
+#ifdef _MSC_VER
 #include <dia2.h>
+#include <atlbase.h>
+#else
+#define INITGUID
+extern "C" {
+#include <dia2.h>
+};
+#include "ms_atl.h"
+#endif
+
 #include <diacreate.h>
-#include <ImageHlp.h>
+#include <imagehlp.h>
 #include <stdio.h>
 
 #include <algorithm>
@@ -46,6 +55,8 @@
 #include "common/windows/dia_util.h"
 #include "common/windows/guid_string.h"
 #include "common/windows/string_utils-inl.h"
+
+#include "common/windows/pdb_source_line_writer.h"
 
 // This constant may be missing from DbgHelp.h.  See the documentation for
 // IDiaSymbol::get_undecoratedNameEx.
@@ -152,7 +163,7 @@ void MaybeRecordSymbol(DWORD rva,
   loc->second.symbol->get_name(&current_name);
   symbol->get_name(&new_name);
   if (wcscmp(new_name, current_name) < 0) {
-    loc->second.symbol = symbol;
+    loc->second.symbol = symbol.p;
     loc->second.is_public = is_public;
   }
 }
@@ -183,8 +194,14 @@ bool SymbolsMatch(IDiaSymbol* a, IDiaSymbol* b) {
   return a_section == b_section && a_offset == b_offset;
 }
 
+DEFINE_GUID(CLSID_DiaSource, 0xBCE36434, 0x2C24, 0x499E, 0xBF, 0x49, 0x8B, 0xD9, 0x9B, 0x0E, 0xEB, 0x68);
+DEFINE_GUID(IID_DiaSource100, 0xB86AE24D, 0xBF2F, 0x4ac9, 0xB5, 0xA2, 0x34, 0xB1, 0x4E, 0x4C, 0xE1, 0x1D);
+DEFINE_GUID(IID_DiaSource110, 0x761D3BCD, 0x1304, 0x41D5, 0x94, 0xE8, 0xEA, 0xC5, 0x4E, 0x4A, 0xC1, 0x72);
+DEFINE_GUID(IID_DiaSource120, 0x3BFCEA48, 0x620F, 0x4B6B, 0x81, 0xF7, 0xB9, 0xAF, 0x75, 0x45, 0x4C, 0x7D);
+DEFINE_GUID(IID_DiaSource140, 0xE6756135, 0x1E65, 0x4D17, 0xB5, 0xA2, 0x61, 0x07, 0x61, 0x39, 0x8C, 0x3C);
+
 bool CreateDiaDataSourceInstance(CComPtr<IDiaDataSource> &data_source) {
-  if (SUCCEEDED(data_source.CoCreateInstance(CLSID_DiaSource))) {
+  if (SUCCEEDED(::CoCreateInstance(CLSID_DiaSource, NULL, CLSCTX_ALL, IID_IDiaDataSource, (void**)&data_source))) {
     return true;
   }
 
@@ -198,13 +215,13 @@ bool CreateDiaDataSourceInstance(CComPtr<IDiaDataSource> &data_source) {
   // the DIA headers don't provide a version. Lets try to figure out which DIA
   // version we're compiling against by comparing CLSIDs.
   const wchar_t *msdia_dll = nullptr;
-  if (CLSID_DiaSource == _uuidof(DiaSource100)) {
+  if (CLSID_DiaSource == IID_DiaSource100) {
     msdia_dll = L"msdia100.dll";
-  } else if (CLSID_DiaSource == _uuidof(DiaSource110)) {
+  } else if (CLSID_DiaSource == IID_DiaSource110) {
     msdia_dll = L"msdia110.dll";
-  } else if (CLSID_DiaSource == _uuidof(DiaSource120)) {
+  } else if (CLSID_DiaSource == IID_DiaSource120) {
     msdia_dll = L"msdia120.dll";
-  } else if (CLSID_DiaSource == _uuidof(DiaSource140)) {
+  } else if (CLSID_DiaSource == IID_DiaSource140) {
     msdia_dll = L"msdia140.dll";
   }
 
@@ -573,7 +590,7 @@ bool PDBSourceLineWriter::PrintFrameDataUsingPDB() {
   // doesn't make it possible to get the frame data in that way.
 
   CComPtr<IDiaEnumFrameData> frame_data_enum;
-  if (!FindTable(session_, &frame_data_enum))
+  if (!FindTable(IID_IDiaEnumFrameData, session_, (void**)&frame_data_enum))
     return false;
 
   DWORD last_type = std::numeric_limits<DWORD>::max();
