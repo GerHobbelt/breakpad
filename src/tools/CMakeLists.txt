@@ -159,23 +159,13 @@ target_include_directories(dump_syms
     PRIVATE ../third_party/dia_sdk/include
     PRIVATE ../third_party/atl_compat
 )
-if(CMAKE_SIZEOF_VOID_P MATCHES "8")
 target_link_libraries(dump_syms
     imagehlp
     version
     wininet
-    #-Wl,--start-group uuid ${CMAKE_SOURCE_DIR}/src/third_party/dia_sdk/lib/amd64/diaguids.lib -Wl,--end-group
     -municode
+    dbghelp
 )
-else()
-target_link_libraries(dump_syms
-    imagehlp
-    version
-    wininet
-    #-Wl,--start-group uuid ${CMAKE_SOURCE_DIR}/src/third_party/dia_sdk/lib/diaguids.lib -Wl,--end-group
-    -municode
-)
-endif()
 
 add_executable(sym_upload
     ${COMMON_TOOL_WINDOWS_SOURCES}
@@ -203,23 +193,13 @@ target_include_directories(sym_upload
     PRIVATE ../third_party/dia_sdk/include
     PRIVATE ../third_party/atl_compat
 )
-if(CMAKE_SIZEOF_VOID_P MATCHES "8")
 target_link_libraries(sym_upload
     imagehlp
     wininet
     version
-    #-Wl,--start-group uuid ${CMAKE_SOURCE_DIR}/src/third_party/dia_sdk/lib/amd64/diaguids.lib -Wl,--end-group
     -municode
+    dbghelp
 )
-else()
-target_link_libraries(sym_upload
-    imagehlp
-    wininet
-    version
-    #-Wl,--start-group uuid ${CMAKE_SOURCE_DIR}/src/third_party/dia_sdk/lib/diaguids.lib -Wl,--end-group
-    -municode
-)
-endif()
 
 install(TARGETS
     dump_syms sym_upload
