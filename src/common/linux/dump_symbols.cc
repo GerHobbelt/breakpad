@@ -968,7 +968,7 @@ bool ReadSymbolDataElfClass(const typename ElfClass::Ehdr* elf_header,
 namespace google_breakpad {
 
 // Not explicitly exported, but not static so it can be used in unit tests.
-bool ReadSymbolDataInternal(const uint8_t* obj_file,
+bool ELFReadSymbolDataInternal(const uint8_t* obj_file,
                             const string& obj_filename,
                             const std::vector<string>& debug_dirs,
                             const DumpOptions& options,
@@ -993,12 +993,12 @@ bool ReadSymbolDataInternal(const uint8_t* obj_file,
   return false;
 }
 
-bool WriteSymbolFile(const string &obj_file,
+bool ELFWriteSymbolFile(const string &obj_file,
                      const std::vector<string>& debug_dirs,
                      const DumpOptions& options,
                      std::ostream &sym_stream) {
   Module* module;
-  if (!ReadSymbolData(obj_file, debug_dirs, options, &module))
+  if (!ELFReadSymbolData(obj_file, debug_dirs, options, &module))
     return false;
 
   bool result = module->Write(sym_stream, options.symbol_data);
@@ -1009,7 +1009,7 @@ bool WriteSymbolFile(const string &obj_file,
 // Read the selected object file's debugging information, and write out the
 // header only to |stream|. Return true on success; if an error occurs, report
 // it and return false.
-bool WriteSymbolFileHeader(const string& obj_file,
+bool ELFWriteSymbolFileHeader(const string& obj_file,
                            std::ostream &sym_stream) {
   MmapWrapper map_wrapper;
   void* elf_header = NULL;
@@ -1045,16 +1045,16 @@ bool WriteSymbolFileHeader(const string& obj_file,
   return module->Write(sym_stream, ALL_SYMBOL_DATA);
 }
 
-bool ReadSymbolData(const string& obj_file,
+bool ELFReadSymbolData(const string& obj_file,
                     const std::vector<string>& debug_dirs,
                     const DumpOptions& options,
                     Module** module) {
   MmapWrapper map_wrapper;
   void* elf_header = NULL;
-  if (!LoadELF(obj_file, &map_wrapper, &elf_header))
+  if (!LoadELF(obj_file, &map_wrapper, &elf_header)) 
     return false;
 
-  return ReadSymbolDataInternal(reinterpret_cast<uint8_t*>(elf_header),
+  return ELFReadSymbolDataInternal(reinterpret_cast<uint8_t*>(elf_header),
                                 obj_file, debug_dirs, options, module);
 }
 

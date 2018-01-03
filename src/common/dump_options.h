@@ -1,5 +1,3 @@
-// -*- mode: c++ -*-
-
 // Copyright (c) 2011, Google Inc.
 // All rights reserved.
 //
@@ -29,48 +27,26 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-// dump_symbols.h: Read debugging information from an ELF file, and write
-// it out as a Breakpad symbol file.
+// dump_options.h: common to linux/dump_symbols.h and pecoff/dump_symbols.h
 
-#ifndef COMMON_LINUX_DUMP_SYMBOLS_H__
-#define COMMON_LINUX_DUMP_SYMBOLS_H__
+#ifndef COMMON_DUMP_OPTIONS_H__
+#define COMMON_DUMP_OPTIONS_H__
 
-#include <iostream>
-#include <string>
-#include <vector>
-
-#include "common/symbol_data.h"
-#include "common/using_std_string.h"
-#include "common/dump_options.h"
 
 namespace google_breakpad {
 
+class Module;
 
-// Find all the debugging information in OBJ_FILE, an ELF executable
-// or shared library, and write it to SYM_STREAM in the Breakpad symbol
-// file format.
-// If OBJ_FILE has been stripped but contains a .gnu_debuglink section,
-// then look for the debug file in DEBUG_DIRS.
-// SYMBOL_DATA allows limiting the type of symbol data written.
-bool ELFWriteSymbolFile(const string &obj_file,
-                     const std::vector<string>& debug_dirs,
-                     const DumpOptions& options,
-                     std::ostream &sym_stream);
+struct DumpOptions {
+  DumpOptions(SymbolData symbol_data, bool handle_inter_cu_refs)
+      : symbol_data(symbol_data),
+        handle_inter_cu_refs(handle_inter_cu_refs) {
+  }
 
-// Read the selected object file's debugging information, and write out the
-// header only to |stream|. Return true on success; if an error occurs, report
-// it and return false.
-bool ELFWriteSymbolFileHeader(const string& obj_file,
-                           std::ostream &sym_stream);
-
-// As above, but simply return the debugging information in MODULE
-// instead of writing it to a stream. The caller owns the resulting
-// Module object and must delete it when finished.
-bool ELFReadSymbolData(const string& obj_file,
-                    const std::vector<string>& debug_dirs,
-                    const DumpOptions& options,
-                    Module** module);
+  SymbolData symbol_data;
+  bool handle_inter_cu_refs;
+};
 
 }  // namespace google_breakpad
 
-#endif  // COMMON_LINUX_DUMP_SYMBOLS_H__
+#endif  // COMMON_DUMP_OPTIONS_H__

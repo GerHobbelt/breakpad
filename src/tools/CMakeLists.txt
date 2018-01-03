@@ -18,7 +18,13 @@ set(DUMP_SYMS_COMMON_SOURCES
 	../common/dwarf/elf_reader.cc
 )
 set(DUMP_SYMS_LINUX_SOURCES
-	../common/linux/crc32.cc
+    ../common/pecoff/pecoffutils.cc
+    ../common/pecoff/pecoffutils.h
+    ../common/pecoff/pecoff_file_id.cc
+    ../common/pecoff/pecoff_file_id.h
+	../common/pecoff/dump_symbols.cc
+	../common/pecoff/dump_symbols.h
+    ../common/linux/crc32.cc
 	../common/linux/dump_symbols.cc
 	../common/linux/dump_symbols.h
 	../common/linux/elf_symbols_to_module.cc

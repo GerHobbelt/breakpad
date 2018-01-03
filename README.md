@@ -2,7 +2,10 @@
 * Compil a basic client library for Windows, Linux (Android) and Mac
 * Crosscompilation for Windows
 * add CMake generation process
-* **warning** windows code won't build on MSVC
+* **Warning** windows code won't build on MSVC
+* linux dump_syms can dump symbols from ELF and PECOFF (mingw-w64)
+* **Warning** autotools are not updated to build the code
+* add lls third party as git submodule
 
 # Breakpad
 

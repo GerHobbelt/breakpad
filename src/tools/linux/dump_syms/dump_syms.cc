@@ -37,9 +37,12 @@
 #include <vector>
 
 #include "common/linux/dump_symbols.h"
+#include "common/pecoff/dump_symbols.h"
 
-using google_breakpad::WriteSymbolFile;
-using google_breakpad::WriteSymbolFileHeader;
+using google_breakpad::ELFWriteSymbolFile;
+using google_breakpad::ELFWriteSymbolFileHeader;
+using google_breakpad::PECOFFWriteSymbolFile;
+using google_breakpad::PECOFFWriteSymbolFileHeader;
 
 int usage(const char* self) {
   fprintf(stderr, "Usage: %s [OPTION] <binary-with-debugging-info> "
@@ -96,16 +99,18 @@ int main(int argc, char **argv) {
   }
 
   if (header_only) {
-    if (!WriteSymbolFileHeader(binary, std::cout)) {
+    if (!ELFWriteSymbolFileHeader(binary, std::cout)) {
       fprintf(saved_stderr, "Failed to process file.\n");
       return 1;
     }
   } else {
     SymbolData symbol_data = cfi ? ALL_SYMBOL_DATA : NO_CFI;
     google_breakpad::DumpOptions options(symbol_data, handle_inter_cu_refs);
-    if (!WriteSymbolFile(binary, debug_dirs, options, std::cout)) {
-      fprintf(saved_stderr, "Failed to write symbol file.\n");
-      return 1;
+    if (!ELFWriteSymbolFile(binary, debug_dirs, options, std::cout)) {
+      if(!PECOFFWriteSymbolFile(binary, debug_dirs, options, std::cout)) {
+        fprintf(saved_stderr, "Failed to write symbol file.\n");
+        return 1;
+      }
     }
   }
 
