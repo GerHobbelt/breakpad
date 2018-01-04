@@ -60,6 +60,7 @@ add_executable(dump_syms
     ${DUMP_SYMS_LINUX_SOURCES}
 )
 target_link_libraries(dump_syms
+    breakpad
 )
 target_compile_definitions(dump_syms
     PRIVATE HAVE_MACH_O_NLIST_H
@@ -92,6 +93,7 @@ add_executable(sym_upload
 )
 target_link_libraries(sym_upload
     breakpad_client
+    breakpad
     dl
 )
 

@@ -8,6 +8,9 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
+option(BREAKPAD_WITH_SHARED "Build the shared version of the library" OFF)
+option(BREAKPAD_WITH_STATIC "Build the static version of the library" ON)
+
 
 # Get the platform
 set(UNIX_SYS OFF)

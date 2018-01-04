@@ -156,6 +156,7 @@ set(BREAKPAD_CLIENT_LINUX_SOURCES
 )
 source_group( "Source Files\\Breakpad_Client" FILES ${BREAKPAD_CLIENT_LINUX_SOURCES} )
 
+if(${BREAKPAD_WITH_STATIC})
 add_library(breakpad_client
     ${BREAKPAD_COMMON_HEADERS}
     ${BREAKPAD_COMMON_SOURCES}
@@ -166,6 +167,19 @@ add_library(breakpad_client
     ${BREAKPAD_CLIENT_LINUX_HEADERS}
     ${BREAKPAD_CLIENT_LINUX_SOURCES}
 )
+endif()
+if(${BREAKPAD_WITH_SHARED})
+add_library(breakpad_client SHARED
+    ${BREAKPAD_COMMON_HEADERS}
+    ${BREAKPAD_COMMON_SOURCES}
+    ${BREAKPAD_CLIENT_COMMON_HEADERS}
+    ${BREAKPAD_CLIENT_COMMON_SOURCES}
+    ${BREAKPAD_COMMON_LINUX_HEADERS}
+    ${BREAKPAD_COMMON_LINUX_SOURCES}
+    ${BREAKPAD_CLIENT_LINUX_HEADERS}
+    ${BREAKPAD_CLIENT_LINUX_SOURCES}
+)
+endif()
 set_target_properties(breakpad_client PROPERTIES DEBUG_POSTFIX "d")
 
 install ( FILES
@@ -249,6 +263,7 @@ set(BREAKPAD_CLIENT_WINDOWS_HEADERS
 )
 source_group( "Header Files\\Breakpad_Client" FILES ${BREAKPAD_CLIENT_WINDOWS_HEADERS} )
 
+if(${BREAKPAD_WITH_STATIC})
 add_library(breakpad_client
     ${BREAKPAD_COMMON_HEADERS}
     ${BREAKPAD_COMMON_SOURCES}
@@ -256,6 +271,17 @@ add_library(breakpad_client
     ${BREAKPAD_CLIENT_WINDOWS_HEADERS}
     ${BREAKPAD_CLIENT_WINDOWS_SOURCES}
 )
+endif()
+if(${BREAKPAD_WITH_SHARED})
+add_library(breakpad_client SHARED
+    ${BREAKPAD_COMMON_HEADERS}
+    ${BREAKPAD_COMMON_SOURCES}
+    ${BREAKPAD_CLIENT_COMMON_HEADERS}
+    ${BREAKPAD_CLIENT_WINDOWS_HEADERS}
+    ${BREAKPAD_CLIENT_WINDOWS_SOURCES}
+)
+endif()
+
 set_target_properties(breakpad_client PROPERTIES DEBUG_POSTFIX "d")
 target_compile_definitions(breakpad_client
     PRIVATE UNICODE
@@ -356,6 +382,7 @@ set(BREAKPAD_CLIENT_MACOS_SOURCES
 )
 source_group( "Source Files\\Breakpad_Client" FILES ${BREAKPAD_CLIENT_MACOS_SOURCES} )
 
+if(${BREAKPAD_WITH_STATIC})
 add_library(breakpad_client
     ${BREAKPAD_COMMON_HEADERS}
     ${BREAKPAD_COMMON_SOURCES}
@@ -363,6 +390,16 @@ add_library(breakpad_client
     ${BREAKPAD_CLIENT_COMMON_SOURCES}
     ${BREAKPAD_CLIENT_MACOS_SOURCES}
 )
+endif()
+if(${BREAKPAD_WITH_SHARED})
+add_library(breakpad_client SHARED
+    ${BREAKPAD_COMMON_HEADERS}
+    ${BREAKPAD_COMMON_SOURCES}
+    ${BREAKPAD_CLIENT_COMMON_HEADERS}
+    ${BREAKPAD_CLIENT_COMMON_SOURCES}
+    ${BREAKPAD_CLIENT_MACOS_SOURCES}
+)
+endif()
 set_target_properties(breakpad_client PROPERTIES DEBUG_POSTFIX "d")
 
 install ( FILES
