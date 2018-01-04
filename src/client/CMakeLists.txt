@@ -301,6 +301,9 @@ target_include_directories(breakpad_client
     PRIVATE ../third_party/dia_sdk/include
     PRIVATE ../third_party/atl_sdk/include
 )
+target_link_libraries(breakpad_client
+    PRIVATE wininet
+)
 
 install ( FILES
 	${BREAKPAD_CLIENT_COMMON_WINDOWS_HEADERS}
