@@ -4,6 +4,9 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 project(breakpad)
 
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 # Get the platform
