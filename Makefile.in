@@ -726,6 +726,13 @@ am__src_common_dumper_unittest_SOURCES_DIST =  \
 	src/common/linux/synth_elf_unittest.cc \
 	src/common/linux/tests/crash_generator.cc \
 	src/common/linux/tests/crash_generator.h \
+	src/common/pecoff/dump_symbols.cc \
+	src/common/pecoff/dump_symbols.h \
+	src/common/pecoff/dump_symbols-inl.h \
+	src/common/pecoff/pecoff_file_id.h \
+	src/common/pecoff/pecoff_file_id.cc \
+	src/common/pecoff/pecoffutils.h \
+	src/common/pecoff/pecoffutils.cc \
 	src/common/testdata/func-line-pairing.h \
 	src/common/tests/file_utils.cc
 @DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@am_src_common_dumper_unittest_OBJECTS = src/common/src_common_dumper_unittest-byte_cursor_unittest.$(OBJEXT) \
@@ -772,6 +779,9 @@ am__src_common_dumper_unittest_SOURCES_DIST =  \
 @DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/linux/src_common_dumper_unittest-synth_elf.$(OBJEXT) \
 @DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/linux/src_common_dumper_unittest-synth_elf_unittest.$(OBJEXT) \
 @DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/linux/tests/src_common_dumper_unittest-crash_generator.$(OBJEXT) \
+@DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/pecoff/src_common_dumper_unittest-dump_symbols.$(OBJEXT) \
+@DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/pecoff/src_common_dumper_unittest-pecoff_file_id.$(OBJEXT) \
+@DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/pecoff/src_common_dumper_unittest-pecoffutils.$(OBJEXT) \
 @DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/tests/src_common_dumper_unittest-file_utils.$(OBJEXT)
 src_common_dumper_unittest_OBJECTS =  \
 	$(am_src_common_dumper_unittest_OBJECTS)
@@ -1400,6 +1410,13 @@ am__src_tools_linux_dump_syms_dump_syms_SOURCES_DIST =  \
 	src/common/dwarf/elf_reader.cc src/common/linux/crc32.cc \
 	src/common/linux/dump_symbols.cc \
 	src/common/linux/dump_symbols.h \
+	src/common/pecoff/dump_symbols.cc \
+	src/common/pecoff/dump_symbols.h \
+	src/common/pecoff/dump_symbols-inl.h \
+	src/common/pecoff/pecoff_file_id.h \
+	src/common/pecoff/pecoff_file_id.cc \
+	src/common/pecoff/pecoffutils.h \
+	src/common/pecoff/pecoffutils.cc \
 	src/common/linux/elf_symbols_to_module.cc \
 	src/common/linux/elf_symbols_to_module.h \
 	src/common/linux/elfutils.cc src/common/linux/file_id.cc \
@@ -1421,6 +1438,9 @@ am__src_tools_linux_dump_syms_dump_syms_SOURCES_DIST =  \
 @DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/dwarf/src_tools_linux_dump_syms_dump_syms-elf_reader.$(OBJEXT) \
 @DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/linux/src_tools_linux_dump_syms_dump_syms-crc32.$(OBJEXT) \
 @DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/linux/src_tools_linux_dump_syms_dump_syms-dump_symbols.$(OBJEXT) \
+@DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/pecoff/src_tools_linux_dump_syms_dump_syms-dump_symbols.$(OBJEXT) \
+@DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/pecoff/src_tools_linux_dump_syms_dump_syms-pecoff_file_id.$(OBJEXT) \
+@DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/pecoff/src_tools_linux_dump_syms_dump_syms-pecoffutils.$(OBJEXT) \
 @DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/linux/src_tools_linux_dump_syms_dump_syms-elf_symbols_to_module.$(OBJEXT) \
 @DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/linux/src_tools_linux_dump_syms_dump_syms-elfutils.$(OBJEXT) \
 @DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/linux/src_tools_linux_dump_syms_dump_syms-file_id.$(OBJEXT) \
@@ -2031,6 +2051,7 @@ pdfdir = @pdfdir@
 prefix = @prefix@
 program_transform_name = @program_transform_name@
 psdir = @psdir@
+runstatedir = @runstatedir@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 srcdir = @srcdir@
@@ -2409,6 +2430,13 @@ TESTS = $(check_PROGRAMS) $(check_SCRIPTS)
 @DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/linux/crc32.cc \
 @DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/linux/dump_symbols.cc \
 @DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/linux/dump_symbols.h \
+@DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/pecoff/dump_symbols.cc \
+@DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/pecoff/dump_symbols.h \
+@DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/pecoff/dump_symbols-inl.h \
+@DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/pecoff/pecoff_file_id.h \
+@DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/pecoff/pecoff_file_id.cc \
+@DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/pecoff/pecoffutils.h \
+@DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/pecoff/pecoffutils.cc \
 @DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/linux/elf_symbols_to_module.cc \
 @DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/linux/elf_symbols_to_module.h \
 @DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/linux/elfutils.cc \
@@ -2532,6 +2560,13 @@ TESTS = $(check_PROGRAMS) $(check_SCRIPTS)
 @DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/linux/synth_elf_unittest.cc \
 @DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/linux/tests/crash_generator.cc \
 @DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/linux/tests/crash_generator.h \
+@DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/pecoff/dump_symbols.cc \
+@DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/pecoff/dump_symbols.h \
+@DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/pecoff/dump_symbols-inl.h \
+@DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/pecoff/pecoff_file_id.h \
+@DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/pecoff/pecoff_file_id.cc \
+@DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/pecoff/pecoffutils.h \
+@DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/pecoff/pecoffutils.cc \
 @DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/testdata/func-line-pairing.h \
 @DISABLE_TOOLS_FALSE@@LINUX_HOST_TRUE@	src/common/tests/file_utils.cc
 
@@ -4141,6 +4176,21 @@ src/common/linux/src_common_dumper_unittest-synth_elf_unittest.$(OBJEXT):  \
 src/common/linux/tests/src_common_dumper_unittest-crash_generator.$(OBJEXT):  \
 	src/common/linux/tests/$(am__dirstamp) \
 	src/common/linux/tests/$(DEPDIR)/$(am__dirstamp)
+src/common/pecoff/$(am__dirstamp):
+	@$(MKDIR_P) src/common/pecoff
+	@: > src/common/pecoff/$(am__dirstamp)
+src/common/pecoff/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) src/common/pecoff/$(DEPDIR)
+	@: > src/common/pecoff/$(DEPDIR)/$(am__dirstamp)
+src/common/pecoff/src_common_dumper_unittest-dump_symbols.$(OBJEXT):  \
+	src/common/pecoff/$(am__dirstamp) \
+	src/common/pecoff/$(DEPDIR)/$(am__dirstamp)
+src/common/pecoff/src_common_dumper_unittest-pecoff_file_id.$(OBJEXT):  \
+	src/common/pecoff/$(am__dirstamp) \
+	src/common/pecoff/$(DEPDIR)/$(am__dirstamp)
+src/common/pecoff/src_common_dumper_unittest-pecoffutils.$(OBJEXT):  \
+	src/common/pecoff/$(am__dirstamp) \
+	src/common/pecoff/$(DEPDIR)/$(am__dirstamp)
 src/common/tests/src_common_dumper_unittest-file_utils.$(OBJEXT):  \
 	src/common/tests/$(am__dirstamp) \
 	src/common/tests/$(DEPDIR)/$(am__dirstamp)
@@ -4564,6 +4614,15 @@ src/common/linux/src_tools_linux_dump_syms_dump_syms-crc32.$(OBJEXT):  \
 src/common/linux/src_tools_linux_dump_syms_dump_syms-dump_symbols.$(OBJEXT):  \
 	src/common/linux/$(am__dirstamp) \
 	src/common/linux/$(DEPDIR)/$(am__dirstamp)
+src/common/pecoff/src_tools_linux_dump_syms_dump_syms-dump_symbols.$(OBJEXT):  \
+	src/common/pecoff/$(am__dirstamp) \
+	src/common/pecoff/$(DEPDIR)/$(am__dirstamp)
+src/common/pecoff/src_tools_linux_dump_syms_dump_syms-pecoff_file_id.$(OBJEXT):  \
+	src/common/pecoff/$(am__dirstamp) \
+	src/common/pecoff/$(DEPDIR)/$(am__dirstamp)
+src/common/pecoff/src_tools_linux_dump_syms_dump_syms-pecoffutils.$(OBJEXT):  \
+	src/common/pecoff/$(am__dirstamp) \
+	src/common/pecoff/$(DEPDIR)/$(am__dirstamp)
 src/common/linux/src_tools_linux_dump_syms_dump_syms-elf_symbols_to_module.$(OBJEXT):  \
 	src/common/linux/$(am__dirstamp) \
 	src/common/linux/$(DEPDIR)/$(am__dirstamp)
@@ -4732,6 +4791,7 @@ mostlyclean-compile:
 	-rm -f src/common/linux/*.$(OBJEXT)
 	-rm -f src/common/linux/tests/*.$(OBJEXT)
 	-rm -f src/common/mac/*.$(OBJEXT)
+	-rm -f src/common/pecoff/*.$(OBJEXT)
 	-rm -f src/common/tests/*.$(OBJEXT)
 	-rm -f src/processor/*.$(OBJEXT)
 	-rm -f src/testing/googlemock/src/*.$(OBJEXT)
@@ -4911,6 +4971,12 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@src/common/mac/$(DEPDIR)/src_tools_mac_dump_syms_dump_syms_mac-macho_reader.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/common/mac/$(DEPDIR)/src_tools_mac_dump_syms_dump_syms_mac-macho_utilities.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/common/mac/$(DEPDIR)/src_tools_mac_dump_syms_dump_syms_mac-macho_walker.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/common/pecoff/$(DEPDIR)/src_common_dumper_unittest-dump_symbols.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/common/pecoff/$(DEPDIR)/src_common_dumper_unittest-pecoff_file_id.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/common/pecoff/$(DEPDIR)/src_common_dumper_unittest-pecoffutils.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/common/pecoff/$(DEPDIR)/src_tools_linux_dump_syms_dump_syms-dump_symbols.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/common/pecoff/$(DEPDIR)/src_tools_linux_dump_syms_dump_syms-pecoff_file_id.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/common/pecoff/$(DEPDIR)/src_tools_linux_dump_syms_dump_syms-pecoffutils.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/common/tests/$(DEPDIR)/src_client_linux_linux_client_unittest_shlib-file_utils.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/common/tests/$(DEPDIR)/src_common_dumper_unittest-file_utils.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/common/tests/$(DEPDIR)/src_common_mac_macho_reader_unittest-file_utils.Po@am__quote@
@@ -6133,6 +6199,48 @@ src/common/linux/tests/src_common_dumper_unittest-crash_generator.obj: src/commo
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_common_dumper_unittest_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/common/linux/tests/src_common_dumper_unittest-crash_generator.obj `if test -f 'src/common/linux/tests/crash_generator.cc'; then $(CYGPATH_W) 'src/common/linux/tests/crash_generator.cc'; else $(CYGPATH_W) '$(srcdir)/src/common/linux/tests/crash_generator.cc'; fi`
 
+src/common/pecoff/src_common_dumper_unittest-dump_symbols.o: src/common/pecoff/dump_symbols.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_common_dumper_unittest_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/common/pecoff/src_common_dumper_unittest-dump_symbols.o -MD -MP -MF src/common/pecoff/$(DEPDIR)/src_common_dumper_unittest-dump_symbols.Tpo -c -o src/common/pecoff/src_common_dumper_unittest-dump_symbols.o `test -f 'src/common/pecoff/dump_symbols.cc' || echo '$(srcdir)/'`src/common/pecoff/dump_symbols.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/common/pecoff/$(DEPDIR)/src_common_dumper_unittest-dump_symbols.Tpo src/common/pecoff/$(DEPDIR)/src_common_dumper_unittest-dump_symbols.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/common/pecoff/dump_symbols.cc' object='src/common/pecoff/src_common_dumper_unittest-dump_symbols.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_common_dumper_unittest_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/common/pecoff/src_common_dumper_unittest-dump_symbols.o `test -f 'src/common/pecoff/dump_symbols.cc' || echo '$(srcdir)/'`src/common/pecoff/dump_symbols.cc
+
+src/common/pecoff/src_common_dumper_unittest-dump_symbols.obj: src/common/pecoff/dump_symbols.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_common_dumper_unittest_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/common/pecoff/src_common_dumper_unittest-dump_symbols.obj -MD -MP -MF src/common/pecoff/$(DEPDIR)/src_common_dumper_unittest-dump_symbols.Tpo -c -o src/common/pecoff/src_common_dumper_unittest-dump_symbols.obj `if test -f 'src/common/pecoff/dump_symbols.cc'; then $(CYGPATH_W) 'src/common/pecoff/dump_symbols.cc'; else $(CYGPATH_W) '$(srcdir)/src/common/pecoff/dump_symbols.cc'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/common/pecoff/$(DEPDIR)/src_common_dumper_unittest-dump_symbols.Tpo src/common/pecoff/$(DEPDIR)/src_common_dumper_unittest-dump_symbols.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/common/pecoff/dump_symbols.cc' object='src/common/pecoff/src_common_dumper_unittest-dump_symbols.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_common_dumper_unittest_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/common/pecoff/src_common_dumper_unittest-dump_symbols.obj `if test -f 'src/common/pecoff/dump_symbols.cc'; then $(CYGPATH_W) 'src/common/pecoff/dump_symbols.cc'; else $(CYGPATH_W) '$(srcdir)/src/common/pecoff/dump_symbols.cc'; fi`
+
+src/common/pecoff/src_common_dumper_unittest-pecoff_file_id.o: src/common/pecoff/pecoff_file_id.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_common_dumper_unittest_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/common/pecoff/src_common_dumper_unittest-pecoff_file_id.o -MD -MP -MF src/common/pecoff/$(DEPDIR)/src_common_dumper_unittest-pecoff_file_id.Tpo -c -o src/common/pecoff/src_common_dumper_unittest-pecoff_file_id.o `test -f 'src/common/pecoff/pecoff_file_id.cc' || echo '$(srcdir)/'`src/common/pecoff/pecoff_file_id.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/common/pecoff/$(DEPDIR)/src_common_dumper_unittest-pecoff_file_id.Tpo src/common/pecoff/$(DEPDIR)/src_common_dumper_unittest-pecoff_file_id.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/common/pecoff/pecoff_file_id.cc' object='src/common/pecoff/src_common_dumper_unittest-pecoff_file_id.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_common_dumper_unittest_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/common/pecoff/src_common_dumper_unittest-pecoff_file_id.o `test -f 'src/common/pecoff/pecoff_file_id.cc' || echo '$(srcdir)/'`src/common/pecoff/pecoff_file_id.cc
+
+src/common/pecoff/src_common_dumper_unittest-pecoff_file_id.obj: src/common/pecoff/pecoff_file_id.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_common_dumper_unittest_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/common/pecoff/src_common_dumper_unittest-pecoff_file_id.obj -MD -MP -MF src/common/pecoff/$(DEPDIR)/src_common_dumper_unittest-pecoff_file_id.Tpo -c -o src/common/pecoff/src_common_dumper_unittest-pecoff_file_id.obj `if test -f 'src/common/pecoff/pecoff_file_id.cc'; then $(CYGPATH_W) 'src/common/pecoff/pecoff_file_id.cc'; else $(CYGPATH_W) '$(srcdir)/src/common/pecoff/pecoff_file_id.cc'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/common/pecoff/$(DEPDIR)/src_common_dumper_unittest-pecoff_file_id.Tpo src/common/pecoff/$(DEPDIR)/src_common_dumper_unittest-pecoff_file_id.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/common/pecoff/pecoff_file_id.cc' object='src/common/pecoff/src_common_dumper_unittest-pecoff_file_id.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_common_dumper_unittest_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/common/pecoff/src_common_dumper_unittest-pecoff_file_id.obj `if test -f 'src/common/pecoff/pecoff_file_id.cc'; then $(CYGPATH_W) 'src/common/pecoff/pecoff_file_id.cc'; else $(CYGPATH_W) '$(srcdir)/src/common/pecoff/pecoff_file_id.cc'; fi`
+
+src/common/pecoff/src_common_dumper_unittest-pecoffutils.o: src/common/pecoff/pecoffutils.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_common_dumper_unittest_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/common/pecoff/src_common_dumper_unittest-pecoffutils.o -MD -MP -MF src/common/pecoff/$(DEPDIR)/src_common_dumper_unittest-pecoffutils.Tpo -c -o src/common/pecoff/src_common_dumper_unittest-pecoffutils.o `test -f 'src/common/pecoff/pecoffutils.cc' || echo '$(srcdir)/'`src/common/pecoff/pecoffutils.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/common/pecoff/$(DEPDIR)/src_common_dumper_unittest-pecoffutils.Tpo src/common/pecoff/$(DEPDIR)/src_common_dumper_unittest-pecoffutils.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/common/pecoff/pecoffutils.cc' object='src/common/pecoff/src_common_dumper_unittest-pecoffutils.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_common_dumper_unittest_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/common/pecoff/src_common_dumper_unittest-pecoffutils.o `test -f 'src/common/pecoff/pecoffutils.cc' || echo '$(srcdir)/'`src/common/pecoff/pecoffutils.cc
+
+src/common/pecoff/src_common_dumper_unittest-pecoffutils.obj: src/common/pecoff/pecoffutils.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_common_dumper_unittest_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/common/pecoff/src_common_dumper_unittest-pecoffutils.obj -MD -MP -MF src/common/pecoff/$(DEPDIR)/src_common_dumper_unittest-pecoffutils.Tpo -c -o src/common/pecoff/src_common_dumper_unittest-pecoffutils.obj `if test -f 'src/common/pecoff/pecoffutils.cc'; then $(CYGPATH_W) 'src/common/pecoff/pecoffutils.cc'; else $(CYGPATH_W) '$(srcdir)/src/common/pecoff/pecoffutils.cc'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/common/pecoff/$(DEPDIR)/src_common_dumper_unittest-pecoffutils.Tpo src/common/pecoff/$(DEPDIR)/src_common_dumper_unittest-pecoffutils.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/common/pecoff/pecoffutils.cc' object='src/common/pecoff/src_common_dumper_unittest-pecoffutils.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_common_dumper_unittest_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o src/common/pecoff/src_common_dumper_unittest-pecoffutils.obj `if test -f 'src/common/pecoff/pecoffutils.cc'; then $(CYGPATH_W) 'src/common/pecoff/pecoffutils.cc'; else $(CYGPATH_W) '$(srcdir)/src/common/pecoff/pecoffutils.cc'; fi`
+
 src/common/tests/src_common_dumper_unittest-file_utils.o: src/common/tests/file_utils.cc
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(src_common_dumper_unittest_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT src/common/tests/src_common_dumper_unittest-file_utils.o -MD -MP -MF src/common/tests/$(DEPDIR)/src_common_dumper_unittest-file_utils.Tpo -c -o src/common/tests/src_common_dumper_unittest-file_utils.o `test -f 'src/common/tests/file_utils.cc' || echo '$(srcdir)/'`src/common/tests/file_utils.cc
 @am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/common/tests/$(DEPDIR)/src_common_dumper_unittest-file_utils.Tpo src/common/tests/$(DEPDIR)/src_common_dumper_unittest-file_utils.Po
@@ -7224,6 +7332,48 @@ src/common/linux/src_tools_linux_dump_syms_dump_syms-dump_symbols.obj: src/commo
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/common/linux/dump_symbols.cc' object='src/common/linux/src_tools_linux_dump_syms_dump_syms-dump_symbols.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(src_tools_linux_dump_syms_dump_syms_CXXFLAGS) $(CXXFLAGS) -c -o src/common/linux/src_tools_linux_dump_syms_dump_syms-dump_symbols.obj `if test -f 'src/common/linux/dump_symbols.cc'; then $(CYGPATH_W) 'src/common/linux/dump_symbols.cc'; else $(CYGPATH_W) '$(srcdir)/src/common/linux/dump_symbols.cc'; fi`
+
+src/common/pecoff/src_tools_linux_dump_syms_dump_syms-dump_symbols.o: src/common/pecoff/dump_symbols.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(src_tools_linux_dump_syms_dump_syms_CXXFLAGS) $(CXXFLAGS) -MT src/common/pecoff/src_tools_linux_dump_syms_dump_syms-dump_symbols.o -MD -MP -MF src/common/pecoff/$(DEPDIR)/src_tools_linux_dump_syms_dump_syms-dump_symbols.Tpo -c -o src/common/pecoff/src_tools_linux_dump_syms_dump_syms-dump_symbols.o `test -f 'src/common/pecoff/dump_symbols.cc' || echo '$(srcdir)/'`src/common/pecoff/dump_symbols.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/common/pecoff/$(DEPDIR)/src_tools_linux_dump_syms_dump_syms-dump_symbols.Tpo src/common/pecoff/$(DEPDIR)/src_tools_linux_dump_syms_dump_syms-dump_symbols.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/common/pecoff/dump_symbols.cc' object='src/common/pecoff/src_tools_linux_dump_syms_dump_syms-dump_symbols.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(src_tools_linux_dump_syms_dump_syms_CXXFLAGS) $(CXXFLAGS) -c -o src/common/pecoff/src_tools_linux_dump_syms_dump_syms-dump_symbols.o `test -f 'src/common/pecoff/dump_symbols.cc' || echo '$(srcdir)/'`src/common/pecoff/dump_symbols.cc
+
+src/common/pecoff/src_tools_linux_dump_syms_dump_syms-dump_symbols.obj: src/common/pecoff/dump_symbols.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(src_tools_linux_dump_syms_dump_syms_CXXFLAGS) $(CXXFLAGS) -MT src/common/pecoff/src_tools_linux_dump_syms_dump_syms-dump_symbols.obj -MD -MP -MF src/common/pecoff/$(DEPDIR)/src_tools_linux_dump_syms_dump_syms-dump_symbols.Tpo -c -o src/common/pecoff/src_tools_linux_dump_syms_dump_syms-dump_symbols.obj `if test -f 'src/common/pecoff/dump_symbols.cc'; then $(CYGPATH_W) 'src/common/pecoff/dump_symbols.cc'; else $(CYGPATH_W) '$(srcdir)/src/common/pecoff/dump_symbols.cc'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/common/pecoff/$(DEPDIR)/src_tools_linux_dump_syms_dump_syms-dump_symbols.Tpo src/common/pecoff/$(DEPDIR)/src_tools_linux_dump_syms_dump_syms-dump_symbols.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/common/pecoff/dump_symbols.cc' object='src/common/pecoff/src_tools_linux_dump_syms_dump_syms-dump_symbols.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(src_tools_linux_dump_syms_dump_syms_CXXFLAGS) $(CXXFLAGS) -c -o src/common/pecoff/src_tools_linux_dump_syms_dump_syms-dump_symbols.obj `if test -f 'src/common/pecoff/dump_symbols.cc'; then $(CYGPATH_W) 'src/common/pecoff/dump_symbols.cc'; else $(CYGPATH_W) '$(srcdir)/src/common/pecoff/dump_symbols.cc'; fi`
+
+src/common/pecoff/src_tools_linux_dump_syms_dump_syms-pecoff_file_id.o: src/common/pecoff/pecoff_file_id.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(src_tools_linux_dump_syms_dump_syms_CXXFLAGS) $(CXXFLAGS) -MT src/common/pecoff/src_tools_linux_dump_syms_dump_syms-pecoff_file_id.o -MD -MP -MF src/common/pecoff/$(DEPDIR)/src_tools_linux_dump_syms_dump_syms-pecoff_file_id.Tpo -c -o src/common/pecoff/src_tools_linux_dump_syms_dump_syms-pecoff_file_id.o `test -f 'src/common/pecoff/pecoff_file_id.cc' || echo '$(srcdir)/'`src/common/pecoff/pecoff_file_id.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/common/pecoff/$(DEPDIR)/src_tools_linux_dump_syms_dump_syms-pecoff_file_id.Tpo src/common/pecoff/$(DEPDIR)/src_tools_linux_dump_syms_dump_syms-pecoff_file_id.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/common/pecoff/pecoff_file_id.cc' object='src/common/pecoff/src_tools_linux_dump_syms_dump_syms-pecoff_file_id.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(src_tools_linux_dump_syms_dump_syms_CXXFLAGS) $(CXXFLAGS) -c -o src/common/pecoff/src_tools_linux_dump_syms_dump_syms-pecoff_file_id.o `test -f 'src/common/pecoff/pecoff_file_id.cc' || echo '$(srcdir)/'`src/common/pecoff/pecoff_file_id.cc
+
+src/common/pecoff/src_tools_linux_dump_syms_dump_syms-pecoff_file_id.obj: src/common/pecoff/pecoff_file_id.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(src_tools_linux_dump_syms_dump_syms_CXXFLAGS) $(CXXFLAGS) -MT src/common/pecoff/src_tools_linux_dump_syms_dump_syms-pecoff_file_id.obj -MD -MP -MF src/common/pecoff/$(DEPDIR)/src_tools_linux_dump_syms_dump_syms-pecoff_file_id.Tpo -c -o src/common/pecoff/src_tools_linux_dump_syms_dump_syms-pecoff_file_id.obj `if test -f 'src/common/pecoff/pecoff_file_id.cc'; then $(CYGPATH_W) 'src/common/pecoff/pecoff_file_id.cc'; else $(CYGPATH_W) '$(srcdir)/src/common/pecoff/pecoff_file_id.cc'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/common/pecoff/$(DEPDIR)/src_tools_linux_dump_syms_dump_syms-pecoff_file_id.Tpo src/common/pecoff/$(DEPDIR)/src_tools_linux_dump_syms_dump_syms-pecoff_file_id.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/common/pecoff/pecoff_file_id.cc' object='src/common/pecoff/src_tools_linux_dump_syms_dump_syms-pecoff_file_id.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(src_tools_linux_dump_syms_dump_syms_CXXFLAGS) $(CXXFLAGS) -c -o src/common/pecoff/src_tools_linux_dump_syms_dump_syms-pecoff_file_id.obj `if test -f 'src/common/pecoff/pecoff_file_id.cc'; then $(CYGPATH_W) 'src/common/pecoff/pecoff_file_id.cc'; else $(CYGPATH_W) '$(srcdir)/src/common/pecoff/pecoff_file_id.cc'; fi`
+
+src/common/pecoff/src_tools_linux_dump_syms_dump_syms-pecoffutils.o: src/common/pecoff/pecoffutils.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(src_tools_linux_dump_syms_dump_syms_CXXFLAGS) $(CXXFLAGS) -MT src/common/pecoff/src_tools_linux_dump_syms_dump_syms-pecoffutils.o -MD -MP -MF src/common/pecoff/$(DEPDIR)/src_tools_linux_dump_syms_dump_syms-pecoffutils.Tpo -c -o src/common/pecoff/src_tools_linux_dump_syms_dump_syms-pecoffutils.o `test -f 'src/common/pecoff/pecoffutils.cc' || echo '$(srcdir)/'`src/common/pecoff/pecoffutils.cc
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/common/pecoff/$(DEPDIR)/src_tools_linux_dump_syms_dump_syms-pecoffutils.Tpo src/common/pecoff/$(DEPDIR)/src_tools_linux_dump_syms_dump_syms-pecoffutils.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/common/pecoff/pecoffutils.cc' object='src/common/pecoff/src_tools_linux_dump_syms_dump_syms-pecoffutils.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(src_tools_linux_dump_syms_dump_syms_CXXFLAGS) $(CXXFLAGS) -c -o src/common/pecoff/src_tools_linux_dump_syms_dump_syms-pecoffutils.o `test -f 'src/common/pecoff/pecoffutils.cc' || echo '$(srcdir)/'`src/common/pecoff/pecoffutils.cc
+
+src/common/pecoff/src_tools_linux_dump_syms_dump_syms-pecoffutils.obj: src/common/pecoff/pecoffutils.cc
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(src_tools_linux_dump_syms_dump_syms_CXXFLAGS) $(CXXFLAGS) -MT src/common/pecoff/src_tools_linux_dump_syms_dump_syms-pecoffutils.obj -MD -MP -MF src/common/pecoff/$(DEPDIR)/src_tools_linux_dump_syms_dump_syms-pecoffutils.Tpo -c -o src/common/pecoff/src_tools_linux_dump_syms_dump_syms-pecoffutils.obj `if test -f 'src/common/pecoff/pecoffutils.cc'; then $(CYGPATH_W) 'src/common/pecoff/pecoffutils.cc'; else $(CYGPATH_W) '$(srcdir)/src/common/pecoff/pecoffutils.cc'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) src/common/pecoff/$(DEPDIR)/src_tools_linux_dump_syms_dump_syms-pecoffutils.Tpo src/common/pecoff/$(DEPDIR)/src_tools_linux_dump_syms_dump_syms-pecoffutils.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='src/common/pecoff/pecoffutils.cc' object='src/common/pecoff/src_tools_linux_dump_syms_dump_syms-pecoffutils.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(src_tools_linux_dump_syms_dump_syms_CXXFLAGS) $(CXXFLAGS) -c -o src/common/pecoff/src_tools_linux_dump_syms_dump_syms-pecoffutils.obj `if test -f 'src/common/pecoff/pecoffutils.cc'; then $(CYGPATH_W) 'src/common/pecoff/pecoffutils.cc'; else $(CYGPATH_W) '$(srcdir)/src/common/pecoff/pecoffutils.cc'; fi`
 
 src/common/linux/src_tools_linux_dump_syms_dump_syms-elf_symbols_to_module.o: src/common/linux/elf_symbols_to_module.cc
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(src_tools_linux_dump_syms_dump_syms_CXXFLAGS) $(CXXFLAGS) -MT src/common/linux/src_tools_linux_dump_syms_dump_syms-elf_symbols_to_module.o -MD -MP -MF src/common/linux/$(DEPDIR)/src_tools_linux_dump_syms_dump_syms-elf_symbols_to_module.Tpo -c -o src/common/linux/src_tools_linux_dump_syms_dump_syms-elf_symbols_to_module.o `test -f 'src/common/linux/elf_symbols_to_module.cc' || echo '$(srcdir)/'`src/common/linux/elf_symbols_to_module.cc
@@ -8589,6 +8739,8 @@ distclean-generic:
 	-rm -f src/common/linux/tests/$(am__dirstamp)
 	-rm -f src/common/mac/$(DEPDIR)/$(am__dirstamp)
 	-rm -f src/common/mac/$(am__dirstamp)
+	-rm -f src/common/pecoff/$(DEPDIR)/$(am__dirstamp)
+	-rm -f src/common/pecoff/$(am__dirstamp)
 	-rm -f src/common/tests/$(DEPDIR)/$(am__dirstamp)
 	-rm -f src/common/tests/$(am__dirstamp)
 	-rm -f src/processor/$(DEPDIR)/$(am__dirstamp)
@@ -8622,7 +8774,7 @@ clean-am: clean-binPROGRAMS clean-checkLIBRARIES clean-checkPROGRAMS \
 
 distclean: distclean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
-	-rm -rf src/client/$(DEPDIR) src/client/linux/crash_generation/$(DEPDIR) src/client/linux/dump_writer_common/$(DEPDIR) src/client/linux/handler/$(DEPDIR) src/client/linux/log/$(DEPDIR) src/client/linux/microdump_writer/$(DEPDIR) src/client/linux/minidump_writer/$(DEPDIR) src/common/$(DEPDIR) src/common/android/$(DEPDIR) src/common/dwarf/$(DEPDIR) src/common/linux/$(DEPDIR) src/common/linux/tests/$(DEPDIR) src/common/mac/$(DEPDIR) src/common/tests/$(DEPDIR) src/processor/$(DEPDIR) src/testing/googlemock/src/$(DEPDIR) src/testing/googletest/src/$(DEPDIR) src/third_party/libdisasm/$(DEPDIR) src/tools/linux/core2md/$(DEPDIR) src/tools/linux/dump_syms/$(DEPDIR) src/tools/linux/md2core/$(DEPDIR) src/tools/linux/symupload/$(DEPDIR) src/tools/mac/dump_syms/$(DEPDIR)
+	-rm -rf src/client/$(DEPDIR) src/client/linux/crash_generation/$(DEPDIR) src/client/linux/dump_writer_common/$(DEPDIR) src/client/linux/handler/$(DEPDIR) src/client/linux/log/$(DEPDIR) src/client/linux/microdump_writer/$(DEPDIR) src/client/linux/minidump_writer/$(DEPDIR) src/common/$(DEPDIR) src/common/android/$(DEPDIR) src/common/dwarf/$(DEPDIR) src/common/linux/$(DEPDIR) src/common/linux/tests/$(DEPDIR) src/common/mac/$(DEPDIR) src/common/pecoff/$(DEPDIR) src/common/tests/$(DEPDIR) src/processor/$(DEPDIR) src/testing/googlemock/src/$(DEPDIR) src/testing/googletest/src/$(DEPDIR) src/third_party/libdisasm/$(DEPDIR) src/tools/linux/core2md/$(DEPDIR) src/tools/linux/dump_syms/$(DEPDIR) src/tools/linux/md2core/$(DEPDIR) src/tools/linux/symupload/$(DEPDIR) src/tools/mac/dump_syms/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-hdr distclean-tags
@@ -8675,7 +8827,7 @@ installcheck-am:
 maintainer-clean: maintainer-clean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -rf $(top_srcdir)/autom4te.cache
-	-rm -rf src/client/$(DEPDIR) src/client/linux/crash_generation/$(DEPDIR) src/client/linux/dump_writer_common/$(DEPDIR) src/client/linux/handler/$(DEPDIR) src/client/linux/log/$(DEPDIR) src/client/linux/microdump_writer/$(DEPDIR) src/client/linux/minidump_writer/$(DEPDIR) src/common/$(DEPDIR) src/common/android/$(DEPDIR) src/common/dwarf/$(DEPDIR) src/common/linux/$(DEPDIR) src/common/linux/tests/$(DEPDIR) src/common/mac/$(DEPDIR) src/common/tests/$(DEPDIR) src/processor/$(DEPDIR) src/testing/googlemock/src/$(DEPDIR) src/testing/googletest/src/$(DEPDIR) src/third_party/libdisasm/$(DEPDIR) src/tools/linux/core2md/$(DEPDIR) src/tools/linux/dump_syms/$(DEPDIR) src/tools/linux/md2core/$(DEPDIR) src/tools/linux/symupload/$(DEPDIR) src/tools/mac/dump_syms/$(DEPDIR)
+	-rm -rf src/client/$(DEPDIR) src/client/linux/crash_generation/$(DEPDIR) src/client/linux/dump_writer_common/$(DEPDIR) src/client/linux/handler/$(DEPDIR) src/client/linux/log/$(DEPDIR) src/client/linux/microdump_writer/$(DEPDIR) src/client/linux/minidump_writer/$(DEPDIR) src/common/$(DEPDIR) src/common/android/$(DEPDIR) src/common/dwarf/$(DEPDIR) src/common/linux/$(DEPDIR) src/common/linux/tests/$(DEPDIR) src/common/mac/$(DEPDIR) src/common/pecoff/$(DEPDIR) src/common/tests/$(DEPDIR) src/processor/$(DEPDIR) src/testing/googlemock/src/$(DEPDIR) src/testing/googletest/src/$(DEPDIR) src/third_party/libdisasm/$(DEPDIR) src/tools/linux/core2md/$(DEPDIR) src/tools/linux/dump_syms/$(DEPDIR) src/tools/linux/md2core/$(DEPDIR) src/tools/linux/symupload/$(DEPDIR) src/tools/mac/dump_syms/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

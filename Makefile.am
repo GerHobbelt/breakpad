@@ -579,6 +579,13 @@ src_tools_linux_dump_syms_dump_syms_SOURCES = \
 	src/common/linux/crc32.cc \
 	src/common/linux/dump_symbols.cc \
 	src/common/linux/dump_symbols.h \
+	src/common/pecoff/dump_symbols.cc \
+	src/common/pecoff/dump_symbols.h \
+	src/common/pecoff/dump_symbols-inl.h \
+	src/common/pecoff/pecoff_file_id.h \
+	src/common/pecoff/pecoff_file_id.cc \
+	src/common/pecoff/pecoffutils.h \
+	src/common/pecoff/pecoffutils.cc \
 	src/common/linux/elf_symbols_to_module.cc \
 	src/common/linux/elf_symbols_to_module.h \
 	src/common/linux/elfutils.cc \
@@ -698,6 +705,13 @@ src_common_dumper_unittest_SOURCES = \
 	src/common/linux/synth_elf_unittest.cc \
 	src/common/linux/tests/crash_generator.cc \
 	src/common/linux/tests/crash_generator.h \
+	src/common/pecoff/dump_symbols.cc \
+	src/common/pecoff/dump_symbols.h \
+	src/common/pecoff/dump_symbols-inl.h \
+	src/common/pecoff/pecoff_file_id.h \
+	src/common/pecoff/pecoff_file_id.cc \
+	src/common/pecoff/pecoffutils.h \
+	src/common/pecoff/pecoffutils.cc \
 	src/common/testdata/func-line-pairing.h \
 	src/common/tests/file_utils.cc
 src_common_dumper_unittest_CPPFLAGS = \
