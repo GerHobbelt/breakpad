@@ -42,6 +42,7 @@
 
 #import "client/ios/handler/ios_exception_minidump_generator.h"
 #import "client/mac/crash_generation/ConfigFile.h"
+#import "client/mac/handler/exception_handler.h"
 #import "client/mac/handler/minidump_generator.h"
 #import "client/mac/handler/protected_memory_allocator.h"
 #import "client/mac/sender/uploader.h"

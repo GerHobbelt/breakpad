@@ -30,7 +30,7 @@
 #include "client/windows/crash_generation/client_info.h"
 #include "client/windows/common/ipc_protocol.h"
 
-static const wchar_t kCustomInfoProcessUptimeName[] = L"ptime";
+static const wchar_t kCustomInfoProcessUptimeName[] = L"uptime";
 static const size_t kMaxCustomInfoEntries = 4096;
 
 namespace google_breakpad {
@@ -176,7 +176,11 @@ void ClientInfo::SetProcessUptime() {
 
   // Convert it to a string.
   wchar_t* value = custom_info_entries_.get()[custom_client_info_.count].value;
+#ifdef _MSC_VER
   _i64tow_s(delay, value, CustomInfoEntry::kValueMaxLength, 10);
+#else
+  _i64tow(delay, value, 10);
+#endif
 }
 
 bool ClientInfo::PopulateCustomInfo() {

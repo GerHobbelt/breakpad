@@ -97,6 +97,53 @@ target_link_libraries(sym_upload
     dl
 )
 
+add_executable(minidump_stackwalk
+    ../processor/minidump_stackwalk.cc
+    ../processor/stackwalk_common.cc
+    ../common/path_helper.cc
+)
+target_link_libraries(minidump_stackwalk
+    breakpad
+    disasm
+    dl
+)
+
+add_executable(microdump_stackwalk
+    ../processor/microdump_stackwalk.cc
+    ../processor/stackwalk_common.cc
+    ../common/path_helper.cc
+)
+
+target_link_libraries(microdump_stackwalk
+    breakpad
+    disasm
+    dl
+)
+
+add_executable(minidump-2-core
+    ../common/linux/memory_mapped_file.cc
+    ../common/path_helper.cc
+    ../tools/linux/md2core/minidump-2-core.cc
+    ../tools/linux/md2core/minidump_memory_range.h
+)
+
+target_link_libraries(minidump-2-core
+    breakpad
+    disasm
+    dl
+)
+
+add_executable(core2md
+    ../tools/linux/core2md/core2md.cc
+)
+
+target_link_libraries(core2md
+    breakpad
+    breakpad_client
+    disasm
+    dl
+)
+
 #install(TARGETS dump_syms DESTINATION . COMPONENT Runtime)
 
 install(TARGETS
