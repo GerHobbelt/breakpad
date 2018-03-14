@@ -147,7 +147,7 @@ target_link_libraries(core2md
 #install(TARGETS dump_syms DESTINATION . COMPONENT Runtime)
 
 install(TARGETS
-    dump_syms sym_upload dump_syms_mac
+    dump_syms sym_upload dump_syms_mac core2md minidump-2-core minidump_stackwalk
 	RUNTIME DESTINATION bin
 	LIBRARY DESTINATION lib
 	ARCHIVE DESTINATION lib
