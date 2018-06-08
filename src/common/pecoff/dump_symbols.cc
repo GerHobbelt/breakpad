@@ -52,7 +52,7 @@ bool PECOFFReadSymbolDataInternal(const uint8_t* obj_file,
     return ReadSymbolDataFromObjectFile<PeCoffClass32>(
         reinterpret_cast<const PeCoffClass32::ObjectFileBase>(obj_file), obj_filename, debug_dirs,
         options, module);
-  }
+  } else
   if (peclass == PE32PLUS) {
     return ReadSymbolDataFromObjectFile<PeCoffClass64>(
         reinterpret_cast<const PeCoffClass64::ObjectFileBase>(obj_file), obj_filename, debug_dirs,

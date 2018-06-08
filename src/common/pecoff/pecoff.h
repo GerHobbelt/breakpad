@@ -37,6 +37,7 @@
 
 #define IMAGE_FILE_HEADER_OFFSET             0x3c
 
+#define IMAGE_FILE_DOS_SIGNATURE             0x5A4D     // MZ
 #define IMAGE_FILE_MAGIC                     0x00004550 // "PE\0\0"
 
 #define IMAGE_FILE_MACHINE_UNKNOWN           0x0000
@@ -257,6 +258,38 @@ struct PeExportTable {
   uint32_t mExportAddressTableRVA;
   uint32_t mNamePointerRVA;
   uint32_t mOrdinalTableRVA;
+};
+
+struct PeImageHeader32 {
+  PeHeader mFileHeader;
+  Pe32OptionalHeader mOptionHeader;
+};
+
+struct PeImageHeader64 {
+  PeHeader mFileHeader;
+  Pe32PlusOptionalHeader mOptionHeader;
+};
+
+struct PeImageFile {                   // DOS .EXE header
+  uint16_t mMagic;                     // Magic number
+  uint16_t mCblp;                      // Bytes on last page of file
+  uint16_t mCp;                        // Pages in file
+  uint16_t mCrlc;                      // Relocations
+  uint16_t mCparhdr;                   // Size of header in paragraphs
+  uint16_t mMinalloc;                  // Minimum extra paragraphs needed
+  uint16_t mMaxalloc;                  // Maximum extra paragraphs needed
+  uint16_t mSs;                        // Initial (relative) SS value
+  uint16_t mSp;                        // Initial SP value
+  uint16_t mCsum;                      // Checksum
+  uint16_t mIp;                        // Initial IP value
+  uint16_t mCs;                        // Initial (relative) CS value
+  uint16_t mLfarlc;                    // File address of relocation table
+  uint16_t mOvno;                      // Overlay number
+  uint16_t mRes[4];                    // Reserved words
+  uint16_t mOemid;                     // OEM identifier (for e_oeminfo)
+  uint16_t mOeminfo;                   // OEM information; e_oemid specific
+  uint16_t mRes2[10];                  // Reserved words
+  int32_t  mLfanew;                    // File address of new exe header
 };
 
 #endif// COMMON_PECOFF_PECOFF_H__

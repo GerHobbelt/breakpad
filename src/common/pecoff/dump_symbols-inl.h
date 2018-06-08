@@ -432,7 +432,9 @@ class LoadSymbolsInfo {
 
   explicit LoadSymbolsInfo(const std::vector<string>& dbg_dirs) :
     debug_dirs_(dbg_dirs),
-    has_loading_addr_(false) {}
+    has_loading_addr_(false) {
+
+  }
 
   // Keeps track of which sections have been loaded so sections don't
   // accidentally get loaded twice from two different files.
@@ -514,8 +516,7 @@ bool LoadSymbols(const string& obj_file,
   if (options.symbol_data != ONLY_CFI) {
 #ifndef NO_STABS_SUPPORT
     // Look for STABS debugging information, and load it if present.
-    const Shdr stab_section =
-        ObjectFileReader::FindSectionByName(".stab", header);
+    const Shdr stab_section = ObjectFileReader::FindSectionByName(".stab", header);
     if (stab_section) {
       const Shdr stabstr_section = ObjectFileReader::FindLinkedSection(header, stab_section);
       if (stabstr_section) {
@@ -532,8 +533,7 @@ bool LoadSymbols(const string& obj_file,
 #endif  // NO_STABS_SUPPORT
 
     // Look for DWARF debugging information, and load it if present.
-    const Shdr dwarf_section =
-        ObjectFileReader::FindSectionByName(".debug_info", header);
+    const Shdr dwarf_section = ObjectFileReader::FindSectionByName(".debug_info", header);
     if (dwarf_section) {
       found_debug_info_section = true;
       found_usable_info = true;
@@ -549,8 +549,7 @@ bool LoadSymbols(const string& obj_file,
   if (options.symbol_data != NO_CFI) {
     // Dwarf Call Frame Information (CFI) is actually independent from
     // the other DWARF debugging information, and can be used alone.
-    const Shdr dwarf_cfi_section =
-        ObjectFileReader::FindSectionByName(".debug_frame", header);
+    const Shdr dwarf_cfi_section = ObjectFileReader::FindSectionByName(".debug_frame", header);
     if (dwarf_cfi_section) {
       // Ignore the return value of this function; even without call frame
       // information, the other debugging information could be perfectly
@@ -565,15 +564,12 @@ bool LoadSymbols(const string& obj_file,
 
     // Linux C++ exception handling information can also provide
     // unwinding data.
-    const Shdr eh_frame_section =
-        ObjectFileReader::FindSectionByName(".eh_frame", header);
+    const Shdr eh_frame_section = ObjectFileReader::FindSectionByName(".eh_frame", header);
     if (eh_frame_section) {
       // Pointers in .eh_frame data may be relative to the base addresses of
       // certain sections. Provide those sections if present.
-      const Shdr got_section =
-          ObjectFileReader::FindSectionByName(".got", header);
-      const Shdr text_section =
-          ObjectFileReader::FindSectionByName(".text", header);
+      const Shdr got_section = ObjectFileReader::FindSectionByName(".got", header);
+      const Shdr text_section = ObjectFileReader::FindSectionByName(".text", header);
       info->LoadedSection(".eh_frame");
       // As above, ignore the return value of this function.
       bool result =
@@ -591,8 +587,7 @@ bool LoadSymbols(const string& obj_file,
 
     // Failed, but maybe there's a .gnu_debuglink section?
     if (read_gnu_debug_link) {
-      const Shdr gnu_debuglink_section
-          = ObjectFileReader::FindSectionByName(".gnu_debuglink", header);
+      const Shdr gnu_debuglink_section = ObjectFileReader::FindSectionByName(".gnu_debuglink", header);
       if (gnu_debuglink_section) {
         if (!info->debug_dirs().empty()) {
           const char* debuglink_contents = reinterpret_cast<const char *>
@@ -650,8 +645,10 @@ bool ReadSymbolDataFromObjectFile(
     Module** out_module) {
 
   typedef typename ObjectFileReader::Section Shdr;
+  ObjectFileReader* ofr = new ObjectFileReader;
 
   *out_module = NULL;
+  ofr->Map(header);
 
   string identifier = ObjectFileReader::FileIdentifierFromMappedFile(header);
   if (identifier.empty()) {
@@ -676,9 +673,7 @@ bool ReadSymbolDataFromObjectFile(
 
   LoadSymbolsInfo<ObjectFileReader> info(debug_dirs);
   scoped_ptr<Module> module(new Module(name, os, architecture, id));
-  if (!LoadSymbols<ObjectFileReader>(obj_filename, big_endian, header,
-                             !debug_dirs.empty(), &info,
-                             options, module.get())) {
+  if (!LoadSymbols<ObjectFileReader>(obj_filename, big_endian, header, !debug_dirs.empty(), &info, options, module.get())) {
     const string debuglink_file = info.debuglink_file();
     if (debuglink_file.empty())
       return false;

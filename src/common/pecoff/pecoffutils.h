@@ -46,6 +46,7 @@ class PeCoffClass32Traits {
  public:
   typedef uint32_t Addr;
   typedef Pe32OptionalHeader PeOptionalHeader;
+  typedef PeImageHeader32    PeImageHeader;
   static const int kClass = PE32;
   static const size_t kAddrSize = 4;
 };
@@ -54,6 +55,7 @@ class PeCoffClass64Traits {
  public:
   typedef uint64_t Addr;
   typedef Pe32PlusOptionalHeader PeOptionalHeader;
+  typedef PeImageHeader64    PeImageHeader;
   static const int kClass = PE32PLUS;
   static const size_t kAddrSize = 8;
 };
@@ -90,7 +92,6 @@ class PeCoffObjectFileReader {
   //
   // Section enumeration and location
   //
-
   static int GetNumberOfSections(ObjectFileBase obj_base);
   static const Section FindSectionByIndex(ObjectFileBase obj_base, int i);
   // Attempt to find a section named |section_name|
@@ -146,6 +147,7 @@ class PeCoffObjectFileReader {
 
  private:
   typedef typename PeCoffClassTraits::PeOptionalHeader PeOptionalHeader;
+  typedef typename PeCoffClassTraits::PeImageHeader PeImageHeader;
 
   //
   // Private implementation helper functions
@@ -157,6 +159,20 @@ class PeCoffObjectFileReader {
   static const PeDataDirectory* GetDataDirectoryEntry(ObjectFileBase obj_base,
                                                       unsigned int entry);
   static const uint8_t* ConvertRVAToPointer(ObjectFileBase obj_base, Offset rva);
+
+  PeImageHeader* header;
+  //PeOptionalHeader* optHeader;
+
+public:
+  int Map(ObjectFileBase obj_base) {
+    const PeImageFile* pe = reinterpret_cast<const PeImageFile*>(obj_base);
+    if (pe->mMagic != IMAGE_FILE_DOS_SIGNATURE) 
+      return -1;
+    header = (PeImageHeader*)(obj_base+pe->mLfanew);
+    if (header->mFileHeader.mMagic != IMAGE_FILE_MAGIC)
+      return -1;
+    return 0;
+  }
 };
 
 class PeCoffClass32 : public PeCoffObjectFileReader<PeCoffClass32Traits> { };
