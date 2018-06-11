@@ -645,10 +645,8 @@ bool ReadSymbolDataFromObjectFile(
     Module** out_module) {
 
   typedef typename ObjectFileReader::Section Shdr;
-  ObjectFileReader* ofr = new ObjectFileReader;
 
   *out_module = NULL;
-  ofr->Map(header);
 
   string identifier = ObjectFileReader::FileIdentifierFromMappedFile(header);
   if (identifier.empty()) {

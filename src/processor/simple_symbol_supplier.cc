@@ -156,16 +156,6 @@ SymbolSupplier::SymbolResult SimpleSymbolSupplier::GetSymbolFileAtPathFromRoot(
   // Append the debug (pdb) file name as a directory name.
   path.append("/");
   string debug_file_name = PathnameStripper::File(module->debug_file());
-  if (debug_file_name.empty()) {
-    BPLOG(ERROR) << "Can't construct symbol file path without debug_file "
-                    "(code_file = " <<
-                    PathnameStripper::File(module->code_file()) << ")";
-    return NOT_FOUND;
-  }
-  path.append(debug_file_name);
-
-  // Append the identifier as a directory name.
-  path.append("/");
   string identifier = module->debug_identifier();
   if (identifier.empty()) {
     BPLOG(ERROR) << "Can't construct symbol file path without debug_identifier "
@@ -174,6 +164,24 @@ SymbolSupplier::SymbolResult SimpleSymbolSupplier::GetSymbolFileAtPathFromRoot(
                     ", debug_file = " << debug_file_name << ")";
     return NOT_FOUND;
   }
+  if (debug_file_name.empty()) {
+    int start = module->code_file().find_last_of('\\');
+    if (start != string::npos)
+      debug_file_name = module->code_file().substr(start+1);
+
+    //debug_file_name = module->code_file();
+
+    if (debug_file_name.empty()) {
+      BPLOG(ERROR) << "Can't construct symbol file path without debug_file "
+                      "(code_file = " <<
+                      PathnameStripper::File(module->code_file()) << ")";
+      return NOT_FOUND;
+    }
+  }
+  path.append(debug_file_name);
+
+  // Append the identifier as a directory name.
+  path.append("/");
   path.append(identifier);
 
   // Transform the debug file name into one ending in .sym.  If the existing
@@ -185,7 +193,7 @@ SymbolSupplier::SymbolResult SimpleSymbolSupplier::GetSymbolFileAtPathFromRoot(
     debug_file_extension = debug_file_name.substr(debug_file_name.size() - 4);
   std::transform(debug_file_extension.begin(), debug_file_extension.end(),
                  debug_file_extension.begin(), tolower);
-  if (debug_file_extension == ".pdb") {
+  if (debug_file_extension == ".pdb" || debug_file_extension == ".exe") {
     path.append(debug_file_name.substr(0, debug_file_name.size() - 4));
   } else {
     path.append(debug_file_name);
