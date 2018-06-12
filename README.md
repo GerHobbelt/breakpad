@@ -7,6 +7,43 @@
 * **Warning** autotools are not updated to build the code
 * add lls third party as git submodule
 
+All PECOFF source code come from https://github.com/jon-turney/google-breakpad
+
+I made minor adjustments by handling the MINIDUMP_HEADER to read the streams offset
+
+I fix the code to use an incomplete codeview record in `simple_symbol_supplier.cc` method `SimpleSymbolSupplier::GetSymbolFileAtPathFromRoot`.
+
+The `build-id` compiler option generate an incomplete codeview record. The pdb file part of the record is empty. This lead to `debug_file` member to be empty. 
+
+## Generate symbols
+You must build your binaries with mingw-w64 and use the options `-Wl,--build-id` on the linker.
+
+`dump_syms` tool to dump the symbol file
+
+    %> dump_syms crash.exe > crash.sym
+
+
+## Resolve symbols
+`minidump_stackwalk` can understand and resolve the symbols. You cannot use `minidump_stackwalk` from bugsplat or other repo to solve symbols.
+
+Open the crash.sym
+
+    MODULE windows x86 <GUID><AGE> crash.exe
+    ...
+
+`<GUID><AGE>` is the identifier for the file crash.exe
+
+To succeed in resolving the symbol, you have to
+* create a symbol folder (./symbols)
+* create for each binary a folder named as the binary (crash.exe) -> ./symbols/crash.exe
+* create a subfolder with the identifier read from the MODULE line of the sym file
+* copy the sym file into this subfolder
+
+Commmand line to resolve the symbols
+    
+    %> minidump_stackwalk crash.dmp ./symbols
+
+
 # Breakpad
 
 Breakpad is a set of client and server components which implement a
