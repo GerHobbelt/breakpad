@@ -18,13 +18,13 @@ The `build-id` compiler option generate an incomplete codeview record. The pdb f
 ## Generate symbols
 You must build your binaries with mingw-w64 and use the options `-Wl,--build-id` on the linker.
 
-`dump_syms` tool to dump the symbol file
+Use the linux `dump_syms` tool to dump the symbol file
 
     %> dump_syms crash.exe > crash.sym
 
 
 ## Resolve symbols
-`minidump_stackwalk` can understand and resolve the symbols. You cannot use `minidump_stackwalk` from bugsplat or other repo to solve symbols.
+The Linux `minidump_stackwalk` can understand and resolve the symbols. You cannot use `minidump_stackwalk` from bugsplat or other repo to solve symbols.
 
 Open the crash.sym
 
