@@ -69,18 +69,7 @@ target_compile_definitions(dump_syms
 target_include_directories(dump_syms
     PRIVATE ../third_party/mac_headers
 )
-add_executable(dump_syms_mac
-    ${DUMP_SYMS_COMMON_SOURCES}
-    ${DUMP_SYMS_MACOS_SOURCES}
-)
-target_link_libraries(dump_syms_mac
-)
-target_compile_definitions(dump_syms_mac
-    PRIVATE HAVE_MACH_O_NLIST_H
-)
-target_include_directories(dump_syms_mac
-    PRIVATE ../third_party/mac_headers
-)
+
 
 set(SYM_UPLOAD_SOURCES
     ../common/linux/http_upload.cc
@@ -146,7 +135,7 @@ target_link_libraries(core2md
 )
 
 install(TARGETS
-    dump_syms sym_upload dump_syms_mac core2md minidump-2-core minidump_stackwalk
+    dump_syms sym_upload core2md minidump-2-core minidump_stackwalk
 	RUNTIME DESTINATION bin
 	LIBRARY DESTINATION lib
 	ARCHIVE DESTINATION lib
