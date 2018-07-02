@@ -33,6 +33,10 @@
 //
 // Author: Dan Waylonis
 
+#ifdef APPLE
+#include "mac_types.h"
+#endif
+
 #include <assert.h>
 #include <fcntl.h>
 #include <mach-o/arch.h>
@@ -171,8 +175,11 @@ bool MachoWalker::FindHeader(cpu_type_t cpu_type,
     if (!ReadBytes(&fat, sizeof(fat), offset))
       return false;
 
-    if (NXHostByteOrder() != NX_BigEndian)
+    if (OSHostByteOrder() != OSBigEndian)
       breakpad_swap_fat_header(&fat);
+
+    // if (NXHostByteOrder() != NX_BigEndian)
+    //   breakpad_swap_fat_header(&fat);
 
     offset += sizeof(fat);
 
@@ -182,8 +189,10 @@ bool MachoWalker::FindHeader(cpu_type_t cpu_type,
       if (!ReadBytes(&arch, sizeof(arch), offset))
         return false;
 
-      if (NXHostByteOrder() != NX_BigEndian)
-        breakpad_swap_fat_arch(&arch, 1);
+      if (OSHostByteOrder() != OSBigEndian)
+        breakpad_swap_fat_header(&fat);
+      // if (NXHostByteOrder() != NX_BigEndian)
+      //   breakpad_swap_fat_arch(&arch, 1);
 
       if (arch.cputype == cpu_type &&
           (cpu_subtype == CPU_SUBTYPE_MULTIPLE ||

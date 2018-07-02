@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.6)
 
 project(breakpad_tools)
 
-if(LINUX)
+if (LINUX OR APPLE)
 set(DUMP_SYMS_COMMON_SOURCES
     ../common/dwarf_cfi_to_module.cc
     ../common/dwarf_cu_to_module.cc
@@ -55,6 +55,7 @@ set(DUMP_SYMS_MACOS_SOURCES
     mac/dump_syms/dump_syms_tool.cc
 )
     
+if(LINUX)
 add_executable(dump_syms
     ${DUMP_SYMS_COMMON_SOURCES}
     ${DUMP_SYMS_LINUX_SOURCES}
@@ -144,14 +145,55 @@ target_link_libraries(core2md
     dl
 )
 
-#install(TARGETS dump_syms DESTINATION . COMPONENT Runtime)
-
 install(TARGETS
     dump_syms sym_upload dump_syms_mac core2md minidump-2-core minidump_stackwalk
 	RUNTIME DESTINATION bin
 	LIBRARY DESTINATION lib
 	ARCHIVE DESTINATION lib
 )
+else()
+add_executable(dump_syms
+    ${DUMP_SYMS_COMMON_SOURCES}
+    ${DUMP_SYMS_MACOS_SOURCES}
+)
+target_link_libraries(dump_syms
+)
+target_compile_definitions(dump_syms
+    PRIVATE HAVE_MACH_O_NLIST_H
+    PRIVATE APPLE
+)
+target_include_directories(dump_syms
+    PRIVATE ../third_party/mac_headers
+    PRIVATE ../common/mac
+)
+
+set(SYM_UPLOAD_SOURCES
+    ../common/mac/http_upload.cc
+    ../common/mac/http_upload.h
+    ../common/mac/HTTPMultipartUpload.h
+    ../common/mac/HTTPMultipartUpload.m
+    mac/symupload/symupload.m
+)
+add_executable(sym_upload
+	${SYM_UPLOAD_SOURCES}
+)
+target_link_libraries(sym_upload
+    dl
+)
+target_include_directories(sym_upload
+    PRIVATE ../common/mac
+)
+
+install(TARGETS
+    dump_syms sym_upload
+	RUNTIME DESTINATION bin
+	LIBRARY DESTINATION lib
+	ARCHIVE DESTINATION lib
+)
+endif()
+
+#install(TARGETS dump_syms DESTINATION . COMPONENT Runtime)
+
 elseif(WIN32)
 # Windows tools
 set(MS_SYMBOL_SOURCES

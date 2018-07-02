@@ -31,6 +31,10 @@
 //
 // Author: Dave Camp
 
+#ifdef APPLE
+#include "mac_types.h"
+#endif
+
 #include "common/mac/byteswap.h"
 #include "common/mac/macho_utilities.h"
 

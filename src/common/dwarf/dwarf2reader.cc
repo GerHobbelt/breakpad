@@ -30,7 +30,9 @@
 
 // Implementation of dwarf2reader::LineInfo, dwarf2reader::CompilationUnit,
 // and dwarf2reader::CallFrameInfo. See dwarf2reader.h for details.
-
+#ifdef APPLE
+#include "mac_types.h"
+#endif
 #include "common/dwarf/dwarf2reader.h"
 
 #include <assert.h>

@@ -33,6 +33,10 @@
 
 // dump_syms.cc: Create a symbol file for use with minidumps
 
+#ifdef APPLE
+#include "mac_types.h"
+#endif
+
 #include "common/mac/dump_syms.h"
 
 #include <assert.h>

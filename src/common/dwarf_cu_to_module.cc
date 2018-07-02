@@ -36,6 +36,10 @@
 #define __STDC_FORMAT_MACROS
 #endif  /* __STDC_FORMAT_MACROS */
 
+#ifdef APPLE
+#include "mac_types.h"
+#endif
+
 #include "common/dwarf_cu_to_module.h"
 
 #include <assert.h>

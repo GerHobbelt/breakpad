@@ -32,6 +32,10 @@
 // dwarf_line_to_module.cc: Implementation of DwarfLineToModule class.
 // See dwarf_line_to_module.h for details. 
 
+#ifdef APPLE
+#include "mac_types.h"
+#endif
+
 #include <stdio.h>
 
 #include <string>

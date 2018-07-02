@@ -26,8 +26,11 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include <assert.h>
+#ifdef APPLE
+#include "mac_types.h"
+#endif
 #include <stdint.h>
+#include <assert.h>
 #include <stdlib.h>
 
 #include "common/dwarf/bytereader-inl.h"

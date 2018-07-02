@@ -32,6 +32,9 @@
 // See file_id.h for documentation
 //
 // Author: Dan Waylonis
+#ifdef APPLE
+#include "mac_types.h"
+#endif
 
 #include <fcntl.h>
 #include <stdio.h>

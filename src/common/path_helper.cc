@@ -27,6 +27,10 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#ifdef APPLE
+#include "common/mac/mac_types.h"
+#endif
+
 #include "common/path_helper.h"
 
 #include <assert.h>

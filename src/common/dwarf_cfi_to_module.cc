@@ -34,6 +34,10 @@
 // Implementation of google_breakpad::DwarfCFIToModule.
 // See dwarf_cfi_to_module.h for details.
 
+#ifdef APPLE
+#include "mac_types.h"
+#endif
+
 #include <sstream>
 
 #include "common/dwarf_cfi_to_module.h"

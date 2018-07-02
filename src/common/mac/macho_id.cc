@@ -33,6 +33,9 @@
 //
 // Author: Dan Waylonis
 
+#ifdef APPLE
+#include "mac_types.h"
+#endif
 
 #include <fcntl.h>
 #include <mach-o/loader.h>

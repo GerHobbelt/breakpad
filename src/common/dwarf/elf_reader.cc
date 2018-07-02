@@ -26,6 +26,10 @@
 // TODO(chatham): It would be nice if we could accomplish this task
 // without using malloc(), so we could use it as the process is dying.
 
+#ifdef APPLE
+#include "mac_types.h"
+#endif
+
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE  // needed for pread()
 #endif

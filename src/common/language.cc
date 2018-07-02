@@ -32,6 +32,10 @@
 // language.cc: Subclasses and singletons for google_breakpad::Language.
 // See language.h for details.
 
+#ifdef APPLE
+#include "mac_types.h"
+#endif
+
 #include "common/language.h"
 
 #include <stdlib.h>

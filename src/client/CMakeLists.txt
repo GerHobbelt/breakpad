@@ -339,6 +339,7 @@ set(BREAKPAD_CLIENT_MACOS_HANDLER_HEADERS
     mac/handler/minidump_generator.h
     mac/handler/dynamic_images.h
     mac/handler/ucontext_compat.h
+    mac/handler/breakpad_nlist_64.h
 )
 set(BREAKPAD_CLIENT_MACOS_CRASHGEN_HEADERS
     mac/crash_generation/crash_generation_client.h
@@ -364,6 +365,7 @@ set(BREAKPAD_CLIENT_MACOS_SOURCES
     mac/handler/exception_handler.cc
     mac/handler/minidump_generator.cc
     mac/handler/dynamic_images.cc
+    mac/handler/breakpad_nlist_64.cc
     mac/crash_generation/crash_generation_client.cc
     ../common/mac/http_upload.cc
     ../common/mac/string_utilities.cc

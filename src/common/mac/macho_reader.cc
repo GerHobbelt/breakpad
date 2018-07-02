@@ -32,6 +32,10 @@
 // macho_reader.cc: Implementation of google_breakpad::Mach_O::FatReader and
 // google_breakpad::Mach_O::Reader. See macho_reader.h for details.
 
+#ifdef APPLE
+#include "mac_types.h"
+#endif
+
 #include "common/mac/macho_reader.h"
 
 #include <assert.h>

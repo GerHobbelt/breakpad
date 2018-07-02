@@ -31,6 +31,9 @@
 // dwarf2diehandler.cc: Implement the dwarf2reader::DieDispatcher class.
 // See dwarf2diehandler.h for details.
 
+#ifdef APPLE
+#include "mac_types.h"
+#endif
 #include <assert.h>
 #include <stdint.h>
 

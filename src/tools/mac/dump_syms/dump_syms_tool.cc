@@ -32,6 +32,10 @@
 // dump_syms_tool.cc: Command line tool that uses the DumpSymbols class.
 // TODO(waylonis): accept stdin
 
+#ifdef APPLE
+#include "common/mac/mac_types.h"
+#endif
+
 #include <mach-o/arch.h>
 #include <unistd.h>
 

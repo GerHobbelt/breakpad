@@ -31,6 +31,10 @@
 
 // module.cc: Implement google_breakpad::Module.  See module.h.
 
+#ifdef APPLE
+#include "common/mac/mac_types.h"
+#endif
+
 #include "common/module.h"
 
 #include <assert.h>

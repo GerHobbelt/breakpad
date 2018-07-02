@@ -13,6 +13,10 @@
  * will fill a supplied 16-byte array with the digest.
  */
 
+#ifdef APPLE
+#include "common/mac/mac_types.h"
+#endif
+
 #include <string.h>
 
 #include "common/md5.h"

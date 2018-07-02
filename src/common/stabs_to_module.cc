@@ -30,6 +30,9 @@
 // Original author: Jim Blandy <jimb@mozilla.com> <jimb@red-bean.com>
 
 // dump_stabs.cc --- implement the StabsToModule class.
+#ifdef APPLE
+#include "common/mac/mac_types.h"
+#endif
 
 #include <assert.h>
 #include <cxxabi.h>

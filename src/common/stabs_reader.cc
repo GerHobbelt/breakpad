@@ -31,6 +31,10 @@
 // This file implements the google_breakpad::StabsReader class.
 // See stabs_reader.h.
 
+#ifdef APPLE
+#include "common/mac/mac_types.h"
+#endif
+
 #include "common/stabs_reader.h"
 
 #include <assert.h>
