@@ -151,7 +151,7 @@ install(TARGETS
 	LIBRARY DESTINATION lib
 	ARCHIVE DESTINATION lib
 )
-else()
+else()  # APPLE
 add_executable(dump_syms
     ${DUMP_SYMS_COMMON_SOURCES}
     ${DUMP_SYMS_MACOS_SOURCES}
@@ -179,6 +179,7 @@ add_executable(sym_upload
 )
 target_link_libraries(sym_upload
     dl
+    "-framework Foundation"
 )
 target_include_directories(sym_upload
     PRIVATE ../common/mac
@@ -305,5 +306,4 @@ install(TARGETS
 	ARCHIVE DESTINATION lib
 )
 
-elseif(APPLE)
 endif()
