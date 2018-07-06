@@ -74,28 +74,25 @@ bool HTTPUpload::SendRequest(const string &url,
   void* curl_lib = dlopen(NULL, RTLD_NOW);
   if (!CheckCurlLib(curl_lib)) {
     fprintf(stderr,
-            "Failed to open curl lib from binary, use libcurl.so instead\n");
+            "Failed to open curl lib from binary, use libcurl.dylib instead\n");
     dlerror();  // Clear dlerror before attempting to open libraries.
     dlclose(curl_lib);
     curl_lib = NULL;
   }
   if (!curl_lib) {
-    curl_lib = dlopen("libcurl.so", RTLD_NOW);
+    curl_lib = dlopen("libcurl.dylib", RTLD_NOW);
   }
   if (!curl_lib) {
     if (error_description != NULL)
       *error_description = dlerror();
-    curl_lib = dlopen("libcurl.so.4", RTLD_NOW);
+    curl_lib = dlopen("libcurl.4.dylib", RTLD_NOW);
   }
   if (!curl_lib) {
-    // Debian gives libcurl a different name when it is built against GnuTLS
-    // instead of OpenSSL.
-    curl_lib = dlopen("libcurl-gnutls.so.4", RTLD_NOW);
+    curl_lib = dlopen("libcurl.3.dylib", RTLD_NOW);
   }
   if (!curl_lib) {
-    curl_lib = dlopen("libcurl.so.3", RTLD_NOW);
-  }
-  if (!curl_lib) {
+    fprintf(stderr,
+            "Failed to open curl lib from libcurl.dylib\n");
     return false;
   }
 
