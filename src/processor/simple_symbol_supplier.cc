@@ -193,7 +193,7 @@ SymbolSupplier::SymbolResult SimpleSymbolSupplier::GetSymbolFileAtPathFromRoot(
     debug_file_extension = debug_file_name.substr(debug_file_name.size() - 4);
   std::transform(debug_file_extension.begin(), debug_file_extension.end(),
                  debug_file_extension.begin(), tolower);
-  if (debug_file_extension == ".pdb" || debug_file_extension == ".exe") {
+  if (debug_file_extension == ".pdb") {
     path.append(debug_file_name.substr(0, debug_file_name.size() - 4));
   } else {
     path.append(debug_file_name);
