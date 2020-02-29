@@ -37,13 +37,17 @@
 
 #include <fcntl.h>
 #include <sys/mman.h>
-#if defined(__ANDROID__)
-#include <sys/stat.h>
+#if defined(__ANDROID__) || defined(__APPLE__)
+	#include <sys/stat.h>
 #endif
 #include <unistd.h>
 
 #include "common/memory_range.h"
+
+#ifndef __APPLE__
 #include "third_party/lss/linux_syscall_support.h"
+#endif
+
 
 namespace google_breakpad {
 
@@ -65,7 +69,11 @@ bool MemoryMappedFile::Map(const char* path, size_t offset) {
   // If O_NONBLOCK is set: The open() function will return without blocking
   // for the device to be ready or available. Setting this value will provent
   // hanging if file is not avilable.
+#ifdef __APPLE__
+  int fd = open(path, O_RDONLY | O_NONBLOCK, 0);
+#else
   int fd = sys_open(path, O_RDONLY | O_NONBLOCK, 0);
+#endif
   if (fd == -1) {
     return false;
   }
@@ -74,13 +82,27 @@ bool MemoryMappedFile::Map(const char* path, size_t offset) {
    (defined(__mips__) && _MIPS_SIM == _ABI64) || \
    (defined(__riscv) && __riscv_xlen == 64)
 
+#ifdef __APPLE__
+  struct stat st;
+  if (fstat(fd, &st) == -1 || st.st_size < 0) {
+#else
   struct kernel_stat st;
   if (sys_fstat(fd, &st) == -1 || st.st_size < 0) {
+#endif
+#else
+#ifdef __APPLE__
+  struct stat64 st;
+  if (fstat64(fd, &st) == -1 || st.st_size < 0) {
 #else
   struct kernel_stat64 st;
   if (sys_fstat64(fd, &st) == -1 || st.st_size < 0) {
 #endif
-    sys_close(fd);
+#endif
+#ifdef __APPLE__
+  close(fd);
+#else
+  sys_close(fd);
+#endif
     return false;
   }
 
@@ -90,13 +112,26 @@ bool MemoryMappedFile::Map(const char* path, size_t offset) {
   // MemoryRange and return true. Don't bother to call mmap()
   // even though mmap() can handle an empty file on some platforms.
   if (offset >= file_len) {
-    sys_close(fd);
+#ifdef __APPLE__
+  close(fd);
+#else
+  sys_close(fd);
+#endif
     return true;
   }
 
   size_t content_len = file_len - offset;
+#ifdef __APPLE__
+  void* data = mmap(NULL, content_len, PROT_READ, MAP_PRIVATE, fd, offset);
+#else
   void* data = sys_mmap(NULL, content_len, PROT_READ, MAP_PRIVATE, fd, offset);
+#endif
+#ifdef __APPLE__
+  close(fd);
+#else
   sys_close(fd);
+#endif
+
   if (data == MAP_FAILED) {
     return false;
   }
@@ -107,7 +142,11 @@ bool MemoryMappedFile::Map(const char* path, size_t offset) {
 
 void MemoryMappedFile::Unmap() {
   if (content_.data()) {
-    sys_munmap(const_cast<uint8_t*>(content_.data()), content_.length());
+#ifdef __APPLE__
+    munmap(const_cast<uint8_t*>(content_.data()), content_.length());
+#else
+	sys_munmap(const_cast<uint8_t*>(content_.data()), content_.length());
+#endif
     content_.Set(NULL, 0);
   }
 }
