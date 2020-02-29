@@ -163,6 +163,8 @@ class Breakpad {
     filter_callback_context_ = context;
   }
 
+  NSString *GetTempDir() { return temp_dir; };
+    
  private:
   Breakpad()
     : handler_(NULL),
@@ -171,6 +173,7 @@ class Breakpad {
       filter_callback_(NULL),
       filter_callback_context_(NULL) {
     inspector_path_[0] = 0;
+    temp_dir = @"";
   }
 
   bool Initialize(NSDictionary* parameters);
@@ -216,6 +219,7 @@ class Breakpad {
 
   BreakpadFilterCallback  filter_callback_;
   void*                   filter_callback_context_;
+  NSString*               temp_dir;
 };
 
 #pragma mark -
@@ -431,6 +435,15 @@ Breakpad::~Breakpad() {
 
   if (handler_)
     handler_->~ExceptionHandler();
+    
+  if ([temp_dir compare: @""] != NSOrderedSame) {
+    NSFileManager *fm = [NSFileManager defaultManager];
+    NSError *error = nil;
+    BOOL success = [fm removeItemAtPath:temp_dir error:&error];
+    if (!success || error) {
+      fprintf(stderr, "\nCould not delete breakpad temporary directory\n");
+    }
+  }
 }
 
 //=============================================================================
@@ -461,6 +474,8 @@ bool Breakpad::ExtractParameters(NSDictionary* parameters) {
   NSString* dumpSubdirectory =
       [parameters objectForKey:@BREAKPAD_DUMP_DIRECTORY];
 
+  temp_dir = dumpSubdirectory;
+    
   NSDictionary* serverParameters =
       [parameters objectForKey:@BREAKPAD_SERVER_PARAMETER_DICT];
 
@@ -773,6 +788,10 @@ bool Breakpad::HandleMinidump(const char* dump_dir, const char* minidump_id) {
 
 #pragma mark -
 #pragma mark Public API
+
+int BreakpadVersion() {
+  return 1;
+}
 
 //=============================================================================
 BreakpadRef BreakpadCreate(NSDictionary* parameters) {

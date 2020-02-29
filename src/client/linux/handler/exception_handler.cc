@@ -389,6 +389,9 @@ void ExceptionHandler::SignalHandler(int sig, siginfo_t* info, void* uc) {
 
   pthread_mutex_unlock(&g_handler_stack_mutex_);
 
+  if (sig == SIGTRAP)
+    DMibPDebugBreak;
+
   // info->si_code <= 0 iff SI_FROMUSER (SI_FROMKERNEL otherwise).
   if (info->si_code <= 0 || sig == SIGABRT) {
     // This signal was triggered by somebody sending us the signal with kill().
