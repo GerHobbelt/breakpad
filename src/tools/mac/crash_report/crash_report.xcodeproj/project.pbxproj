@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		03F2389116FB24940060376D /* stack_frame_symbolizer.cc in Sources */ = {isa = PBXBuildFile; fileRef = 03F2389016FB24940060376D /* stack_frame_symbolizer.cc */; };
 		162F64FE161C5ECB00CD68D5 /* arch_utilities.cc in Sources */ = {isa = PBXBuildFile; fileRef = 162F64FC161C5ECB00CD68D5 /* arch_utilities.cc */; };
 		4214B800211109A600B769FA /* convert_old_arm64_context.cc in Sources */ = {isa = PBXBuildFile; fileRef = 4214B7FE211109A600B769FA /* convert_old_arm64_context.cc */; };
 		4247E6402110D5A500482558 /* path_helper.cc in Sources */ = {isa = PBXBuildFile; fileRef = 4247E63F2110D5A500482558 /* path_helper.cc */; };
@@ -79,6 +80,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		03F2389016FB24940060376D /* stack_frame_symbolizer.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = stack_frame_symbolizer.cc; path = ../../../processor/stack_frame_symbolizer.cc; sourceTree = "<group>"; };
 		08FB7796FE84155DC02AAC07 /* crash_report.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = crash_report.mm; sourceTree = "<group>"; };
 		08FB779EFE84155DC02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		162F64FC161C5ECB00CD68D5 /* arch_utilities.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = arch_utilities.cc; path = ../../../common/mac/arch_utilities.cc; sourceTree = "<group>"; };
@@ -362,6 +364,7 @@
 		9BDF17280B1B8B0200F8391B /* processor */ = {
 			isa = PBXGroup;
 			children = (
+				03F2389016FB24940060376D /* stack_frame_symbolizer.cc */,
 				4D2C7222126F9AF900B43EAF /* exploitability_win.cc */,
 				F407DC40185773C10064622B /* exploitability_linux.cc */,
 				F407DC41185773C10064622B /* stack_frame_symbolizer.cc */,
@@ -550,6 +553,7 @@
 				F407DC4B185773C10064622B /* stackwalker_mips.cc in Sources */,
 				4D2C726D126F9CDC00B43EAF /* x86_imm.c in Sources */,
 				4D72CA5713DFBA84006CABE3 /* md5.cc in Sources */,
+				03F2389116FB24940060376D /* stack_frame_symbolizer.cc in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
