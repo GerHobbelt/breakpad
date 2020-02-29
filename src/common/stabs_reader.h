@@ -50,7 +50,7 @@
 #include <stdint.h>
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include <Config.h>
 #endif
 
 #ifdef HAVE_MACH_O_NLIST_H

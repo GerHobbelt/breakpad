@@ -462,7 +462,7 @@ static const char *get_insn_group_str( enum x86_insn_group gp ) {
                 "other",      // 15
         };
 
-        if ( gp > sizeof (types)/sizeof(types[0]) )
+        if ( (int)gp > sizeof (types)/sizeof(types[0]) )
                 return "";
 
         return types[gp];
