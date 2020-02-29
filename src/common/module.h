@@ -440,6 +440,7 @@ class Module {
   string architecture() const { return architecture_; }
   string identifier() const { return id_; }
   string code_identifier() const { return code_id_; }
+  bool WriteBinary(std::ostream &stream, bool cfi);
 
  private:
   // Report an error that has occurred writing the symbol file, using
