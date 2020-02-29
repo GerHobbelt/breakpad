@@ -52,7 +52,7 @@
 
 - (IBAction)forkTestOptions:(id)sender {
   NSInteger tag = [[sender selectedCell] tag];
-  NSLog(@"sender tag: %d", tag);
+  NSLog(@"sender tag: %ld", (long)tag);
   if (tag <= 2) {
     bpForkOption = tag;
   }
