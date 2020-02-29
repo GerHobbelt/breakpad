@@ -33,11 +33,15 @@
 #include "common/linux/elf_symbols_to_module.h"
 
 #include <cxxabi.h>
-#include <elf.h>
+#include "elf.h"
 #include <string.h>
 
 #include "common/byte_cursor.h"
 #include "common/module.h"
+
+#ifdef __APPLE__
+	#include "../../third_party/string/memrchr.h"
+#endif
 
 namespace google_breakpad {
 
