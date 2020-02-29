@@ -38,6 +38,8 @@
 #include "common/linux/dump_symbols.h"
 #include "common/path_helper.h"
 
+DAppNoClass;
+
 using google_breakpad::WriteSymbolFile;
 using google_breakpad::WriteSymbolFileHeader;
 
