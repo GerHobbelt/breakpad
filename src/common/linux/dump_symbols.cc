@@ -35,11 +35,11 @@
 #include "common/linux/dump_symbols.h"
 
 #include <assert.h>
-#include <elf.h>
+#include "elf.h"
 #include <errno.h>
 #include <fcntl.h>
 #include <limits.h>
-#include <link.h>
+#include "link.h"
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -47,6 +47,10 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <unistd.h>
+
+#ifdef __APPLE__
+	#include <stddef.h>
+#endif
 
 #include <iostream>
 #include <set>
@@ -75,6 +79,10 @@
 #include "common/stabs_to_module.h"
 #endif
 #include "common/using_std_string.h"
+
+#ifdef __APPLE__
+	#include <libgen.h>
+#endif
 
 // This namespace contains helper functions.
 namespace {
