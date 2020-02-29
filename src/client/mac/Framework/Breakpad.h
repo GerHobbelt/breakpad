@@ -225,10 +225,12 @@ typedef bool (*BreakpadFilterCallback)(int exception_type,
 //                                   Only used in crash_report_sender.
 
 // Returns a new BreakpadRef object on success, NULL otherwise.
+int BreakpadVersion() __attribute__((weak_import));
+    
 BreakpadRef BreakpadCreate(NSDictionary* parameters);
 
 // Uninstall and release the data associated with |ref|.
-void BreakpadRelease(BreakpadRef ref);
+void BreakpadRelease(BreakpadRef ref) __attribute__((weak_import));
 
 // Clients may set an optional callback which gets called when a crash
 // occurs.  The callback function should return |true| if we should
