@@ -204,15 +204,27 @@ boolean_t breakpad_exc_server(mach_msg_header_t* request,
   return exc_server(request, reply);
 }
 
+extern "C"
+{
+  bool (*breakpad_should_handle_exception_ptr)(pthread_t pThread) = 0;
+}
+	
+
 // Callback from exc_server()
 kern_return_t catch_exception_raise(mach_port_t port, mach_port_t failed_thread,
                                     mach_port_t task,
                                     exception_type_t exception,
                                     exception_data_t code,
                                     mach_msg_type_number_t code_count) {
+	
   if (task != mach_task_self()) {
     return KERN_FAILURE;
   }
+
+  auto ptherad = pthread_from_mach_thread_np(failed_thread);
+  if (ptherad && breakpad_should_handle_exception_ptr && !breakpad_should_handle_exception_ptr(ptherad))
+    return KERN_FAILURE;
+	
   return ForwardException(task, failed_thread, exception, code, code_count);
 }
 #endif
@@ -559,7 +571,14 @@ void* ExceptionHandler::WaitForMessage(void* exception_handler_class) {
         // still need to call into the exception server and have it return
         // KERN_FAILURE (see catch_exception_raise) in order for the kernel
         // to move onto the host exception handler for the child task
-        if (receive.task.name == mach_task_self()) {
+		  
+        auto ptherad = pthread_from_mach_thread_np(receive.thread.name);
+		 
+        bool should_handle_exception = true;
+        if (ptherad && breakpad_should_handle_exception_ptr)
+          should_handle_exception = breakpad_should_handle_exception_ptr(ptherad);
+
+        if (receive.task.name == mach_task_self() && should_handle_exception) {
           self->SuspendThreads();
 
 #if USE_PROTECTED_ALLOCATIONS
@@ -665,6 +684,8 @@ bool ExceptionHandler::InstallHandler() {
   catch (std::bad_alloc) {
     return false;
   }
+  
+  (void * &)breakpad_should_handle_exception_ptr = dlsym(RTLD_DEFAULT, "breakpad_should_handle_exception");
 
   // Save the current exception ports so that we can forward to them
   previous_->count = EXC_TYPES_COUNT;
