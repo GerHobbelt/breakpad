@@ -36,7 +36,7 @@
 namespace google_breakpad {
 
 //static
-const MinidumpDescriptor::MicrodumpOnConsole
+[[maybe_unused]] const MinidumpDescriptor::MicrodumpOnConsole
     MinidumpDescriptor::kMicrodumpOnConsole = {};
 
 MinidumpDescriptor::MinidumpDescriptor(const MinidumpDescriptor& descriptor)
