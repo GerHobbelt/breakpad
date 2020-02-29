@@ -187,7 +187,7 @@ bool GoogleCrashdumpUploader::Upload(int* http_status_code,
   parameters_["ptime"] = ptime_;
   parameters_["ctime"] = ctime_;
   parameters_["email"] = email_;
-  parameters_["comments_"] = comments_;
+  parameters_["comments"] = comments_;
   if (!http_layer_->AddFile(minidump_pathname_,
                             "upload_file_minidump")) {
     return false;
