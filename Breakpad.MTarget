@@ -1,0 +1,347 @@
+%Target Lib_Breakpad_Common
+{
+	Target
+	{
+		BaseName "Breakpad_Common"
+		Type "StaticLibrary"
+		Group "Libraries/SDK"
+	}
+	Compile
+	{
+		!!CompileDialect "C"
+		SearchPath "@('src'->MakeAbsolute());@(Compile.SearchPath)"
+		SearchPath "@('src/include'->MakeAbsolute());@(Compile.SearchPath)"
+		{
+			!!PlatformFamily OSX
+		}
+		SearchPath "@(Builtin.BasePathAbsolute)/External/elftoolchain/libelf;@(Builtin.BasePathAbsolute)/External/elftoolchain/common;@(Compile.SearchPath)"
+		DynamicTypeInfo true
+		PreprocessorDefines "USE_PROTECTED_ALLOCATIONS=0;@(Compile.PreprocessorDefines)"
+	}
+	Compile
+	{
+		!!MalterlibCompileSupportTabSetings true
+		IndentWidth 2
+		TabWidth 2
+		UsesTabs false
+	}
+	%Group Source
+	{
+		%Group Shared
+		{
+			%Group Headers
+			{
+				%File "src/common/using_std_string.h"
+				%File "src/common/basictypes.h"
+				%File "src/common/memory_range.h"
+				%File "src/common/string_conversion.h"
+				%File "src/common/convert_UTF.h"
+				%File "src/google_breakpad/common/minidump_format.h"
+				%File "src/google_breakpad/common/minidump_size.h"
+				%File "src/google_breakpad/common/breakpad_types.h"
+				%File "src/third_party/lss/linux_syscall_support.h"
+				%File "src/common/linux/linux_libc_support.h"
+				%File "src/third_party/string/memrchr.h"
+			}
+
+			%File "src/common/string_conversion.cc"
+			%File "src/common/path_helper.cc"
+			%File "src/common/convert_UTF.cc"
+			%File "src/common/linux/linux_libc_support.cc"
+		}
+		%Group Linux
+		{
+			Compile.Disabled true
+			{
+				&
+				{
+					!PlatformFamily Linux
+					!BreakpadLibsEnabled true
+				}
+			}
+			%Group Headers
+			{
+
+				%File "src/common/linux/eintr_wrapper.h"
+				%File "src/common/linux/ignore_ret.h"
+				%File "src/common/linux/file_id.h"
+				%File "src/common/linux/memory_mapped_file.h"
+				%File "src/common/linux/safe_readlink.h"
+				%File "src/common/linux/guid_creator.h"
+				%File "src/common/linux/elfutils.h"
+				%File "src/common/linux/elfutils-inl.h"
+			}
+			%File "src/common/linux/file_id.cc"
+			%File "src/common/linux/memory_mapped_file.cc"
+			%File "src/common/linux/safe_readlink.cc"
+			%File "src/common/linux/guid_creator.cc"
+			%File "src/common/linux/elfutils.cc"
+			%File "src/common/linux/google_crashdump_uploader.cc"
+			%File "src/common/linux/libcurl_wrapper.cc"
+		}
+		%Group OSX
+		{
+			Compile.Disabled true
+			{
+				!PlatformFamily OSX
+			}
+			%Group Headers
+			{
+				%File "src/common/md5.h"
+				%File "src/common/scoped_ptr.h"
+				%File "src/google_breakpad/common/minidump_exception_mac.h"
+			}
+			%File "src/common/md5.cc"
+		}
+	}
+}
+
+%Target Lib_Breakpad_Processor
+{
+	Target
+	{
+		BaseName "Breakpad_Processor"
+		Type "StaticLibrary"
+		Group "Libraries/SDK"
+	}
+	Compile
+	{
+		!!CompileDialect "C"
+		SearchPath "@('src'->MakeAbsolute());@(Compile.SearchPath)"
+		SearchPath "@('src/include'->MakeAbsolute());@(Compile.SearchPath)"
+		{
+			!!PlatformFamily OSX
+		}
+		SearchPath "@(Builtin.BasePathAbsolute)/External/elftoolchain/libelf;@(Builtin.BasePathAbsolute)/External/elftoolchain/common;@(Compile.SearchPath)"
+		DynamicTypeInfo true
+	}
+	Compile
+	{
+		!!MalterlibCompileSupportTabSetings true
+		IndentWidth 2
+		TabWidth 2
+		UsesTabs false
+	}
+	%Group Source
+	{
+		%Group Shared
+		{
+			%File "src/processor/*.h"
+			%File "src/processor/*.cc"
+			%File "src/processor/*unittest.cc"
+			{
+				Compile.Disabled true
+			}
+
+			%Group "libdisasm"
+			{
+				%File "src/third_party/libdisasm/*.h"
+				%File "src/third_party/libdisasm/*.c"
+			}
+
+		}
+		%Group Linux
+		{
+			Compile.Disabled true
+			{
+				&
+				{
+					!PlatformFamily Linux
+					!BreakpadLibsEnabled true
+				}
+			}
+		}
+		%Group OSX
+		{
+			Compile.Disabled true
+			{
+				!PlatformFamily OSX
+			}
+		}
+	}
+}
+
+%Target Lib_Breakpad_Client
+{
+	Target
+	{
+		BaseName "Breakpad_Client"
+		Type "StaticLibrary"
+		Group "Libraries/SDK"
+	}
+	Compile
+	{
+		!!CompileDialect "C"
+		PreprocessorDefines "USE_PROTECTED_ALLOCATIONS=0;typeof=__typeof__;@(Compile.PreprocessorDefines)"
+		SearchPath "@('src'->MakeAbsolute());@(Compile.SearchPath)"
+		SearchPath "@('src/include'->MakeAbsolute());@(Compile.SearchPath)"
+		{
+			!!PlatformFamily OSX
+		}
+		DynamicTypeInfo true
+	}
+	Compile
+	{
+		!!MalterlibCompileSupportTabSetings true
+		IndentWidth 2
+		TabWidth 2
+		UsesTabs false
+	}
+	%Group Source
+	{
+		%Group Client
+		{
+			%Group Shared
+			{
+				%Group Headers
+				{
+					%File "src/client/minidump_file_writer-inl.h"
+					%File "src/client/minidump_file_writer.h"
+				}
+
+				%File "src/client/minidump_file_writer.cc"
+			}
+
+			%Group OSX
+			{
+				Compile.Disabled true
+				{
+					!PlatformFamily OSX
+				}
+
+				%Group Headers
+				{
+					%File "src/client/mac/handler/exception_handler.h"
+					%File "src/client/mac/crash_generation/crash_generation_client.h"
+					%File "src/client/mac/crash_generation/crash_generation_server.h"
+					%File "src/client/mac/crash_generation/client_info.h"
+					%File "src/client/mac/handler/minidump_generator.h"
+					%File "src/client/mac/handler/dynamic_images.h"
+					%File "src/client/mac/handler/breakpad_nlist_64.h"
+					%File "src/client/mac/handler/mach_vm_compat.h"
+					%File "src/common/mac/macho_utilities.h"
+					%File "src/common/mac/byteswap.h"
+					%File "src/common/mac/MachIPC.h"
+					%File "src/common/mac/scoped_task_suspend-inl.h"
+					%File "src/common/mac/file_id.h"
+					%File "src/common/mac/macho_id.h"
+					%File "src/common/mac/macho_walker.h"
+					%File "src/common/mac/macho_utilities.h"
+					%File "src/common/mac/bootstrap_compat.h"
+					%File "src/common/mac/string_utilities.h"
+				}
+
+				%File "src/client/mac/handler/exception_handler.cc"
+				%File "src/client/mac/crash_generation/crash_generation_client.cc"
+				%File "src/client/mac/crash_generation/crash_generation_server.cc"
+				%File "src/client/mac/handler/minidump_generator.cc"
+				%File "src/client/mac/handler/dynamic_images.cc"
+				%File "src/client/mac/handler/breakpad_nlist_64.cc"
+				%File "src/common/mac/macho_id.cc"
+				%File "src/common/mac/macho_walker.cc"
+				%File "src/common/mac/macho_utilities.cc"
+				%File "src/common/mac/string_utilities.cc"
+				%File "src/common/mac/file_id.cc"
+				%File "src/common/mac/MachIPC.mm"
+				%File "src/common/mac/bootstrap_compat.cc"
+			}
+
+			%Group Linux
+			{
+				Compile.Disabled true
+				{
+					!PlatformFamily Linux
+				}
+
+				%Group Headers
+				{
+					%File "src/client/linux/handler/exception_handler.h"
+					%File "src/client/linux/crash_generation/crash_generation_client.h"
+					%File "src/client/linux/handler/minidump_descriptor.h"
+					%File "src/client/linux/minidump_writer/minidump_writer.h"
+					%File "src/client/linux/minidump_writer/line_reader.h"
+					%File "src/client/linux/minidump_writer/linux_dumper.h"
+					%File "src/client/linux/minidump_writer/linux_ptrace_dumper.h"
+					%File "src/client/linux/minidump_writer/directory_reader.h"
+					%File "src/client/linux/log/log.h"
+					%File "src/client/linux/dump_writer_common/ucontext_reader.h"
+					%File "src/client/linux/microdump_writer/microdump_writer.h"
+					%File "src/client/linux/dump_writer_common/thread_info.h"
+				}
+				%File "src/client/linux/crash_generation/crash_generation_client.cc"
+				%File "src/client/linux/handler/exception_handler.cc"
+				%File "src/client/linux/handler/minidump_descriptor.cc"
+				%File "src/client/linux/minidump_writer/minidump_writer.cc"
+				%File "src/client/linux/minidump_writer/linux_dumper.cc"
+				%File "src/client/linux/minidump_writer/linux_ptrace_dumper.cc"
+				%File "src/client/linux/log/log.cc"
+				%File "src/client/linux/dump_writer_common/ucontext_reader.cc"
+				%File "src/client/linux/microdump_writer/microdump_writer.cc"
+				%File "src/client/linux/dump_writer_common/thread_info.cc"
+			}
+		}
+	}
+}
+
+%Target Exe_Dump_Syms
+{
+	Target
+	{
+		BaseName "dump_syms"
+		Type "Executable"
+	}
+	Property
+	{
+		MalterlibPostCopyProject "Dump_Syms"
+	}
+	Compile
+	{
+		!!CompileDialect "C"
+		PreprocessorDefines "HAVE_CONFIG_H=1;@(Compile.PreprocessorDefines)"
+		SearchPath "@('src'->MakeAbsolute());@(Compile.SearchPath)"
+		SearchPath "@('src/include'->MakeAbsolute());@(Compile.SearchPath)"
+		{
+			!!PlatformFamily OSX
+		}
+		SearchPath "@(Builtin.BasePathAbsolute)/External/elftoolchain/libelf;@(Builtin.BasePathAbsolute)/External/elftoolchain/common;@(Compile.SearchPath)"
+		DynamicTypeInfo true
+	}
+	Compile
+	{
+		!!MalterlibCompileSupportTabSetings true
+		IndentWidth 2
+		TabWidth 2
+		UsesTabs false
+	}
+	%Group Source
+	{
+		%Group Dwarf
+		{
+			%File "src/common/dwarf/bytereader.cc"
+			%File "src/common/dwarf/elf_reader.cc"
+			%File "src/common/dwarf/dwarf2diehandler.cc"
+			%File "src/common/dwarf/dwarf2reader.cc"
+			%File "src/common/dwarf/functioninfo.cc"
+			%File "src/common/dwarf_cfi_to_module.cc"
+			%File "src/common/dwarf_cu_to_module.cc"
+			%File "src/common/dwarf_line_to_module.cc"
+			%File "src/common/dwarf_range_list_handler.cc"
+		}
+		%Group Common
+		{
+			%File "src/common/module.cc"
+			%File "src/common/stabs_to_module.cc"
+			%File "src/common/stabs_reader.cc"
+			%File "src/common/language.cc"
+		}
+		%Group Linux
+		{
+			%File "src/common/linux/dump_symbols.cc"
+			%File "src/common/linux/elf_symbols_to_module.cc"
+			%File "src/tools/linux/dump_syms/dump_syms.cc"
+			%File "src/common/linux/crc32.cc"
+		}
+	}
+	%Dependency Lib_Breakpad_Common
+	%Dependency Lib_Malterlib
+}
