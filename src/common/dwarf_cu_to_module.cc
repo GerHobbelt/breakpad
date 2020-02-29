@@ -440,7 +440,7 @@ void DwarfCUToModule::GenericDIEHandler::ProcessAttributeString(
           break;
 
         case Language::kDemangleFailure:
-          cu_context_->reporter->DemangleError(data);
+          //cu_context_->reporter->DemangleError(data);
           // fallthrough
         case Language::kDontDemangle:
           demangled_name_ = StringView();
