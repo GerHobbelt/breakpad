@@ -369,6 +369,7 @@ static bool HasTaskDyldInfo() {
   return true;
 }
 #else
+#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_6
 static SInt32 GetOSVersionInternal() {
   SInt32 os_version = 0;
   Gestalt(gestaltSystemVersion, &os_version);
@@ -379,6 +380,7 @@ static SInt32 GetOSVersion() {
   static SInt32 os_version = GetOSVersionInternal();
   return os_version;
 }
+#endif
 
 static bool HasTaskDyldInfo() {
   return GetOSVersion() >= 0x1060;
