@@ -1342,7 +1342,7 @@ TEST_F(LoadCommand, ThreeLoadCommands) {
   EXPECT_TRUE(reader.WalkLoadCommands(&load_command_handler));
 }
 
-static inline Matcher<const Section&> MatchSection(
+static Matcher<const Section&> MatchSection(
     Matcher<bool> bits_64,
     Matcher<const string&> section_name,
     Matcher<const string&> segment_name,
@@ -1359,7 +1359,7 @@ static inline Matcher<const Section&> MatchSection(
                      Field(&Section::contents, contents)));
 }
 
-static inline Matcher<const Section&> MatchSection(
+static Matcher<const Section&> MatchSection(
     Matcher<bool> bits_64,
     Matcher<const string&> section_name,
     Matcher<const string&> segment_name,

@@ -33,6 +33,10 @@
 
 #include "common/stabs_reader.h"
 
+#if defined(__APPLE__) && defined(DPlatform)
+	#include "elf.h"
+#endif
+
 #include <assert.h>
 #include <stab.h>
 #include <string.h>
