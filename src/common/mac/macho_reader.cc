@@ -521,6 +521,8 @@ bool Reader::WalkSegmentSections(const Segment& segment,
       if (offset < size_t(segment.contents.start - buffer_.start) ||
           offset > size_t(segment.contents.end - buffer_.start) ||
           size > size_t(segment.contents.end - buffer_.start - offset)) {
+        //if (section.section_name == "__thread_bss")
+        //  continue; MalterlibMerge
         if (offset > 0) {
           reporter_->MisplacedSectionData(section.section_name,
                                           section.segment_name);
