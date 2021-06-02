@@ -219,8 +219,10 @@ target_include_directories(libbreakpad_client
 if(NOT WIN32 AND NOT APPLE)
     hunter_add_package(gflags)
     hunter_add_package(glog)
+    hunter_add_package(lss)
     find_package(gflags CONFIG REQUIRED)
     find_package(glog CONFIG REQUIRED)
+    find_package(lss CONFIG REQUIRED)
     target_link_libraries(libbreakpad_client PUBLIC gflags glog::glog)
 endif()
 
