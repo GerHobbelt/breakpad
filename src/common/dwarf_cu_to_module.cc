@@ -937,6 +937,8 @@ void DwarfCUToModule::WarningReporter::CUHeading() {
 
 void DwarfCUToModule::WarningReporter::UnknownSpecification(uint64_t offset,
                                                             uint64_t target) {
+  return;
+
   CUHeading();
   fprintf(stderr, "%s: the DIE at offset 0x%" PRIx64 " has a "
           "DW_AT_specification attribute referring to the DIE at offset 0x%"
