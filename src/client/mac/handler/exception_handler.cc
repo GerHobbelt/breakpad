@@ -693,19 +693,22 @@ bool ExceptionHandler::InstallHandler() {
   // Save the current exception ports so that we can forward to them
   previous_->count = EXC_TYPES_COUNT;
   mach_port_t current_task = mach_task_self();
-  kern_return_t result = task_get_exception_ports(current_task,
-                                                  s_exception_mask,
-                                                  previous_->masks,
-                                                  &previous_->count,
-                                                  previous_->ports,
-                                                  previous_->behaviors,
-                                                  previous_->flavors);
 
   // Setup the exception ports on this task
-  if (result == KERN_SUCCESS)
-    result = task_set_exception_ports(current_task, s_exception_mask,
-                                      handler_port_, EXCEPTION_DEFAULT,
-                                      THREAD_STATE_NONE);
+  kern_return_t result = task_swap_exception_ports
+    (
+      current_task,
+      s_exception_mask,
+      handler_port_,
+      EXCEPTION_DEFAULT,
+      THREAD_STATE_NONE,
+      previous_->masks,
+      &previous_->count,
+      previous_->ports,
+      previous_->behaviors,
+      previous_->flavors
+    )
+  ;
 
   installed_exception_handler_ = (result == KERN_SUCCESS);
 
@@ -768,10 +771,6 @@ bool ExceptionHandler::Setup(bool install_handler) {
     result = mach_port_insert_right(current_task, handler_port_, handler_port_,
                                     MACH_MSG_TYPE_MAKE_SEND);
 
-  if (install_handler && result == KERN_SUCCESS)
-    if (!InstallHandler())
-      return false;
-
   if (result == KERN_SUCCESS) {
     // Install the handler in its own thread, detached as we won't be joining.
     pthread_attr_t attr;
@@ -780,6 +779,10 @@ bool ExceptionHandler::Setup(bool install_handler) {
                                               &WaitForMessage, this);
     pthread_attr_destroy(&attr);
     result = thread_create_result ? KERN_FAILURE : KERN_SUCCESS;
+
+    if (install_handler && result == KERN_SUCCESS)
+      if (!InstallHandler())
+        return false;
   }
 
   return result == KERN_SUCCESS;
