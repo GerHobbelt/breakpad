@@ -1,4 +1,17 @@
-%Target Lib_Breakpad_Common
+Property.MalterilBreakpadLibsEnabled define bool = false
+
+%Repository "lss"
+{
+	Repository
+	{
+		Type "External"
+		Location "src/third_party/lss"->MakeAbsolute()
+		DefaultBranch "main"
+		URL "https://chromium.googlesource.com/linux-syscall-support"
+	}
+}
+
+%Target "Lib_Breakpad_Common"
 {
 	Target
 	{
@@ -9,14 +22,19 @@
 	Compile
 	{
 		!!CompileDialect "C"
-		SearchPath "@('src'->MakeAbsolute());@(Compile.SearchPath)"
-		SearchPath "@('src/include'->MakeAbsolute());@(Compile.SearchPath)"
+		SearchPath += "src"->MakeAbsolute()
+		SearchPath += "src/include"->MakeAbsolute()
+		SearchPath += [`@(Builtin.BasePathAbsolute)/External/elftoolchain/libelf`, `@(Builtin.BasePathAbsolute)/External/elftoolchain/common`]
+/*		SearchPath += `@(Builtin.BasePathAbsolute)/SDK/libelf/Linux`
 		{
-			!!PlatformFamily OSX
-		}
-		SearchPath "@(Builtin.BasePathAbsolute)/External/elftoolchain/libelf;@(Builtin.BasePathAbsolute)/External/elftoolchain/common;@(Compile.SearchPath)"
+			&
+			{
+				PlatformFamily "OSX"
+				MalterilBreakpadLibsEnabled true
+			}
+		}*/
 		DynamicTypeInfo true
-		PreprocessorDefines "USE_PROTECTED_ALLOCATIONS=0;@(Compile.PreprocessorDefines)"
+		PreprocessorDefines += "USE_PROTECTED_ALLOCATIONS=0"
 	}
 	Compile
 	{
@@ -25,13 +43,14 @@
 		TabWidth 2
 		UsesTabs false
 	}
-	%Group Source
+	%Group "Source"
 	{
-		%Group Shared
+		%Group "Shared"
 		{
-			%Group Headers
+			%Group "Headers"
 			{
 				%File "src/common/using_std_string.h"
+				//%File "src/common/memory.h"
 				%File "src/common/basictypes.h"
 				%File "src/common/memory_range.h"
 				%File "src/common/string_conversion.h"
@@ -39,7 +58,7 @@
 				%File "src/google_breakpad/common/minidump_format.h"
 				%File "src/google_breakpad/common/minidump_size.h"
 				%File "src/google_breakpad/common/breakpad_types.h"
-				%File "src/third_party/lss/linux_syscall_support.h"
+				//%File "src/third_party/lss/linux_syscall_support.h"
 				%File "src/common/linux/linux_libc_support.h"
 				%File "src/third_party/string/memrchr.h"
 			}
@@ -49,17 +68,17 @@
 			%File "src/common/convert_UTF.cc"
 			%File "src/common/linux/linux_libc_support.cc"
 		}
-		%Group Linux
+		%Group "Linux"
 		{
 			Compile.Disabled true
 			{
 				&
 				{
-					!PlatformFamily Linux
-					!BreakpadLibsEnabled true
+					!PlatformFamily "Linux"
+					!MalterilBreakpadLibsEnabled true
 				}
 			}
-			%Group Headers
+			%Group "Headers"
 			{
 
 				%File "src/common/linux/eintr_wrapper.h"
@@ -79,13 +98,13 @@
 			%File "src/common/linux/google_crashdump_uploader.cc"
 			%File "src/common/linux/libcurl_wrapper.cc"
 		}
-		%Group OSX
+		%Group "OSX"
 		{
 			Compile.Disabled true
 			{
-				!PlatformFamily OSX
+				!PlatformFamily "OSX"
 			}
-			%Group Headers
+			%Group "Headers"
 			{
 				%File "src/common/md5.h"
 				%File "src/common/scoped_ptr.h"
@@ -96,7 +115,7 @@
 	}
 }
 
-%Target Lib_Breakpad_Processor
+%Target "Lib_Breakpad_Processor"
 {
 	Target
 	{
@@ -107,12 +126,9 @@
 	Compile
 	{
 		!!CompileDialect "C"
-		SearchPath "@('src'->MakeAbsolute());@(Compile.SearchPath)"
-		SearchPath "@('src/include'->MakeAbsolute());@(Compile.SearchPath)"
-		{
-			!!PlatformFamily OSX
-		}
-		SearchPath "@(Builtin.BasePathAbsolute)/External/elftoolchain/libelf;@(Builtin.BasePathAbsolute)/External/elftoolchain/common;@(Compile.SearchPath)"
+		SearchPath += "src"->MakeAbsolute()
+		SearchPath += "src/include"->MakeAbsolute()
+		SearchPath += [`@(Builtin.BasePathAbsolute)/External/elftoolchain/libelf`, `@(Builtin.BasePathAbsolute)/External/elftoolchain/common`]
 		DynamicTypeInfo true
 	}
 	Compile
@@ -122,9 +138,9 @@
 		TabWidth 2
 		UsesTabs false
 	}
-	%Group Source
+	%Group "Source"
 	{
-		%Group Shared
+		%Group "Shared"
 		{
 			%File "src/processor/*.h"
 			%File "src/processor/*.cc"
@@ -140,28 +156,28 @@
 			}
 
 		}
-		%Group Linux
+		%Group "Linux"
 		{
 			Compile.Disabled true
 			{
 				&
 				{
-					!PlatformFamily Linux
-					!BreakpadLibsEnabled true
+					!PlatformFamily "Linux"
+					!MalterilBreakpadLibsEnabled true
 				}
 			}
 		}
-		%Group OSX
+		%Group "OSX"
 		{
 			Compile.Disabled true
 			{
-				!PlatformFamily OSX
+				!PlatformFamily "OSX"
 			}
 		}
 	}
 }
 
-%Target Lib_Breakpad_Client
+%Target "Lib_Breakpad_Client"
 {
 	Target
 	{
@@ -169,17 +185,27 @@
 		Type "StaticLibrary"
 		Group "Libraries/SDK"
 	}
+
+	Compile
+	{
+		|
+		{
+			CompileDialect "C"
+			Compile.Type "Assembler"
+		}
+
+		SearchPath += "src"->MakeAbsolute()
+		SearchPath += "src/include"->MakeAbsolute()
+	}
+
 	Compile
 	{
 		!!CompileDialect "C"
-		PreprocessorDefines "USE_PROTECTED_ALLOCATIONS=0;typeof=__typeof__;@(Compile.PreprocessorDefines)"
-		SearchPath "@('src'->MakeAbsolute());@(Compile.SearchPath)"
-		SearchPath "@('src/include'->MakeAbsolute());@(Compile.SearchPath)"
-		{
-			!!PlatformFamily OSX
-		}
+
+		PreprocessorDefines += ["USE_PROTECTED_ALLOCATIONS=0"]
 		DynamicTypeInfo true
 	}
+
 	Compile
 	{
 		!!MalterlibCompileSupportTabSetings true
@@ -187,13 +213,13 @@
 		TabWidth 2
 		UsesTabs false
 	}
-	%Group Source
+	%Group "Source"
 	{
-		%Group Client
+		%Group "Client"
 		{
-			%Group Shared
+			%Group "Shared"
 			{
-				%Group Headers
+				%Group "Headers"
 				{
 					%File "src/client/minidump_file_writer-inl.h"
 					%File "src/client/minidump_file_writer.h"
@@ -202,14 +228,14 @@
 				%File "src/client/minidump_file_writer.cc"
 			}
 
-			%Group OSX
+			%Group "OSX"
 			{
 				Compile.Disabled true
 				{
-					!PlatformFamily OSX
+					!PlatformFamily "OSX"
 				}
 
-				%Group Headers
+				%Group "Headers"
 				{
 					%File "src/client/mac/handler/exception_handler.h"
 					%File "src/client/mac/crash_generation/crash_generation_client.h"
@@ -246,14 +272,14 @@
 				%File "src/common/mac/bootstrap_compat.cc"
 			}
 
-			%Group Linux
+			%Group "Linux"
 			{
 				Compile.Disabled true
 				{
-					!PlatformFamily Linux
+					!PlatformFamily "Linux"
 				}
 
-				%Group Headers
+				%Group "Headers"
 				{
 					%File "src/client/linux/handler/exception_handler.h"
 					%File "src/client/linux/crash_generation/crash_generation_client.h"
@@ -278,12 +304,13 @@
 				%File "src/client/linux/dump_writer_common/ucontext_reader.cc"
 				%File "src/client/linux/microdump_writer/microdump_writer.cc"
 				%File "src/client/linux/dump_writer_common/thread_info.cc"
+				%File "src/common/linux/breakpad_getcontext.S"
 			}
 		}
 	}
 }
 
-%Target Exe_Dump_Syms
+%Target "Exe_Dump_Syms"
 {
 	Target
 	{
@@ -297,13 +324,10 @@
 	Compile
 	{
 		!!CompileDialect "C"
-		PreprocessorDefines "HAVE_CONFIG_H=1;@(Compile.PreprocessorDefines)"
-		SearchPath "@('src'->MakeAbsolute());@(Compile.SearchPath)"
-		SearchPath "@('src/include'->MakeAbsolute());@(Compile.SearchPath)"
-		{
-			!!PlatformFamily OSX
-		}
-		SearchPath "@(Builtin.BasePathAbsolute)/External/elftoolchain/libelf;@(Builtin.BasePathAbsolute)/External/elftoolchain/common;@(Compile.SearchPath)"
+		PreprocessorDefines += "HAVE_CONFIG_H=1"
+		SearchPath += "src"->MakeAbsolute()
+		SearchPath += "src/include"->MakeAbsolute()
+		SearchPath += [`@(Builtin.BasePathAbsolute)/External/elftoolchain/libelf`, `@(Builtin.BasePathAbsolute)/External/elftoolchain/common`]
 		DynamicTypeInfo true
 	}
 	Compile
@@ -313,28 +337,27 @@
 		TabWidth 2
 		UsesTabs false
 	}
-	%Group Source
+	%Group "Source"
 	{
-		%Group Dwarf
+		%Group "Dwarf"
 		{
 			%File "src/common/dwarf/bytereader.cc"
 			%File "src/common/dwarf/elf_reader.cc"
 			%File "src/common/dwarf/dwarf2diehandler.cc"
 			%File "src/common/dwarf/dwarf2reader.cc"
-			%File "src/common/dwarf/functioninfo.cc"
 			%File "src/common/dwarf_cfi_to_module.cc"
 			%File "src/common/dwarf_cu_to_module.cc"
 			%File "src/common/dwarf_line_to_module.cc"
 			%File "src/common/dwarf_range_list_handler.cc"
 		}
-		%Group Common
+		%Group "Common"
 		{
 			%File "src/common/module.cc"
 			%File "src/common/stabs_to_module.cc"
 			%File "src/common/stabs_reader.cc"
 			%File "src/common/language.cc"
 		}
-		%Group Linux
+		%Group "Linux"
 		{
 			%File "src/common/linux/dump_symbols.cc"
 			%File "src/common/linux/elf_symbols_to_module.cc"
@@ -342,6 +365,6 @@
 			%File "src/common/linux/crc32.cc"
 		}
 	}
-	%Dependency Lib_Breakpad_Common
-	%Dependency Lib_Malterlib
+	%Dependency "Lib_Breakpad_Common"
+	%Dependency "Lib_Malterlib"
 }
