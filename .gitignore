@@ -63,7 +63,6 @@ lib*.a
 .dirstamp
 autom4te.cache/
 /config.cache
-config.h
 /config.log
 /config.status
 /Makefile
@@ -89,3 +88,6 @@ src/Makefile
 src/testing
 src/third_party/lss
 src/third_party/protobuf
+
+xcuserdata/
+/External.MRepoState
