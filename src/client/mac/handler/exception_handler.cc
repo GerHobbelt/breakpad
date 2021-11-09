@@ -773,7 +773,6 @@ bool ExceptionHandler::Setup(bool install_handler) {
     // Install the handler in its own thread, detached as we won't be joining.
     pthread_attr_t attr;
     pthread_attr_init(&attr);
-    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
     int thread_create_result = pthread_create(&handler_thread_, &attr,
                                               &WaitForMessage, this);
     pthread_attr_destroy(&attr);
@@ -792,6 +791,7 @@ bool ExceptionHandler::Teardown() {
 
   // Send an empty message so that the handler_thread exits
   if (SendMessageToHandlerThread(kShutdownMessage)) {
+    [[maybe_unused]] int thread_join_result = pthread_join(handler_thread_, nullptr);
     mach_port_t current_task = mach_task_self();
     result = mach_port_deallocate(current_task, handler_port_);
     if (result != KERN_SUCCESS)
