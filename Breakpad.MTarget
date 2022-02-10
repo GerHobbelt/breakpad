@@ -24,7 +24,7 @@ Property.MalterilBreakpadLibsEnabled define bool = false
 		!!CompileDialect "C"
 		SearchPath += "src"->MakeAbsolute()
 		SearchPath += "src/include"->MakeAbsolute()
-		SearchPath += [`@(Builtin.BasePathAbsolute)/External/elftoolchain/libelf`, `@(Builtin.BasePathAbsolute)/External/elftoolchain/common`]
+		SearchPath += [`@(GeneratedWorkspaceDirectory)elftoolchain`, `@(Builtin.BasePathAbsolute)/External/elftoolchain/libelf`, `@(Builtin.BasePathAbsolute)/External/elftoolchain/common`]
 /*		SearchPath += `@(Builtin.BasePathAbsolute)/SDK/libelf/Linux`
 		{
 			&
@@ -128,7 +128,7 @@ Property.MalterilBreakpadLibsEnabled define bool = false
 		!!CompileDialect "C"
 		SearchPath += "src"->MakeAbsolute()
 		SearchPath += "src/include"->MakeAbsolute()
-		SearchPath += [`@(Builtin.BasePathAbsolute)/External/elftoolchain/libelf`, `@(Builtin.BasePathAbsolute)/External/elftoolchain/common`]
+		SearchPath += [`@(GeneratedWorkspaceDirectory)elftoolchain`, `@(Builtin.BasePathAbsolute)/External/elftoolchain/libelf`, `@(Builtin.BasePathAbsolute)/External/elftoolchain/common`]
 		DynamicTypeInfo true
 	}
 	Compile
@@ -327,7 +327,7 @@ Property.MalterilBreakpadLibsEnabled define bool = false
 		PreprocessorDefines += "HAVE_CONFIG_H=1"
 		SearchPath += "src"->MakeAbsolute()
 		SearchPath += "src/include"->MakeAbsolute()
-		SearchPath += [`@(Builtin.BasePathAbsolute)/External/elftoolchain/libelf`, `@(Builtin.BasePathAbsolute)/External/elftoolchain/common`]
+		SearchPath += [`@(GeneratedWorkspaceDirectory)elftoolchain`, `@(Builtin.BasePathAbsolute)/External/elftoolchain/libelf`, `@(Builtin.BasePathAbsolute)/External/elftoolchain/common`]
 		DynamicTypeInfo true
 	}
 	Compile
