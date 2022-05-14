@@ -300,6 +300,7 @@ Property.MalterilBreakpadLibsEnabled define bool = false
 				%File "src/client/linux/minidump_writer/minidump_writer.cc"
 				%File "src/client/linux/minidump_writer/linux_dumper.cc"
 				%File "src/client/linux/minidump_writer/linux_ptrace_dumper.cc"
+				%File "src/client/linux/minidump_writer/pe_file.cc"
 				%File "src/client/linux/log/log.cc"
 				%File "src/client/linux/dump_writer_common/ucontext_reader.cc"
 				%File "src/client/linux/microdump_writer/microdump_writer.cc"
