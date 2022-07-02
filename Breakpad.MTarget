@@ -29,7 +29,7 @@ Property.MalterilBreakpadLibsEnabled define bool = false
 		{
 			&
 			{
-				PlatformFamily "OSX"
+				PlatformFamily "macOS"
 				MalterilBreakpadLibsEnabled true
 			}
 		}*/
@@ -98,11 +98,11 @@ Property.MalterilBreakpadLibsEnabled define bool = false
 			%File "src/common/linux/google_crashdump_uploader.cc"
 			%File "src/common/linux/libcurl_wrapper.cc"
 		}
-		%Group "OSX"
+		%Group "macOS"
 		{
 			Compile.Disabled true
 			{
-				!PlatformFamily "OSX"
+				!PlatformFamily "macOS"
 			}
 			%Group "Headers"
 			{
@@ -167,11 +167,11 @@ Property.MalterilBreakpadLibsEnabled define bool = false
 				}
 			}
 		}
-		%Group "OSX"
+		%Group "macOS"
 		{
 			Compile.Disabled true
 			{
-				!PlatformFamily "OSX"
+				!PlatformFamily "macOS"
 			}
 		}
 	}
@@ -228,11 +228,11 @@ Property.MalterilBreakpadLibsEnabled define bool = false
 				%File "src/client/minidump_file_writer.cc"
 			}
 
-			%Group "OSX"
+			%Group "macOS"
 			{
 				Compile.Disabled true
 				{
-					!PlatformFamily "OSX"
+					!PlatformFamily "macOS"
 				}
 
 				%Group "Headers"
