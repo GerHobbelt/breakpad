@@ -6,8 +6,8 @@ Property.MalterilBreakpadLibsEnabled define bool = false
 	{
 		Type "External"
 		Location "src/third_party/lss"->MakeAbsolute()
-		DefaultBranch "main"
-		URL "https://chromium.googlesource.com/linux-syscall-support"
+		DefaultUpstreamBranch "main"
+		Remotes =+ {Name: "upstream", URL: "https://chromium.googlesource.com/linux-syscall-support"}
 	}
 }
 
