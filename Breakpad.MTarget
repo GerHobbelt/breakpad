@@ -1,4 +1,4 @@
-Property.MalterilBreakpadLibsEnabled define bool = false
+Property.MalterilBreakpadLibsEnabled: bool = false
 
 %Repository "lss"
 {
