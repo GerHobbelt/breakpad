@@ -111,6 +111,7 @@ Property.MalterilBreakpadLibsEnabled: bool = false
 				%File "src/google_breakpad/common/minidump_exception_mac.h"
 			}
 			%File "src/common/md5.cc"
+			%File "src/common/mac/arch_utilities.cc"
 		}
 	}
 }
