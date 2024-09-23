@@ -147,7 +147,7 @@ TEST(Context, ARM) {
               == 0);
 }
 
-#if GTEST_OS_WINDOWS && !GTEST_HAS_ABSL
+#if GTEST_OS_WINDOWS && (!defined(GTEST_HAS_ABSL) || !GTEST_HAS_ABSL)
 // GTest on Windows does not support complex regular expressions.
 TEST(ContextDeathTest, DISABLED_X86BadFlags) {
 #else
