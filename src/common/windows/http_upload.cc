@@ -31,6 +31,9 @@
 #endif
 
 #include <algorithm>
+#include <map>
+#include <memory>
+#include <string>
 
 #include <assert.h>
 #include <stdint.h>
@@ -53,7 +56,6 @@ namespace {
   using std::string;
   using std::wstring;
   using std::map;
-  using std::ios;
   using std::unique_ptr;
 
 // Compresses the contents of `data` into `deflated` using the deflate
@@ -102,6 +104,9 @@ bool Deflate(const string& data, string& deflated) {
 
   return result == Z_STREAM_END;
 #else
+  // Silence MSVC warning C4100 when building without zlib support.
+  data;
+  deflated;
   return false;
 #endif  // defined(HAVE_ZLIB)
 }
