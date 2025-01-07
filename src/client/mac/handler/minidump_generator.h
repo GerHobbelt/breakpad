@@ -33,6 +33,7 @@
 
 #include <mach/mach.h>
 #include <TargetConditionals.h>
+#include <AvailabilityMacros.h>
 
 #include <string>
 
