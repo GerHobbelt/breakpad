@@ -38,6 +38,7 @@
 #include <mach/mach.h>
 #include <TargetConditionals.h>
 
+#include <atomic>
 #include <string>
 
 #include "client/mac/handler/ucontext_compat.h"
@@ -256,7 +257,7 @@ class ExceptionHandler {
   bool is_in_teardown_;
 
   // Save the last result of the last minidump
-  bool last_minidump_write_result_;
+  std::atomic<bool> last_minidump_write_result_;
 
   // A mutex for use when writing out a minidump that was requested on a
   // thread other than the exception handler.

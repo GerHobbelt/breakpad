@@ -36,6 +36,7 @@
 #include <signal.h>
 #include <TargetConditionals.h>
 
+#include <atomic>
 #include <map>
 
 #include "client/mac/handler/exception_handler.h"
@@ -282,7 +283,7 @@ bool ExceptionHandler::WriteMinidump(bool write_exception_stream) {
     return false;
 
   use_minidump_write_mutex_ = true;
-  last_minidump_write_result_ = false;
+  last_minidump_write_result_.store(false, std::memory_order_relaxed);
 
   // Lock the mutex.  Since we just created it, this will return immediately.
   if (pthread_mutex_lock(&minidump_write_mutex_) == 0) {
@@ -303,7 +304,7 @@ bool ExceptionHandler::WriteMinidump(bool write_exception_stream) {
 
   use_minidump_write_mutex_ = false;
   UpdateNextID();
-  return last_minidump_write_result_;
+  return last_minidump_write_result_.load(std::memory_order_relaxed);
 }
 
 // static
@@ -542,10 +543,10 @@ void* ExceptionHandler::WaitForMessage(void* exception_handler_class) {
         }
 
         // Write out the dump and save the result for later retrieval
-        self->last_minidump_write_result_ =
-          self->WriteMinidumpWithException(exception_type, exception_code,
-                                           0, NULL, thread,
-                                           false, false);
+        self->last_minidump_write_result_.store(
+            self->WriteMinidumpWithException(exception_type, exception_code, 0,
+                                             NULL, thread, false, false),
+            std::memory_order_release);
 
 #if USE_PROTECTED_ALLOCATIONS
         if (gBreakpadAllocator)
