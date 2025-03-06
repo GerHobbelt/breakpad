@@ -37,7 +37,10 @@
 #include <TargetConditionals.h>
 
 #include <atomic>
+#include <condition_variable>
 #include <map>
+#include <mutex>
+#include <utility>
 
 #include "client/mac/handler/exception_handler.h"
 #include "client/mac/handler/minidump_generator.h"
@@ -279,30 +282,30 @@ ExceptionHandler::~ExceptionHandler() {
 
 bool ExceptionHandler::WriteMinidump(bool write_exception_stream) {
   // If we're currently writing, just return
-  if (use_minidump_write_mutex_)
+  if (use_minidump_write_mutex_.exchange(true, std::memory_order_release))
     return false;
 
-  use_minidump_write_mutex_ = true;
   last_minidump_write_result_.store(false, std::memory_order_relaxed);
 
   // Lock the mutex.  Since we just created it, this will return immediately.
-  if (pthread_mutex_lock(&minidump_write_mutex_) == 0) {
+  std::unique_lock lock(minidump_write_mutex_, std::defer_lock);
+  if (lock.try_lock()) {
     // Send an empty message to the handle port so that a minidump will
     // be written
     bool result = SendMessageToHandlerThread(write_exception_stream ?
                                                kWriteDumpWithExceptionMessage :
                                                kWriteDumpMessage);
     if (!result) {
-      pthread_mutex_unlock(&minidump_write_mutex_);
+      use_minidump_write_mutex_.store(false, std::memory_order_release);
       return false;
     }
 
     // Wait for the minidump writer to complete its writing.  It will unlock
     // the mutex when completed
-    pthread_mutex_lock(&minidump_write_mutex_);
+    minidump_write_condition_.wait(lock);
   }
 
-  use_minidump_write_mutex_ = false;
+  use_minidump_write_mutex_.store(false, std::memory_order_relaxed);
   UpdateNextID();
   return last_minidump_write_result_.load(std::memory_order_relaxed);
 }
@@ -555,8 +558,8 @@ void* ExceptionHandler::WaitForMessage(void* exception_handler_class) {
 
         self->ResumeThreads();
 
-        if (self->use_minidump_write_mutex_)
-          pthread_mutex_unlock(&self->minidump_write_mutex_);
+        if (self->use_minidump_write_mutex_.load(std::memory_order_relaxed))
+          self->minidump_write_condition_.notify_one();
       } else {
         // When forking a child process with the exception handler installed,
         // if the child crashes, it will send the exception back to the parent
@@ -738,9 +741,6 @@ bool ExceptionHandler::UninstallHandler(bool in_exception) {
 }
 
 bool ExceptionHandler::Setup(bool install_handler) {
-  if (pthread_mutex_init(&minidump_write_mutex_, NULL))
-    return false;
-
   // Create a receive right
   mach_port_t current_task = mach_task_self();
   kern_return_t result = mach_port_allocate(current_task,
@@ -788,7 +788,6 @@ bool ExceptionHandler::Teardown() {
 
   handler_thread_ = NULL;
   handler_port_ = MACH_PORT_NULL;
-  pthread_mutex_destroy(&minidump_write_mutex_);
 
   return result == KERN_SUCCESS;
 }

@@ -39,6 +39,8 @@
 #include <TargetConditionals.h>
 
 #include <atomic>
+#include <condition_variable>
+#include <mutex>
 #include <string>
 
 #include "client/mac/handler/ucontext_compat.h"
@@ -261,10 +263,13 @@ class ExceptionHandler {
 
   // A mutex for use when writing out a minidump that was requested on a
   // thread other than the exception handler.
-  pthread_mutex_t minidump_write_mutex_;
+  std::mutex minidump_write_mutex_;
 
-  // True, if we're using the mutext to indicate when mindump writing occurs
-  bool use_minidump_write_mutex_;
+  // Condition of the finished minidump writing.
+  std::condition_variable minidump_write_condition_;
+
+  // True, if we're using the mutex to indicate when minidump writing occurs
+  std::atomic<bool> use_minidump_write_mutex_;
 
   // Old signal handler for SIGABRT. Used to be able to restore it when
   // uninstalling.
