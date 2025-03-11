@@ -5468,9 +5468,12 @@ bool MinidumpCrashpadInfo::Read(uint32_t expected_size) {
       module_crashpad_info_links_.push_back(
           module_crashpad_info_links[index].minidump_module_list_index);
       module_crashpad_info_.push_back(module_crashpad_info);
-      module_crashpad_info_list_annotations_.push_back(list_annotations);
-      module_crashpad_info_simple_annotations_.push_back(simple_annotations);
-      module_crashpad_info_annotation_objects_.push_back(annotation_objects);
+      module_crashpad_info_list_annotations_.push_back(std::move(
+          list_annotations));
+      module_crashpad_info_simple_annotations_.push_back(std::move(
+          simple_annotations));
+      module_crashpad_info_annotation_objects_.push_back(std::move(
+          annotation_objects));
     }
   }
 
@@ -6272,7 +6275,7 @@ bool Minidump::ReadStringList(
       return false;
     }
 
-    string_list->push_back(entry);
+    string_list->push_back(std::move(entry));
   }
 
   return true;
@@ -6402,9 +6405,9 @@ bool Minidump::ReadCrashpadAnnotationsList(
       return false;
     }
 
-    MinidumpCrashpadInfo::AnnotationObject object = {annotation.type, name,
-                                                     value_data};
-    annotations_list->push_back(object);
+    MinidumpCrashpadInfo::AnnotationObject object{annotation.type, name,
+                                                  value_data};
+    annotations_list->push_back(std::move(object));
   }
 
   return true;
