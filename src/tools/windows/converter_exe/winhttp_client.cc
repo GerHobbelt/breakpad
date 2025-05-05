@@ -147,7 +147,7 @@ bool WinHttpClient::Connect(HttpHandle session_handle,
                                          ToHINTERNET(session_handle),
                                          server,
                                          static_cast<INTERNET_PORT>(port),
-                                         nullptr));
+                                         0));
   return !!(*connection_handle);
 }
 
@@ -185,7 +185,7 @@ bool WinHttpClient::SendRequest(HttpHandle request_handle,
                                 nullptr,
                                 0,
                                 WINHTTP_IGNORE_REQUEST_TOTAL_LENGTH,
-                                nullptr);
+                                0);
 }
 
 bool WinHttpClient::ReceiveResponse(HttpHandle request_handle) const {
