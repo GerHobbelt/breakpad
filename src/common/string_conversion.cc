@@ -31,6 +31,7 @@
 #endif
 
 #include <string.h>
+#include <wchar.h>
 
 #include "common/convert_UTF.h"
 #include "common/scoped_ptr.h"
