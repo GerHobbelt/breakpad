@@ -44,6 +44,7 @@
 
 #include "dynamic_images.h"
 #include "mach_vm_compat.h"
+#include "AvailabilityMacros.h"
 
 #if !TARGET_OS_IPHONE && (MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_7)
   #define HAS_PPC_SUPPORT
