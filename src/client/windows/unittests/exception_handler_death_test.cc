@@ -274,6 +274,7 @@ void ExceptionHandlerDeathTest::DoCrashPureVirtualCall() {
   PureVirtualCall instance;
 }
 
+#if GTEST_HAS_DEATH_TEST
 TEST_F(ExceptionHandlerDeathTest, PureVirtualCallTest) {
   using google_breakpad::ExceptionHandler;
 
@@ -287,6 +288,7 @@ TEST_F(ExceptionHandlerDeathTest, PureVirtualCallTest) {
   // Calls a pure virtual function.
   EXPECT_EXIT(DoCrashPureVirtualCall(), ::testing::ExitedWithCode(0), "");
 }
+#endif // GTEST_HAS_DEATH_TEST
 
 wstring find_minidump_in_directory(const wstring& directory) {
   wstring search_path = directory + L"\\*";

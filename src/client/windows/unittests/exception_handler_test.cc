@@ -231,6 +231,8 @@ void ExceptionHandlerTest::DoCrashPureVirtualCall() {
   }
 }
 
+#if GTEST_HAS_DEATH_TEST
+
 // This test validates that the minidump is written correctly.
 TEST_F(ExceptionHandlerTest, InvalidParameterMiniDumpTest) {
   ASSERT_TRUE(DoesPathExist(temp_path_));
@@ -373,6 +375,8 @@ TEST_F(ExceptionHandlerTest, PureVirtualCallMiniDumpTest) {
   EXPECT_FALSE(mini.HasStream(TokenStream));
   EXPECT_FALSE(full.HasStream(TokenStream));
 }
+
+#endif // GTEST_HAS_DEATH_TEST
 
 // Test that writing a minidump produces a valid minidump containing
 // some expected structures.
