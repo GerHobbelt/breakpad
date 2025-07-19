@@ -216,6 +216,7 @@ check_PROGRAMS += \
 	src/processor/stackwalker_address_list_unittest \
 	src/processor/stackwalker_mips_unittest \
 	src/processor/stackwalker_mips64_unittest \
+	src/processor/stackwalker_loong64_unittest \
 	src/processor/stackwalker_riscv_unittest \
 	src/processor/stackwalker_riscv64_unittest \
 	src/processor/stackwalker_x86_unittest \
@@ -424,6 +425,8 @@ src_libbreakpad_a_SOURCES = \
 	src/processor/stackwalker_arm64.h \
 	src/processor/stackwalker_address_list.cc \
 	src/processor/stackwalker_address_list.h \
+	src/processor/stackwalker_loong64.cc \
+	src/processor/stackwalker_loong64.h \
 	src/processor/stackwalker_mips.cc \
 	src/processor/stackwalker_mips.h \
 	src/processor/stackwalker_ppc.cc \
@@ -1066,6 +1069,7 @@ src_processor_microdump_processor_unittest_LDADD = \
 	src/processor/stackwalker_amd64.o \
 	src/processor/stackwalker_arm.o \
 	src/processor/stackwalker_arm64.o \
+	src/processor/stackwalker_loong64.o \
 	src/processor/stackwalker_mips.o \
 	src/processor/stackwalker_ppc.o \
 	src/processor/stackwalker_ppc64.o \
@@ -1113,6 +1117,7 @@ src_processor_minidump_processor_unittest_LDADD = \
 	src/processor/stackwalker_amd64.o \
 	src/processor/stackwalker_arm.o \
 	src/processor/stackwalker_arm64.o \
+	src/processor/stackwalker_loong64.o \
 	src/processor/stackwalker_mips.o \
 	src/processor/stackwalker_ppc.o \
 	src/processor/stackwalker_ppc64.o \
@@ -1264,6 +1269,7 @@ src_processor_stackwalker_selftest_LDADD = \
 	src/processor/stackwalker_amd64.o \
 	src/processor/stackwalker_arm.o \
 	src/processor/stackwalker_arm64.o \
+	src/processor/stackwalker_loong64.o \
 	src/processor/stackwalker_mips.o \
 	src/processor/stackwalker_ppc.o \
 	src/processor/stackwalker_ppc64.o \
@@ -1318,6 +1324,16 @@ src_processor_stackwalker_address_list_unittest_LDADD = \
 	$(TEST_LIBS) \
 	$(PTHREAD_CFLAGS) $(PTHREAD_LIBS)
 src_processor_stackwalker_address_list_unittest_CPPFLAGS = \
+	$(AM_CPPFLAGS) $(TEST_CFLAGS)
+
+src_processor_stackwalker_loong64_unittest_SOURCES = \
+	src/common/test_assembler.cc \
+	src/processor/stackwalker_loong64_unittest.cc
+src_processor_stackwalker_loong64_unittest_LDADD = \
+	src/libbreakpad.a \
+	$(TEST_LIBS) \
+	$(PTHREAD_CFLAGS) $(PTHREAD_LIBS)
+src_processor_stackwalker_loong64_unittest_CPPFLAGS = \
 	$(AM_CPPFLAGS) $(TEST_CFLAGS)
 
 src_processor_stackwalker_mips_unittest_SOURCES = \
@@ -1456,6 +1472,7 @@ src_processor_microdump_stackwalk_LDADD = \
 	src/processor/stackwalker_amd64.o \
 	src/processor/stackwalker_arm.o \
 	src/processor/stackwalker_arm64.o \
+	src/processor/stackwalker_loong64.o \
 	src/processor/stackwalker_mips.o \
 	src/processor/stackwalker_ppc.o \
 	src/processor/stackwalker_ppc64.o \
@@ -1503,6 +1520,7 @@ src_processor_minidump_stackwalk_LDADD = \
 	src/processor/stackwalker_amd64.o \
 	src/processor/stackwalker_arm.o \
 	src/processor/stackwalker_arm64.o \
+	src/processor/stackwalker_loong64.o \
 	src/processor/stackwalker_mips.o \
 	src/processor/stackwalker_ppc.o \
 	src/processor/stackwalker_ppc64.o \
@@ -1630,6 +1648,7 @@ EXTRA_DIST = \
 	src/processor/testdata/linux_write_to_under_4k.dmp \
 	src/processor/testdata/microdump-arm64.dmp \
 	src/processor/testdata/microdump-arm.dmp \
+	src/processor/testdata/microdump-loong64.dmp \
 	src/processor/testdata/microdump-mips32.dmp \
 	src/processor/testdata/microdump-mips64.dmp \
 	src/processor/testdata/microdump-multiple.dmp \

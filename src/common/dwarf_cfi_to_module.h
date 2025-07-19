@@ -117,6 +117,9 @@ class DwarfCFIToModule: public CallFrameInfo::Handler {
     // RISC-V.
     static vector<string> RISCV();
 
+    // LOONGARCH64.
+    static vector<string> LOONG64();
+
    private:
     // Given STRINGS, an array of C strings with SIZE elements, return an
     // equivalent vector<string>.
