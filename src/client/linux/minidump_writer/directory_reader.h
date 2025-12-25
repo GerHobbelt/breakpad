@@ -94,6 +94,7 @@ class DirectoryReader {
   }
 
  private:
+  // Order members properly to minimize the padding.
   const int fd_;
   unsigned buf_used_;
   alignas(struct kernel_dirent)

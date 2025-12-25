@@ -86,9 +86,5 @@ src/Makefile
 # Ignore compiled Python files.
 *.pyc
 
-# Ignore directories gclient syncs.
-src/testing
-src/third_party/protobuf
-
 # Ignore generated files.
 /build

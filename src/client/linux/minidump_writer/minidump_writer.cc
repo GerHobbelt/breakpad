@@ -943,8 +943,9 @@ class MinidumpWriter {
   void set_minidump_size_limit(off_t limit) { minidump_size_limit_ = limit; }
 
  private:
-  void* Alloc(unsigned bytes) {
-    return dumper_->allocator()->Alloc(bytes);
+  void* Alloc(unsigned bytes,
+              unsigned alignment = PageAllocator::kDefaultAllocAlignment) {
+    return dumper_->allocator()->Alloc(bytes, alignment);
   }
 
   pid_t GetCrashThread() const {
@@ -1335,7 +1336,8 @@ class MinidumpWriter {
       Buffers* next;
       size_t len;
       uint8_t data[kBufSize];
-    }* buffers = reinterpret_cast<Buffers*>(Alloc(sizeof(Buffers)));
+    }* buffers =
+        static_cast<Buffers*>(Alloc(sizeof(Buffers), alignof(Buffers)));
     buffers->next = nullptr;
     buffers->len = 0;
 
@@ -1352,7 +1354,8 @@ class MinidumpWriter {
       total += r;
       bufptr->len += r;
       if (bufptr->len == kBufSize) {
-        bufptr->next = reinterpret_cast<Buffers*>(Alloc(sizeof(Buffers)));
+        bufptr->next = static_cast<Buffers*>(
+            Alloc(sizeof(Buffers), alignof(Buffers)));
         bufptr = bufptr->next;
         bufptr->next = nullptr;
         bufptr->len = 0;
