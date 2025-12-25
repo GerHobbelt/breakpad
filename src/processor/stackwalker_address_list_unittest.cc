@@ -56,7 +56,7 @@ using google_breakpad::StackFrame;
 using google_breakpad::Stackwalker;
 using google_breakpad::StackwalkerAddressList;
 using std::vector;
-using testing::_;
+using testing::_anything_;
 using testing::AnyNumber;
 using testing::DoAll;
 using testing::Return;
@@ -87,12 +87,12 @@ class StackwalkerAddressListTest : public testing::Test {
 
     // By default, none of the modules have symbol info; call
     // SetModuleSymbols to override this.
-    EXPECT_CALL(supplier, GetCStringSymbolData(_, _, _, _, _))
+    EXPECT_CALL(supplier, GetCStringSymbolData(_anything_, _anything_, _anything_, _anything_, _anything_))
       .WillRepeatedly(Return(MockSymbolSupplier::NOT_FOUND));
 
     // Avoid GMOCK WARNING "Uninteresting mock function call - returning
     // directly" for FreeSymbolData().
-    EXPECT_CALL(supplier, FreeSymbolData(_)).Times(AnyNumber());
+    EXPECT_CALL(supplier, FreeSymbolData(_anything_)).Times(AnyNumber());
   }
 
   // Set the Breakpad symbol information that supplier should return for
@@ -100,7 +100,7 @@ class StackwalkerAddressListTest : public testing::Test {
   void SetModuleSymbols(MockCodeModule* module, const std::string& info) {
     size_t buffer_size;
     char* buffer = supplier.CopySymbolDataAndOwnTheCopy(info, &buffer_size);
-    EXPECT_CALL(supplier, GetCStringSymbolData(module, nullptr, _, _, _))
+    EXPECT_CALL(supplier, GetCStringSymbolData(module, nullptr, _anything_, _anything_, _anything_))
       .WillRepeatedly(DoAll(SetArgumentPointee<3>(buffer),
                             SetArgumentPointee<4>(buffer_size),
                             Return(MockSymbolSupplier::FOUND)));

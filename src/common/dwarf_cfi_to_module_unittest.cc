@@ -46,7 +46,7 @@ using google_breakpad::Module;
 using google_breakpad::DwarfCFIToModule;
 using testing::ContainerEq;
 using testing::Test;
-using testing::_;
+using testing::_anything_;
 
 struct MockCFIReporter: public DwarfCFIToModule::Reporter {
   MockCFIReporter(const std::string& file, const std::string& section)
@@ -75,9 +75,9 @@ struct DwarfCFIToModuleFixture {
     register_names.push_back("pc");
     register_names.push_back("");
 
-    EXPECT_CALL(reporter, UnnamedRegister(_, _)).Times(0);
-    EXPECT_CALL(reporter, UndefinedNotSupported(_, _)).Times(0);
-    EXPECT_CALL(reporter, ExpressionsNotSupported(_, _)).Times(0);
+    EXPECT_CALL(reporter, UnnamedRegister(_anything_, _anything_)).Times(0);
+    EXPECT_CALL(reporter, UndefinedNotSupported(_anything_, _anything_)).Times(0);
+    EXPECT_CALL(reporter, ExpressionsNotSupported(_anything_, _anything_)).Times(0);
   }
 
   Module module;
@@ -136,7 +136,7 @@ struct RuleFixture: public DwarfCFIToModuleFixture {
 class Rule: public RuleFixture, public Test { };
 
 TEST_F(Rule, UndefinedRule) {
-  EXPECT_CALL(reporter, UndefinedNotSupported(_, "reg7"));
+  EXPECT_CALL(reporter, UndefinedNotSupported(_anything_, "reg7"));
   StartEntry();
   ASSERT_TRUE(handler.UndefinedRule(entry_address, 7));
   ASSERT_TRUE(handler.End());
@@ -146,8 +146,8 @@ TEST_F(Rule, UndefinedRule) {
 }
 
 TEST_F(Rule, RegisterWithEmptyName) {
-  EXPECT_CALL(reporter, UnnamedRegister(_, 10));
-  EXPECT_CALL(reporter, UndefinedNotSupported(_, "unnamed_register10"));
+  EXPECT_CALL(reporter, UnnamedRegister(_anything_, 10));
+  EXPECT_CALL(reporter, UndefinedNotSupported(_anything_, "unnamed_register10"));
   StartEntry();
   ASSERT_TRUE(handler.UndefinedRule(entry_address, 10));
   ASSERT_TRUE(handler.End());
@@ -194,7 +194,7 @@ TEST_F(Rule, OffsetRuleNegative) {
 
 TEST_F(Rule, ValOffsetRule) {
   // Use an unnamed register number, to exercise that branch of RegisterName.
-  EXPECT_CALL(reporter, UnnamedRegister(_, 11));
+  EXPECT_CALL(reporter, UnnamedRegister(_anything_, 11));
   StartEntry();
   ASSERT_TRUE(handler.ValOffsetRule(entry_address + 0x5ab7,
                                     DwarfCFIToModule::kCFARegister,
@@ -220,7 +220,7 @@ TEST_F(Rule, RegisterRule) {
 }
 
 TEST_F(Rule, ExpressionRule) {
-  EXPECT_CALL(reporter, ExpressionsNotSupported(_, "reg2"));
+  EXPECT_CALL(reporter, ExpressionsNotSupported(_anything_, "reg2"));
   StartEntry();
   ASSERT_TRUE(handler.ExpressionRule(entry_address + 0xf326, 2,
                                      "it takes two to tango"));
@@ -231,7 +231,7 @@ TEST_F(Rule, ExpressionRule) {
 }
 
 TEST_F(Rule, ValExpressionRule) {
-  EXPECT_CALL(reporter, ExpressionsNotSupported(_, "reg0"));
+  EXPECT_CALL(reporter, ExpressionsNotSupported(_anything_, "reg0"));
   StartEntry();
   ASSERT_TRUE(handler.ValExpressionRule(entry_address + 0x6367, 0,
                                         "bit off more than he could chew"));

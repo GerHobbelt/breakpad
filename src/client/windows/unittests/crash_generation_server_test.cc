@@ -35,7 +35,7 @@
 #include "client/windows/crash_generation/crash_generation_server.h"
 #include "client/windows/common/ipc_protocol.h"
 
-using testing::_;
+using testing::_anything_;
 
 namespace {
 
@@ -137,12 +137,12 @@ class CrashGenerationServerTest : public ::testing::Test {
   }
 
   void DoTestFault(ClientFault fault) {
-    EXPECT_CALL(mock_callbacks_, OnClientConnected(_)).Times(0);
+    EXPECT_CALL(mock_callbacks_, OnClientConnected(_anything_)).Times(0);
     ASSERT_NO_FATAL_FAILURE(FaultyClient(fault));
     ASSERT_NO_FATAL_FAILURE(FaultyClient(fault));
     ASSERT_NO_FATAL_FAILURE(FaultyClient(fault));
 
-    EXPECT_CALL(mock_callbacks_, OnClientConnected(_));
+    EXPECT_CALL(mock_callbacks_, OnClientConnected(_anything_));
 
     ASSERT_NO_FATAL_FAILURE(FaultyClient(NO_FAULT));
 
@@ -290,13 +290,13 @@ TEST_F(CrashGenerationServerTest, CloseAfterResponse) {
 // It turns out that, as long as you send one byte, the ACK is accepted and
 // registration succeeds.
 TEST_F(CrashGenerationServerTest, SendInvalidAck) {
-  EXPECT_CALL(mock_callbacks_, OnClientConnected(_));
+  EXPECT_CALL(mock_callbacks_, OnClientConnected(_anything_));
   ASSERT_NO_FATAL_FAILURE(FaultyClient(SEND_INVALID_ACK));
 
   // See DoTestFault for an explanation of this line
   ASSERT_NO_FATAL_FAILURE(FaultyClient(CLOSE_AFTER_CONNECT));
 
-  EXPECT_CALL(mock_callbacks_, OnClientConnected(_));
+  EXPECT_CALL(mock_callbacks_, OnClientConnected(_anything_));
   ASSERT_NO_FATAL_FAILURE(FaultyClient(NO_FAULT));
 
   // See DoTestFault for an explanation of this line

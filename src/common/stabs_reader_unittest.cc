@@ -57,7 +57,7 @@ using ::testing::InSequence;
 using ::testing::Return;
 using ::testing::StrEq;
 using ::testing::Test;
-using ::testing::_;
+using ::testing::_anything_;
 using google_breakpad::StabsHandler;
 using google_breakpad::StabsReader;
 using google_breakpad::test_assembler::Label;
@@ -375,9 +375,9 @@ TEST_F(Stabs, NoCU) {
   stabs.set_value_size(8);
   stabs.Stab(N_SO, 161, 25673, 0x8f676e7bU, "build-directory/");
 
-  EXPECT_CALL(mock_handler, StartCompilationUnit(_, _, _))
+  EXPECT_CALL(mock_handler, StartCompilationUnit(_anything_, _anything_, _anything_))
       .Times(0);
-  EXPECT_CALL(mock_handler, StartFunction(_, _))
+  EXPECT_CALL(mock_handler, StartFunction(_anything_, _anything_))
       .Times(0);
 
   ASSERT_TRUE(ApplyHandlerToMockStabsData());

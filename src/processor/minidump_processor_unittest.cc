@@ -179,7 +179,7 @@ using google_breakpad::MockMinidumpUnloadedModuleList;
 using google_breakpad::ProcessState;
 using google_breakpad::SymbolSupplier;
 using google_breakpad::SystemInfo;
-using ::testing::_;
+using ::testing::_anything_;
 using ::testing::AnyNumber;
 using ::testing::DoAll;
 using ::testing::Mock;
@@ -378,7 +378,7 @@ TEST_F(MinidumpProcessorTest, TestUnloadedModules) {
   EXPECT_CALL(thread_list, GetThreadAtIndex(0)).
     WillOnce(Return(&thread));
 
-  EXPECT_CALL(thread, GetThreadID(_)).
+  EXPECT_CALL(thread, GetThreadID(_anything_)).
     WillRepeatedly(DoAll(SetArgumentPointee<0>(1),
                          Return(true)));
 
@@ -398,7 +398,7 @@ TEST_F(MinidumpProcessorTest, TestUnloadedModules) {
     WillRepeatedly(Return(&thread_memory));
   EXPECT_CALL(thread, GetStartOfStackMemoryRange()).
     Times(0);
-  EXPECT_CALL(memory_list, GetMemoryRegionForAddress(_)).
+  EXPECT_CALL(memory_list, GetMemoryRegionForAddress(_anything_)).
     Times(0);
 
   MockMinidumpUnloadedModuleList* unloaded_module_list_copy =
@@ -465,14 +465,14 @@ TEST_F(MinidumpProcessorTest, TestSymbolSupplierLookupCounts) {
   EXPECT_CALL(supplier, GetCStringSymbolData(
       Property(&google_breakpad::CodeModule::code_file,
                "c:\\test_app.exe"),
-      _, _, _, _)).WillOnce(Return(SymbolSupplier::NOT_FOUND));
+      _anything_, _anything_, _anything_, _anything_)).WillOnce(Return(SymbolSupplier::NOT_FOUND));
   EXPECT_CALL(supplier, GetCStringSymbolData(
       Property(&google_breakpad::CodeModule::code_file,
                Ne("c:\\test_app.exe")),
-      _, _, _, _)).WillRepeatedly(Return(SymbolSupplier::NOT_FOUND));
+      _anything_, _anything_, _anything_, _anything_)).WillRepeatedly(Return(SymbolSupplier::NOT_FOUND));
   // Avoid GMOCK WARNING "Uninteresting mock function call - returning
   // directly" for FreeSymbolData().
-  EXPECT_CALL(supplier, FreeSymbolData(_)).Times(AnyNumber());
+  EXPECT_CALL(supplier, FreeSymbolData(_anything_)).Times(AnyNumber());
   ASSERT_EQ(processor.Process(minidump_file, &state),
             google_breakpad::PROCESS_OK);
 
@@ -483,14 +483,14 @@ TEST_F(MinidumpProcessorTest, TestSymbolSupplierLookupCounts) {
   EXPECT_CALL(supplier, GetCStringSymbolData(
       Property(&google_breakpad::CodeModule::code_file,
                "c:\\test_app.exe"),
-      _, _, _, _)).WillOnce(Return(SymbolSupplier::NOT_FOUND));
+      _anything_, _anything_, _anything_, _anything_)).WillOnce(Return(SymbolSupplier::NOT_FOUND));
   EXPECT_CALL(supplier, GetCStringSymbolData(
       Property(&google_breakpad::CodeModule::code_file,
                Ne("c:\\test_app.exe")),
-      _, _, _, _)).WillRepeatedly(Return(SymbolSupplier::NOT_FOUND));
+      _anything_, _anything_, _anything_, _anything_)).WillRepeatedly(Return(SymbolSupplier::NOT_FOUND));
   // Avoid GMOCK WARNING "Uninteresting mock function call - returning
   // directly" for FreeSymbolData().
-  EXPECT_CALL(supplier, FreeSymbolData(_)).Times(AnyNumber());
+  EXPECT_CALL(supplier, FreeSymbolData(_anything_)).Times(AnyNumber());
   ASSERT_EQ(processor.Process(minidump_file, &state),
             google_breakpad::PROCESS_OK);
 }
@@ -607,7 +607,7 @@ TEST_F(MinidumpProcessorTest, TestThreadMissingMemory) {
 
   // Return a thread missing stack memory.
   MockMinidumpThread no_memory_thread;
-  EXPECT_CALL(no_memory_thread, GetThreadID(_)).
+  EXPECT_CALL(no_memory_thread, GetThreadID(_anything_)).
     WillRepeatedly(DoAll(SetArgumentPointee<0>(1),
                          Return(true)));
   EXPECT_CALL(no_memory_thread, GetMemory()).
@@ -707,7 +707,7 @@ TEST_F(MinidumpProcessorTest, TestThreadMissingContext) {
 
   // Return a thread missing a thread context.
   MockMinidumpThread no_context_thread;
-  EXPECT_CALL(no_context_thread, GetThreadID(_)).
+  EXPECT_CALL(no_context_thread, GetThreadID(_anything_)).
     WillRepeatedly(DoAll(SetArgumentPointee<0>(1),
                          Return(true)));
   EXPECT_CALL(no_context_thread, GetContext()).
@@ -719,7 +719,7 @@ TEST_F(MinidumpProcessorTest, TestThreadMissingContext) {
     WillRepeatedly(Return(&no_context_thread_memory));
   EXPECT_CALL(no_context_thread, GetStartOfStackMemoryRange()).
     Times(0);
-  EXPECT_CALL(memory_list, GetMemoryRegionForAddress(_)).
+  EXPECT_CALL(memory_list, GetMemoryRegionForAddress(_anything_)).
     Times(0);
 
   EXPECT_CALL(thread_list, thread_count()).

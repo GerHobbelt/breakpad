@@ -46,7 +46,7 @@ using google_breakpad::CFIFrameInfoParseHandler;
 using google_breakpad::CFIRuleParser;
 using google_breakpad::MemoryRegion;
 using google_breakpad::SimpleCFIWalker;
-using testing::_;
+using testing::_anything_;
 using testing::A;
 using testing::AtMost;
 using testing::DoAll;
@@ -72,10 +72,10 @@ struct CFIFixture {
   void ExpectNoMemoryReferences() {
     EXPECT_CALL(memory, GetBase()).Times(0);
     EXPECT_CALL(memory, GetSize()).Times(0);
-    EXPECT_CALL(memory, GetMemoryAtAddress(_, A<uint8_t*>())).Times(0);
-    EXPECT_CALL(memory, GetMemoryAtAddress(_, A<uint16_t*>())).Times(0);
-    EXPECT_CALL(memory, GetMemoryAtAddress(_, A<uint32_t*>())).Times(0);
-    EXPECT_CALL(memory, GetMemoryAtAddress(_, A<uint64_t*>())).Times(0);
+    EXPECT_CALL(memory, GetMemoryAtAddress(_anything_, A<uint8_t*>())).Times(0);
+    EXPECT_CALL(memory, GetMemoryAtAddress(_anything_, A<uint16_t*>())).Times(0);
+    EXPECT_CALL(memory, GetMemoryAtAddress(_anything_, A<uint32_t*>())).Times(0);
+    EXPECT_CALL(memory, GetMemoryAtAddress(_anything_, A<uint64_t*>())).Times(0);
   }
 
   CFIFrameInfo cfi;
@@ -306,9 +306,9 @@ class CFIParserFixture {
   CFIParserFixture() : parser(&mock_handler) {
     // Expect no parsing results to be reported to mock_handler. Individual
     // tests can override this.
-    EXPECT_CALL(mock_handler, CFARule(_)).Times(0);
-    EXPECT_CALL(mock_handler, RARule(_)).Times(0);
-    EXPECT_CALL(mock_handler, RegisterRule(_, _)).Times(0);
+    EXPECT_CALL(mock_handler, CFARule(_anything_)).Times(0);
+    EXPECT_CALL(mock_handler, RARule(_anything_)).Times(0);
+    EXPECT_CALL(mock_handler, RegisterRule(_anything_, _anything_)).Times(0);
   }
 
   MockCFIRuleParserHandler mock_handler;
@@ -398,7 +398,7 @@ TEST_F(Parser, WhitespaceLoneColon) {
 }
 
 TEST_F(Parser, EmptyName) {
-  EXPECT_CALL(mock_handler, RegisterRule("reg", _))
+  EXPECT_CALL(mock_handler, RegisterRule("reg", _anything_))
       .Times(AtMost(1))
       .WillRepeatedly(Return());
   EXPECT_FALSE(parser.Parse("reg: expr1 : expr2"));

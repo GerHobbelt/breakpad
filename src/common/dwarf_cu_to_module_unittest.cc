@@ -54,7 +54,7 @@ using google_breakpad::DwarfInline;
 using google_breakpad::DwarfCUToModule;
 using google_breakpad::Module;
 
-using ::testing::_;
+using ::testing::_anything_;
 using ::testing::AtMost;
 using ::testing::DoAll;
 using ::testing::Invoke;
@@ -112,7 +112,7 @@ class CUFixtureBase {
   // MockLineToModuleHandler like this:
   //
   //   MockLineToModuleHandler l2m;
-  //   EXPECT_CALL(l2m, ReadProgram(_,_,_,_))
+  //   EXPECT_CALL(l2m, ReadProgram(_anything_,_anything_,_anything_,_anything_))
   //       .WillOnce(DoAll(Invoke(appender), Return()));
   //
   // in which case calling l2m with some line vector will append lines.
@@ -147,19 +147,19 @@ class CUFixtureBase {
     // compilation unit's name to be provided. The test can override
     // these expectations.
     EXPECT_CALL(reporter_, SetCUName("compilation-unit-name")).Times(1);
-    EXPECT_CALL(reporter_, UnknownSpecification(_, _)).Times(0);
-    EXPECT_CALL(reporter_, UnknownAbstractOrigin(_, _)).Times(0);
-    EXPECT_CALL(reporter_, MissingSection(_)).Times(0);
-    EXPECT_CALL(reporter_, BadLineInfoOffset(_)).Times(0);
-    EXPECT_CALL(reporter_, UncoveredFunction(_)).Times(0);
-    EXPECT_CALL(reporter_, UncoveredLine(_)).Times(0);
-    EXPECT_CALL(reporter_, UnnamedFunction(_)).Times(0);
-    EXPECT_CALL(reporter_, UnhandledInterCUReference(_, _)).Times(0);
+    EXPECT_CALL(reporter_, UnknownSpecification(_anything_, _anything_)).Times(0);
+    EXPECT_CALL(reporter_, UnknownAbstractOrigin(_anything_, _anything_)).Times(0);
+    EXPECT_CALL(reporter_, MissingSection(_anything_)).Times(0);
+    EXPECT_CALL(reporter_, BadLineInfoOffset(_anything_)).Times(0);
+    EXPECT_CALL(reporter_, UncoveredFunction(_anything_)).Times(0);
+    EXPECT_CALL(reporter_, UncoveredLine(_anything_)).Times(0);
+    EXPECT_CALL(reporter_, UnnamedFunction(_anything_)).Times(0);
+    EXPECT_CALL(reporter_, UnhandledInterCUReference(_anything_, _anything_)).Times(0);
 
     // By default, expect the line program reader not to be invoked. We
     // may override this in StartCU.
-    EXPECT_CALL(line_reader_, StartCompilationUnit(_)).Times(0);
-    EXPECT_CALL(line_reader_, ReadProgram(_,_,_,_,_,_,_,_,_)).Times(0);
+    EXPECT_CALL(line_reader_, StartCompilationUnit(_anything_)).Times(0);
+    EXPECT_CALL(line_reader_, ReadProgram(_anything_,_anything_,_anything_,_anything_,_anything_,_anything_,_anything_,_anything_,_anything_)).Times(0);
 
     // The handler will consult this section map to decide what to
     // pass to our line reader.
@@ -348,8 +348,8 @@ void CUFixtureBase::StartCU() {
   if (!lines_.empty())
     EXPECT_CALL(line_reader_,
                 ReadProgram(&dummy_line_program_[0], dummy_line_size_,
-                            _,_,_,_,
-                            &module_, _,_))
+                            _anything_,_anything_,_anything_,_anything_,
+                            &module_, _anything_,_anything_))
         .Times(AtMost(1))
         .WillOnce(DoAll(Invoke(appender_), Return()));
   ASSERT_TRUE(root_handler_
@@ -878,11 +878,11 @@ TEST_P(FuncLinePairing, Pairing) {
            s.lines[1].end - s.lines[1].start,
            "line-file", 67636963);
   if (s.uncovered_functions)
-    EXPECT_CALL(reporter_, UncoveredFunction(_))
+    EXPECT_CALL(reporter_, UncoveredFunction(_anything_))
       .Times(s.uncovered_functions)
       .WillRepeatedly(Return());
   if (s.uncovered_lines)
-    EXPECT_CALL(reporter_, UncoveredLine(_))
+    EXPECT_CALL(reporter_, UncoveredLine(_anything_))
       .Times(s.uncovered_lines)
       .WillRepeatedly(Return());
 
@@ -923,7 +923,7 @@ TEST_F(FuncLinePairing, EmptyCU) {
 
 TEST_F(FuncLinePairing, LinesNoFuncs) {
   PushLine(40, 2, "line-file", 82485646);
-  EXPECT_CALL(reporter_, UncoveredLine(_)).WillOnce(Return());
+  EXPECT_CALL(reporter_, UncoveredLine(_anything_)).WillOnce(Return());
 
   StartCU();
   root_handler_.Finish();
@@ -932,7 +932,7 @@ TEST_F(FuncLinePairing, LinesNoFuncs) {
 }
 
 TEST_F(FuncLinePairing, FuncsNoLines) {
-  EXPECT_CALL(reporter_, UncoveredFunction(_)).WillOnce(Return());
+  EXPECT_CALL(reporter_, UncoveredFunction(_anything_)).WillOnce(Return());
 
   StartCU();
   DefineFunction(&root_handler_, "function1", 0x127da12ffcf5c51fULL, 0x1000U,
@@ -995,7 +995,7 @@ TEST_F(FuncLinePairing, GCCAlignmentStretch) {
 
 TEST_F(FuncLinePairing, LineAtEndOfAddressSpace) {
   PushLine(0xfffffffffffffff0ULL, 16, "line-file", 63351048);
-  EXPECT_CALL(reporter_, UncoveredLine(_)).WillOnce(Return());
+  EXPECT_CALL(reporter_, UncoveredLine(_anything_)).WillOnce(Return());
 
   StartCU();
   DefineFunction(&root_handler_, "function1", 0xfffffffffffffff0ULL, 6,
@@ -1018,7 +1018,7 @@ TEST_F(FuncLinePairing, LineAtEndOfAddressSpace) {
 TEST_F(FuncLinePairing, WarnOnceFunc) {
   PushLine(20, 1, "line-file-2", 262951329);
   PushLine(11, 1, "line-file-1", 219964021);
-  EXPECT_CALL(reporter_, UncoveredFunction(_)).WillOnce(Return());
+  EXPECT_CALL(reporter_, UncoveredFunction(_anything_)).WillOnce(Return());
 
   StartCU();
   DefineFunction(&root_handler_, "function", 10, 11, nullptr);
@@ -1035,7 +1035,7 @@ TEST_F(FuncLinePairing, WarnOnceFunc) {
 // about once.
 TEST_F(FuncLinePairing, WarnOnceLine) {
   PushLine(10, 20, "filename1", 118581871);
-  EXPECT_CALL(reporter_, UncoveredLine(_)).WillOnce(Return());
+  EXPECT_CALL(reporter_, UncoveredLine(_anything_)).WillOnce(Return());
 
   StartCU();
   DefineFunction(&root_handler_, "function1", 11, 1, nullptr);
@@ -1526,9 +1526,9 @@ TEST_F(Specifications, LongChain) {
 TEST_F(Specifications, InterCU) {
   Module m("module-name", "module-os", "module-arch", "module-id");
   DwarfCUToModule::FileContext fc("dwarf-filename", &m, true);
-  EXPECT_CALL(reporter_, UncoveredFunction(_)).WillOnce(Return());
+  EXPECT_CALL(reporter_, UncoveredFunction(_anything_)).WillOnce(Return());
   MockLineToModuleHandler lr;
-  EXPECT_CALL(lr, ReadProgram(_,_,_,_,_,_,_,_,_)).Times(0);
+  EXPECT_CALL(lr, ReadProgram(_anything_,_anything_,_anything_,_anything_,_anything_,_anything_,_anything_,_anything_,_anything_)).Times(0);
 
   // Kludge: satisfy reporter_'s expectation.
   reporter_.SetCUName("compilation-unit-name");
@@ -1585,9 +1585,9 @@ TEST_F(Specifications, InterCU) {
 TEST_F(Specifications, UnhandledInterCU) {
   Module m("module-name", "module-os", "module-arch", "module-id");
   DwarfCUToModule::FileContext fc("dwarf-filename", &m, false);
-  EXPECT_CALL(reporter_, UncoveredFunction(_)).WillOnce(Return());
+  EXPECT_CALL(reporter_, UncoveredFunction(_anything_)).WillOnce(Return());
   MockLineToModuleHandler lr;
-  EXPECT_CALL(lr, ReadProgram(_,_,_,_,_,_,_,_,_)).Times(0);
+  EXPECT_CALL(lr, ReadProgram(_anything_,_anything_,_anything_,_anything_,_anything_,_anything_,_anything_,_anything_,_anything_)).Times(0);
 
   // Kludge: satisfy reporter_'s expectation.
   reporter_.SetCUName("compilation-unit-name");
@@ -1612,7 +1612,7 @@ TEST_F(Specifications, UnhandledInterCU) {
     ASSERT_TRUE(root2_handler.StartRootDIE(1,
                                            google_breakpad::DW_TAG_compile_unit));
     ASSERT_TRUE(root2_handler.EndAttributes());
-    EXPECT_CALL(reporter_, UnhandledInterCUReference(_, _)).Times(1);
+    EXPECT_CALL(reporter_, UnhandledInterCUReference(_anything_, _anything_)).Times(1);
     DIEHandler* class_A_handler
       = StartSpecifiedDIE(&root2_handler, google_breakpad::DW_TAG_class_type,
                           0xb8fbfdd5f0b26fceULL);
@@ -1630,7 +1630,7 @@ TEST_F(Specifications, UnhandledInterCU) {
     ASSERT_TRUE(root3_handler.StartRootDIE(1,
                                            google_breakpad::DW_TAG_compile_unit));
     ASSERT_TRUE(root3_handler.EndAttributes());
-    EXPECT_CALL(reporter_, UnhandledInterCUReference(_, _)).Times(1);
+    EXPECT_CALL(reporter_, UnhandledInterCUReference(_anything_, _anything_)).Times(1);
     DefinitionDIE(&root3_handler, google_breakpad::DW_TAG_subprogram,
                   0xb01fef8b380bd1a2ULL, "",
                   0x2618f00a1a711e53ULL, 0x4fd94b76d7c2caf5ULL);

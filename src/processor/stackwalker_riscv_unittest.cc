@@ -65,7 +65,7 @@ using google_breakpad::test_assembler::kLittleEndian;
 using google_breakpad::test_assembler::Label;
 using google_breakpad::test_assembler::Section;
 using std::vector;
-using testing::_;
+using testing::_anything_;
 using testing::AnyNumber;
 using testing::DoAll;
 using testing::Return;
@@ -95,12 +95,12 @@ public:
 
     // By default, none of the modules have symbol info; call
     // SetModuleSymbols to override this.
-    EXPECT_CALL(supplier, GetCStringSymbolData(_, _, _, _, _))
+    EXPECT_CALL(supplier, GetCStringSymbolData(_anything_, _anything_, _anything_, _anything_, _anything_))
         .WillRepeatedly(Return(MockSymbolSupplier::NOT_FOUND));
 
     // Avoid GMOCK WARNING "Uninteresting mock function call - returning
     // directly" for FreeSymbolData().
-    EXPECT_CALL(supplier, FreeSymbolData(_)).Times(AnyNumber());
+    EXPECT_CALL(supplier, FreeSymbolData(_anything_)).Times(AnyNumber());
 
     // Reset max_frames_scanned since it's static.
     Stackwalker::set_max_frames_scanned(1024);
@@ -111,7 +111,7 @@ public:
   void SetModuleSymbols(MockCodeModule* module, const std::string& info) {
     size_t buffer_size;
     char *buffer = supplier.CopySymbolDataAndOwnTheCopy(info, &buffer_size);
-    EXPECT_CALL(supplier, GetCStringSymbolData(module, &system_info, _, _, _))
+    EXPECT_CALL(supplier, GetCStringSymbolData(module, &system_info, _anything_, _anything_, _anything_))
         .WillRepeatedly(DoAll(SetArgumentPointee<3>(buffer),
                               SetArgumentPointee<4>(buffer_size),
                               Return(MockSymbolSupplier::FOUND)));
